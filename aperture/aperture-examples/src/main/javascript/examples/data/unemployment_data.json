@@ -1,0 +1,75 @@
+{
+    "height": 320,
+    "width": 480,
+    "rules":[
+    	{"type":"horizontal", "value":0, "color":"#6B93EE"},
+    	{"type":"vertical", "value":"10700", "color":"#EE6B6B"}
+    ],
+    "series": [
+        {
+            "color": [
+                "#003ECA",
+                "#c6c4bf"
+            ],
+            "data": [
+                {
+                    "min_bound": 0.8,
+                    "max_bound": 0.9,
+                    "lower_range": 0.3,
+                    "upper_range": 0.2,                    
+                    "average": 2,
+                    "year": 2000,
+                },
+                {
+                    "min_bound": 0.8,
+                    "max_bound": 0.9,
+                    "lower_range": 0.3,
+                    "upper_range": 0.2,                    
+                    "average": 2.4,
+                    "year": 2002,
+                },
+                {
+                    "min_bound": 0.8,
+                    "max_bound": 0.9,
+                    "lower_range": 0.3,
+                    "upper_range": 0.2,                    
+                    "average": 3,
+                    "year": 2004,
+                },
+                {
+                    "min_bound": 0.8,
+                    "max_bound": 0.9,
+                    "lower_range": 0.3,
+                    "upper_range": 0.2,                    
+                    "average": 2.8,
+                    "year": 2006,
+                },
+                {
+                    "min_bound": 0.8,
+                    "max_bound": 0.9,
+                    "lower_range": 0.3,
+                    "upper_range": 0.2,                    
+                    "average": 5,
+                    "year": 2008,
+                },
+                {
+                    "min_bound": 0.8,
+                    "max_bound": 0.9,
+                    "lower_range": 0.3,
+                    "upper_range": 0.2,                    
+                    "average": 7,
+                    "year": 2010,
+                },
+                {
+                    "min_bound": 0.8,
+                    "max_bound": 0.9,
+                    "lower_range": 0.3,
+                    "upper_range": 0.2,                    
+                    "average": 8,
+                    "year": 2012,
+                }
+                
+            ]
+        }
+    ]
+}

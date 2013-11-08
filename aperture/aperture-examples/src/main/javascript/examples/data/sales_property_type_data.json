@@ -1,0 +1,29 @@
+{
+    "data": [
+        {
+            "percentage": 44.4,
+            "propertytype": "Detached",
+            "color": "#9B9638"
+        },
+        {
+            "percentage": 10.4,
+            "propertytype": "Semi Detached",
+            "color": "#0D4C4F"
+        },
+        {
+            "percentage": 17.0,
+            "propertytype": "Row house",
+            "color": "#07959B"
+        },
+        {
+            "percentage": 25.7,
+            "propertytype": "Condo",
+            "color": "#832990"
+        },
+        {
+            "percentage": 2.5,
+            "propertytype": "Other",
+            "color": "#5B3422"
+        }
+    ]
+}

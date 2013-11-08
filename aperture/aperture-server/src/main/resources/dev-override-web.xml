@@ -1,0 +1,19 @@
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<web-app>
+	<!-- This web.xml override specifies development settings where all caching is disabled -->
+
+	<!-- Config File Location -->
+	<!-- Turns off client-side caching -->
+	<context-param>
+		<param-name>apertureConfig</param-name>
+		<param-value>res:///app.properties</param-value>
+	</context-param>
+
+	<!-- ehcache Config File Location -->
+	<!-- Turns off ehcache -->
+	<context-param>
+		<param-name>ehcacheConfig</param-name>
+		<param-value>res:///dev-ehcache.xml</param-value>
+	</context-param>
+
+</web-app>

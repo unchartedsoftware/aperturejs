@@ -1,0 +1,38 @@
+	<style>
+		.aperture-log-error {
+			color: red;
+		}
+
+		.aperture-log-warn {
+			color: orange;
+		}
+
+		.aperture-log-info {
+			color: blue;
+		}
+
+		#log {
+			border-style:ridge;
+			border-width:2px;
+			height:18em;
+			overflow-y:scroll;
+			overflow-x:hidden;
+
+		}
+	</style>
+
+	<div id="log"></div>
+
+	<button id="doLog">Log some messages</button>
+	<p><b>Number of messages currently in the buffer: <span id="bufferLength">0</span> </b> <button id="clear">Clear</button></p>
+
+	<p>This example demonstrates the use of the logging system and a variety of
+	logging appenders.  When the "Log" button is pressed, an error, a warning,
+	and an info message are logged.  A console appender logs these messages to your
+	browser console, a DOM appender logs the messages (WARN and higher) to a DIV
+	element above, and a buffering appender collects all logged messages in an
+	array that can be accessed at a later time.  The number of messages that are
+	currently in the buffer is displayed below the log button.  Clicking "Clear"
+	only clears the DOM appender's output window. To demonstrate logging of objects 
+	on older browsers this example includes a copy of json2.js, Douglas Crockford's
+	simple polyfill for ECMAScript 5 JSON formatting.</p>

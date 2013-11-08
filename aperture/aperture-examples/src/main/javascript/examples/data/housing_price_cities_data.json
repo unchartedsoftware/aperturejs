@@ -1,0 +1,424 @@
+{
+    "series": [
+        {	"city": "Toronto",
+        	"color":"#8DC643",
+        	"data":[
+            {
+                "priceindex": 121.43,
+                "month": "Jan"
+            },
+            {
+                "priceindex": 121.91,
+                "month": "Feb"
+            },
+            {
+                "priceindex": 121.82,
+                "month": "Mar"                
+            },
+            {
+                "priceindex": 122.43,
+                "month": "Apr"
+            },
+            {
+                "priceindex": 123.85,
+                "month": "May"
+            },
+            {
+                "priceindex": 126.89,
+                "month": "Jun"
+            },
+			{
+                "priceindex": 128.51,
+                "month": "Jul"
+            },
+			{
+                "priceindex": 129.07,
+                "month": "Aug"
+            },
+			{
+                "priceindex": 126.92,
+                "month": "Sep"
+            },
+			{
+                "priceindex": 125.78,
+                "month": "Oct"
+            },
+			{
+                "priceindex": 125.1,
+                "month": "Nov"
+            },
+			{
+                "priceindex": 125.66,
+                "month": "Dec"
+            }
+        ]},
+        {	"city": "Montreal", 
+    		"color":"#A64499",
+    		"data": [
+             {
+                "priceindex": 128.44,
+                "month": "Jan"
+            },
+            {
+                "priceindex": 129.03,
+                "month": "Feb"
+            },
+            {
+                "priceindex": 130.02,
+                "month": "Mar"                
+            },
+            {
+                "priceindex": 131.33,
+                "month": "Apr"
+            },
+            {
+                "priceindex": 133.19,
+                "month": "May"
+            },
+            {
+                "priceindex": 134.72,
+                "month": "Jun"
+            },
+			{
+                "priceindex": 135.73,
+                "month": "Jul"
+            },
+			{
+                "priceindex": 136.81,
+                "month": "Aug"
+            },
+			{
+                "priceindex": 137.0,
+                "month": "Sep"
+            },
+			{
+                "priceindex": 136.47,
+                "month": "Oct"
+            },
+			{
+                "priceindex": 134.71,
+                "month": "Nov"
+            },
+			{
+                "priceindex": 135.35,
+                "month": "Dec"
+            }
+        ]}
+    ],
+    "full_series": [
+        {	"city": "Toronto",
+        	"color":"#8DC643",
+        	"data":[
+            {
+                "priceindex": 121.43,
+                "month": "Jan"
+            },
+            {
+                "priceindex": 121.91,
+                "month": "Feb"
+            },
+            {
+                "priceindex": 121.82,
+                "month": "Mar"                
+            },
+            {
+                "priceindex": 122.43,
+                "month": "Apr"
+            },
+            {
+                "priceindex": 123.85,
+                "month": "May"
+            },
+            {
+                "priceindex": 126.89,
+                "month": "Jun"
+            },
+			{
+                "priceindex": 128.51,
+                "month": "Jul"
+            },
+			{
+                "priceindex": 129.07,
+                "month": "Aug"
+            },
+			{
+                "priceindex": 126.92,
+                "month": "Sep"
+            },
+			{
+                "priceindex": 125.78,
+                "month": "Oct"
+            },
+			{
+                "priceindex": 125.1,
+                "month": "Nov"
+            },
+			{
+                "priceindex": 125.66,
+                "month": "Dec"
+            }
+        ]},
+        {	"city": "Montreal", 
+    		"color":"#A64499",
+    		"data": [
+             {
+                "priceindex": 128.44,
+                "month": "Jan"
+            },
+            {
+                "priceindex": 129.03,
+                "month": "Feb"
+            },
+            {
+                "priceindex": 130.02,
+                "month": "Mar"                
+            },
+            {
+                "priceindex": 131.33,
+                "month": "Apr"
+            },
+            {
+                "priceindex": 133.19,
+                "month": "May"
+            },
+            {
+                "priceindex": 134.72,
+                "month": "Jun"
+            },
+			{
+                "priceindex": 135.73,
+                "month": "Jul"
+            },
+			{
+                "priceindex": 136.81,
+                "month": "Aug"
+            },
+			{
+                "priceindex": 137.0,
+                "month": "Sep"
+            },
+			{
+                "priceindex": 136.47,
+                "month": "Oct"
+            },
+			{
+                "priceindex": 134.71,
+                "month": "Nov"
+            },
+			{
+                "priceindex": 135.35,
+                "month": "Dec"
+            }
+        ]},
+        {	"city": "Vancouver", 
+    		"color":"#A3521D",
+    		"data": [
+             {
+                "priceindex": 150.5,
+                "month": "Jan"
+            },
+            {
+                "priceindex": 151.16,
+                "month": "Feb"
+            },
+            {
+                "priceindex": 152.14,
+                "month": "Mar"                
+            },
+            {
+                "priceindex": 153.59,
+                "month": "Apr"
+            },
+            {
+                "priceindex": 155.28,
+                "month": "May"
+            },
+            {
+                "priceindex": 156.52,
+                "month": "Jun"
+            },
+			{
+                "priceindex": 155.88,
+                "month": "Jul"
+            },
+			{
+                "priceindex": 155.33,
+                "month": "Aug"
+            },
+			{
+                "priceindex": 154.66,
+                "month": "Sep"
+            },
+			{
+                "priceindex": 154.7,
+                "month": "Oct"
+            },
+			{
+                "priceindex": 155.71,
+                "month": "Nov"
+            },
+			{
+                "priceindex": 156.45,
+                "month": "Dec"
+            }
+        ]},
+        {	"city": "Quebec City", 
+    		"color":"#A3521D",
+    		"data": [
+             {
+                "priceindex": 142.15,
+                "month": "Jan"
+            },
+            {
+                "priceindex": 144.4,
+                "month": "Feb"
+            },
+            {
+                "priceindex": 146.02,
+                "month": "Mar"                
+            },
+            {
+                "priceindex": 147.29,
+                "month": "Apr"
+            },
+            {
+                "priceindex": 148.51,
+                "month": "May"
+            },
+            {
+                "priceindex": 150.73,
+                "month": "Jun"
+            },
+			{
+                "priceindex": 153.46,
+                "month": "Jul"
+            },
+			{
+                "priceindex": 155.74,
+                "month": "Aug"
+            },
+			{
+                "priceindex": 155.87,
+                "month": "Sep"
+            },
+			{
+                "priceindex": 157.22,
+                "month": "Oct"
+            },
+			{
+                "priceindex": 156.36,
+                "month": "Nov"
+            },
+			{
+                "priceindex": 154.95,
+                "month": "Dec"
+            }
+        ]},
+        {	"city": "Halifax", 
+    		"color":"#A3521D",
+    		"data": [
+             {
+                "priceindex": 122.87,
+                "month": "Jan"
+            },
+            {
+                "priceindex": 122.8,
+                "month": "Feb"
+            },
+            {
+                "priceindex": 125.4,
+                "month": "Mar"                
+            },
+            {
+                "priceindex": 127.39,
+                "month": "Apr"
+            },
+            {
+                "priceindex": 127.95,
+                "month": "May"
+            },
+            {
+                "priceindex": 128.34,
+                "month": "Jun"
+            },
+			{
+                "priceindex": 128.96,
+                "month": "Jul"
+            },
+			{
+                "priceindex": 129.7,
+                "month": "Aug"
+            },
+			{
+                "priceindex": 128.35,
+                "month": "Sep"
+            },
+			{
+                "priceindex": 128.68,
+                "month": "Oct"
+            },
+			{
+                "priceindex": 127.73,
+                "month": "Nov"
+            },
+			{
+                "priceindex": 130.37,
+                "month": "Dec"
+            }
+        ]}         
+    ],
+    "avg": 
+    	{	"color":"#888888",
+    		"data": [
+            {
+                "priceindex": 133.210,
+                "month": "Jan"
+            },
+            {
+                "priceindex": 133.5,
+                "month": "Feb"
+            },
+            {
+                "priceindex": 133.84,
+                "month": "Mar"                
+            },
+            {
+                "priceindex": 134.81,
+                "month": "Apr"
+            },
+            {
+                "priceindex": 136.47,
+                "month": "May"
+            },
+            {
+                "priceindex": 138.51,
+                "month": "Jun"
+            },
+			{
+                "priceindex": 139.44,
+                "month": "Jul"
+            },
+			{
+                "priceindex": 139.73,
+                "month": "Aug"
+            },
+			{
+                "priceindex": 138.33,
+                "month": "Sep"
+            },
+			{
+                "priceindex": 137.62,
+                "month": "Oct"
+            },
+			{
+                "priceindex": 137.13,
+                "month": "Nov"
+            },
+			{
+                "priceindex": 137.67,
+                "month": "Dec"
+            }
+            
+        ]
+	}         
+}

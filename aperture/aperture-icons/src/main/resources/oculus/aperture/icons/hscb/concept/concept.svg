@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="0.398563in" height="0.38552in" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 2.35672 2.2796"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str2 {stroke:#4C4C4C;stroke-width:0.0807341}
+    .str1 {stroke:#4C4C4C;stroke-width:0.103478}
+    .str0 {stroke:#4C4C4C;stroke-width:0.143729}
+    .fil2 {fill:url(#id0);fill-rule:nonzero}
+    .fil1 {fill:url(#id1);fill-rule:nonzero}
+    .fil0 {fill:url(#id2);fill-rule:nonzero}
+   ]]>
+  </style>
+  <linearGradient id="id0" gradientUnits="userSpaceOnUse" x1="0.113" y1="1.9633" x2="0.261804" y2="2.22105">
+   <stop offset="0" style="stop-color:white"/>
+   <stop offset="0.709804" style="stop-color:#E3E3E3"/>
+   <stop offset="1" style="stop-color:#C6C6C6"/>
+  </linearGradient>
+  <linearGradient id="id1" gradientUnits="userSpaceOnUse" x1="0.576988" y1="1.69861" x2="0.792559" y2="2.07197">
+   <stop offset="0" style="stop-color:white"/>
+   <stop offset="0.709804" style="stop-color:#E3E3E3"/>
+   <stop offset="1" style="stop-color:#C6C6C6"/>
+  </linearGradient>
+  <linearGradient id="id2" gradientUnits="userSpaceOnUse" x1="0.84964" y1="0.127619" x2="1.67444" y2="1.5562">
+   <stop offset="0" style="stop-color:white"/>
+   <stop offset="0.709804" style="stop-color:#E3E3E3"/>
+   <stop offset="1" style="stop-color:#C6C6C6"/>
+  </linearGradient>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <path class="fil0 str0" d="M2.28486 0.842051c0,0.425228 -0.457866,0.769931 -1.0228,0.769931 -0.564859,0 -1.02282,-0.344703 -1.02282,-0.769931 0,-0.425391 0.457959,-0.770187 1.02282,-0.770187 0.564929,0 1.0228,0.344796 1.0228,0.770187z"/>
+  <path class="fil1 str1" d="M0.894663 1.88531c0,0.118843 -0.0940036,0.215175 -0.210053,0.215175 -0.115817,0 -0.209727,-0.0963315 -0.209727,-0.215175 0,-0.118959 0.0939104,-0.215198 0.209727,-0.215198 0.116049,0 0.210053,0.0962384 0.210053,0.215198z"/>
+  <path class="fil2 str2" d="M0.334623 2.09222c0,0.0812463 -0.065998,0.147174 -0.147337,0.147174 -0.0812463,0 -0.147081,-0.0659282 -0.147081,-0.147174 0,-0.0813161 0.0658351,-0.147268 0.147081,-0.147268 0.0813394,0 0.147337,0.0659515 0.147337,0.147268z"/>
+ </g>
+</svg>

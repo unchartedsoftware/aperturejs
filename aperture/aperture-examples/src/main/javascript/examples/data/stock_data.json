@@ -1,0 +1,160 @@
+{
+    "series": [
+    	{	"name": "Apple Inc. (AAPL)",
+    		"data": [
+	            {
+	                "price": 339.32,
+	                "month": "Jan"
+	            },
+	            {
+	                "price": 352.21,
+	                "month": "Feb"
+	            },
+	            {
+	                "price": 348.51,
+	                "month": "Mar"
+	            },
+	            {
+	                "price": 350.13,
+	                "month": "Apr"                
+	            },
+	            {
+	                "price": 347.83,
+	                "month": "May"
+	            },
+	            {
+	                "price": 335.67,
+	                "month": "Jun"
+	            },
+				{
+	                "price": 390.48,
+	                "month": "Jul"
+	            },
+	            {
+	                "price": 384.83,
+	                "month": "Aug"
+	            },
+	            {
+	                "price": 381.32,
+	                "month": "Sep"
+	            },
+	            {
+	                "price": 404.78,
+	                "month": "Oct"                
+	            },
+	            {
+	                "price": 382.20,
+	                "month": "Nov"
+	            },
+	            {
+	                "price": 405.00,
+	                "month": "Dec"
+	            }
+        	]
+        },       
+    	{	"name": "Google Inc. (GOOG)",
+    		"data": [
+	            {
+	                "price": 600.36,
+	                "month": "Jan"
+	            },
+	            {
+	                "price": 613.40,
+	                "month": "Feb"
+	            },
+	            {
+	                "price": 586.76,
+	                "month": "Mar"
+	            },
+	            {
+	                "price": 544.10,
+	                "month": "Apr"
+	            },
+	            {
+	                "price": 529.02,
+	                "month": "May"
+	            },
+	            {
+	                "price": 506.38,
+	                "month": "Jun"
+	            },
+				{
+	                "price": 603.69,
+	                "month": "Jul"
+	            },
+	            {
+	                "price": 540.96,
+	                "month": "Aug"
+	            },
+	            {
+	                "price": 515.04,
+	                "month": "Sep"
+	            },
+	            {
+	                "price": 592.64,
+	                "month": "Oct"                
+	            },
+	            {
+	                "price": 599.39,
+	                "month": "Nov"
+	            },
+	            {
+	                "price": 645.90,
+	                "month": "Dec"
+	            }
+        	]
+        },         
+    	{	"name": "Amazon.com Inc. (AMZN)",
+    		"data": [
+	            {
+	                "price": 169.64,
+	                "month": "Jan"
+	            },
+	            {
+	                "price": 173.29,
+	                "month": "Feb"
+	            },
+	            {
+	                "price": 180.13,
+	                "month": "Mar"
+	            },
+	            {
+	                "price": 195.81,
+	                "month": "Apr"
+	            },
+	            {
+	                "price": 196.69,
+	                "month": "May"
+	            },
+	            {
+	                "price": 204.49,
+	                "month": "Jun"
+	            },
+				{
+	                "price": 222.52,
+	                "month": "Jul"
+	            },
+	            {
+	                "price": 215.23,
+	                "month": "Aug"
+	            },
+	            {
+	                "price": 216.23,
+	                "month": "Sep"
+	            },
+	            {
+	                "price": 213.51,
+	                "month": "Oct"                
+	            },
+	            {
+	                "price": 192.29,
+	                "month": "Nov"
+	            },
+	            {
+	                "price": 173.10,
+	                "month": "Dec"
+	            }
+        	]
+        }         
+    ]
+}

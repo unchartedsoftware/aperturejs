@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="0.290949in" height="0.332295in" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 1.21421 1.38676"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str0 {stroke:#2C2C2C;stroke-width:0.0579494}
+    .fil4 {fill:#B2B2B2}
+    .fil2 {fill:white}
+    .fil3 {fill:#666666;fill-rule:nonzero}
+    .fil1 {fill:#B2B2B2;fill-rule:nonzero}
+    .fil0 {fill:url(#id0)}
+   ]]>
+  </style>
+  <linearGradient id="id0" gradientUnits="userSpaceOnUse" x1="0.0289829" y1="0.693372" x2="1.18523" y2="0.693372">
+   <stop offset="0" style="stop-color:#DFDFDF"/>
+   <stop offset="0.709804" style="stop-color:#CACACA"/>
+   <stop offset="1" style="stop-color:#B4B4B4"/>
+  </linearGradient>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <rect class="fil0 str0" x="0.0289829" y="0.0289829" width="1.15624" height="1.32879" rx="0.0867516" ry="0.0867516"/>
+  <polygon class="fil1" points="0.983744,1.09705 0.230171,1.09705 0.230171,0.98307 0.983744,0.98307 "/>
+  <polygon class="fil2" points="0.117624,0.690628 0.616889,0.690628 1.09838,0.690628 1.09838,0.923576 0.616889,0.923576 0.616889,1.14874 0.117624,1.14874 "/>
+  <polygon class="fil1" points="0.983744,0.863343 0.230171,0.863343 0.230171,0.749366 0.983744,0.749366 "/>
+  <polygon class="fil3" points="0.616889,1.09705 0.230171,1.09705 0.230171,0.98307 0.616889,0.98307 "/>
+  <polygon class="fil3" points="0.983744,0.867171 0.230171,0.867171 0.230171,0.753195 0.983744,0.753195 "/>
+  <polygon class="fil1" points="0.983744,0.633468 0.577983,0.633468 0.577983,0.519491 0.983744,0.519491 "/>
+  <polygon class="fil1" points="0.983744,0.399748 0.577983,0.399748 0.577983,0.285771 0.983744,0.285771 "/>
+  <rect class="fil4" x="0.230183" y="0.285771" width="0.228106" height="0.347697"/>
+ </g>
+</svg>

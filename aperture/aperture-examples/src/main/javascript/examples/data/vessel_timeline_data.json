@@ -1,0 +1,180 @@
+{
+ "dateTimeFormat": "iso8601",
+ "Title": "Algoma Discovery Vessel Timeline",
+"band":[
+	{
+		"start":"2012-02-08T10:00Z",
+		"end":"2012-02-21T23:59Z",
+		"intervalWidth":100,
+		"intervalUnit":"hour"
+	}
+],
+"series":
+	[
+	    {"id" : 0,
+	    "events": [
+	        {
+	            "start": "2012-02-08T10:00Z",
+	            "duration" : 86400000,
+	            "title": "Departure from Bergen",
+	            "location": "Bergen, Norway",
+	            "icon": "event_departure.png",
+	            "description": "Beginning of cargo shipping trip from Norway towards Port of Quebec",
+	            "image": "event1.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-10T12:30Z",
+	            "duration" : 43200000,
+	            "title": "96 hour call",
+	            "location": "Lat 57.2, Lon -19.48",
+	            "icon": "event_96h.png",
+	            "description": "96 hours until arrival to Quebec",
+	            "image": "event2.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-14T12:00Z",
+	            "duration" : 100000000,
+	            "title": "24 hour call",
+	            "location": "Lat 49.5, Lon -46.23",
+	            "icon": "event_24h.png",
+	            "description": "24 hours until arrival to Quebec",
+	            "image": "event3.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-17T13:00Z",
+	            "duration" : 21600000,
+	            "title": "Arrival in Quebec",
+	            "location": "Quebec City, Quebec",
+	            "icon": "event_arrival.png",
+	            "description": "Arrived in Quebec with all cargo intact",
+	            "image": "event4.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-18T15:00Z",
+	            "duration" : 50000000,
+	            "title": "Departure to Montreal",
+	            "location": "Montreal, Quebec",
+	            "icon": "event_departure.png",
+	            "description": "Departure towards Montreal after unloading Quebec cargo",
+	            "image": "event5.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-19T14:00Z",
+	            "duration" : 21600000,
+	            "title": "Arrival in Montreal",
+	            "location": "Montreal, Quebec",
+	            "icon": "event_arrival.png",
+	            "description": "Arrival in Montreal with cargo",
+	            "image": "event6.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-20T08:00Z",
+	            "duration" : 32600000,
+	            "title": "Departure to Toronto",
+	            "location": "Montreal, Quebec",
+	            "icon": "event_departure.png",
+	            "description": "Departing for Toronto with cargo",
+	            "image": "event7.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-20T18:00Z",
+	            "duration" : 36000000,
+	            "title": "Arrival in Toronto",
+	            "location": "Toronto, Ontario",
+	            "icon": "event_arrival.png",
+	            "description": "Arrived in Toronto to deliver remaining cargo",
+	            "image": "event8.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        }
+	    ]},
+		{"id" : 1,
+		"events": [
+	        {
+	            "start": "2012-02-09T10:00Z",
+	            "duration" : 86400000,
+	            "title": "Departure from Bergen",
+	            "location": "Bergen, Norway",
+	            "icon": "event_24h.png",
+	            "description": "Beginning of cargo shipping trip from Norway towards Port of Quebec",
+	            "image": "event8.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-11T12:30Z",
+	            "duration" : 43200000,
+	            "title": "96 hour call",
+	            "location": "Lat 57.2, Lon -19.48",
+	            "icon": "event_departure.png",
+	            "description": "96 hours until arrival to Quebec",
+	            "image": "event_24h",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-15T12:00Z",
+	            "duration" : 100000000,
+	            "title": "24 hour call",
+	            "location": "Lat 49.5, Lon -46.23",
+	            "icon": "event_departure.png",
+	            "description": "24 hours until arrival to Quebec",
+	            "image": "event5.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-18T13:00Z",
+	            "duration" : 21600000,
+	            "title": "Arrival in Quebec",
+	            "location": "Quebec City, Quebec",
+	            "icon": "event_arrival.png",
+	            "description": "Arrived in Quebec with all cargo intact",
+	            "image": "event7.png.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-18T15:00Z",
+	            "duration" : 50000000,
+	            "title": "Departure to Montreal",
+	            "location": "Montreal, Quebec",
+	            "icon": "event_departure.png",
+	            "description": "Departure towards Montreal after unloading Quebec cargo",
+	            "image": "event4.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-20T14:00Z",
+	            "duration" : 21600000,
+	            "title": "Arrival in Montreal",
+	            "location": "Montreal, Quebec",
+	            "icon": "event_24h.png",
+	            "description": "Arrival in Montreal with cargo",
+	            "image": "event3.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-21T08:00Z",
+	            "duration" : 32600000,
+	            "title": "Departure to Toronto",
+	            "location": "Montreal, Quebec",
+	            "icon": "event_departure.png",
+	            "description": "Departing for Toronto with cargo",
+	            "image": "event2.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        },
+	        {
+	            "start": "2012-02-21T18:00Z",
+	            "duration" : 36000000,
+	            "title": "Arrival in Toronto",
+	            "location": "Toronto, Ontario",
+	            "icon": "event_96h.png",
+	            "description": "Arrived in Toronto to deliver remaining cargo",
+	            "image": "event1.png",
+	            "link": "http://www.seaway.ca/en/pdf/overview_brochure.pdf"
+	        }]}
+	]
+}

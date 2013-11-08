@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>oculus.aperture</groupId>
+	<artifactId>aperture</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>aperture</name>
+	<description>Parent project for the aperture client-server framework</description>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-site-plugin</artifactId>
+		        <version>3.0</version>
+		        <dependencies>
+		            <dependency><!-- add support for ssh/scp -->
+		            	<groupId>org.apache.maven.wagon</groupId>
+		            	<artifactId>wagon-ssh</artifactId>
+		            	<version>1.0</version>
+		            </dependency>
+		        </dependencies>
+        	</plugin>
+		</plugins>
+	</build>
+
+	<!-- Information on how/where to deploy -->
+	<distributionManagement>
+		<repository>
+			<id>archiva.internal</id>
+			<name>Internal Release Repository</name>
+			<url>http://maven.oculus.local:8080/archiva/repository/internal/</url>
+		</repository>
+		<snapshotRepository>
+			<id>archiva.snapshots</id>
+			<name>Internal Snapshot Repository</name>
+			<url>http://maven.oculus.local:8080/archiva/repository/snapshots/</url>
+		</snapshotRepository>
+		<site>
+	      <id>pathwaysbuild</id>
+	      <url>scp://pathwaysbuild.oculus.local/home/oculusbuild/aperture-www/</url>
+	    </site>
+	</distributionManagement>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.4</version>
+			</plugin>
+		</plugins>
+	</reporting>
+
+
+	<!-- Local Repositories -->
+	<repositories>
+		<repository>
+			<id>maven-repo</id>
+			<name>Global Maven Repository</name>
+			<url>http://repo1.maven.org/maven2/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+
+		<repository>
+			<id>Apache Snapshots</id>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<url>https://repository.apache.org/content/repositories/snapshots</url>
+		</repository>
+
+		<repository>
+			<id>maven-restlet</id>
+			<name>Public online Restlet repository</name>
+			<url>http://maven.restlet.org</url>
+		</repository>
+	</repositories>
+
+	<profiles>
+		<!-- Development Profile -->
+		<profile>
+			<id>Development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+
+		<!-- Deployment Profile -->
+		<profile>
+			<id>Deployment</id>
+		</profile>
+	</profiles>
+
+
+	<modules>
+		<!-- Aperture Common Java Classes -->
+		<module>aperture-common</module>
+
+		<!-- Client-side libraries (JS) -->
+		<module>aperture-client</module>
+
+		<!-- Documentatoin for client-side libraries (JS) -->
+		<module>aperture-client-docs</module>
+
+		<!-- Core server components -->
+		<module>aperture-server-core</module>
+
+		<!-- Service Provider Interface definitions -->
+		<module>aperture-spi</module>
+
+		<!-- Docs for same -->
+		<module>aperture-spi-docs</module>
+
+		<!-- Sample server -->
+		<module>aperture-server</module>
+
+		<!-- HSCB Icon Service Implementation -->
+    	<module>aperture-icons</module>
+
+		<!-- Parchment service Implementation for source confidence -->
+    	<module>aperture-parchment</module>
+
+    	<!-- Image Capture Service Implementation -->
+    	<module>aperture-capture-phantom</module>
+
+		<!-- Client-side examples (JS) -->
+		<module>aperture-examples</module>
+
+		<!-- Reference Content Management Service Implementations -->
+		<module>aperture-cms</module>
+
+		<!-- Reference Layout Service Implementation -->
+		<module>aperture-layout</module>
+		
+		<!-- Module that handles making a distribution ZIP -->
+		<module>aperture-distribution</module>
+		
+		<!-- Graph Utilities -->
+		<module>aperture-graph</module>
+	</modules>
+
+
+	<!-- Specify dependency versions here to apply across Aperture -->
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- RESTLET -->
+			<dependency>
+				<groupId>org.restlet.jee</groupId>
+				<artifactId>org.restlet</artifactId>
+				<version>2.1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jee</groupId>
+				<artifactId>org.restlet.ext.servlet</artifactId>
+				<version>2.1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jee</groupId>
+				<artifactId>org.restlet.ext.jackson</artifactId>
+				<version>2.1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jee</groupId>
+				<artifactId>org.restlet.ext.json</artifactId>
+				<version>2.1.2</version>
+			</dependency>
+
+			<!-- Guava -->
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>r07</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+			<!-- Guice -->
+			<dependency>
+				<groupId>com.google.inject</groupId>
+				<artifactId>guice</artifactId>
+				<version>3.0</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.inject.extensions</groupId>
+				<artifactId>guice-assistedinject</artifactId>
+				<version>3.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.inject.extensions</groupId>
+				<artifactId>guice-multibindings</artifactId>
+				<version>3.0</version>
+			</dependency>
+
+
+			<!-- Logging -->
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.17</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.7.5</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.7.5</version>
+			</dependency>
+
+			<!-- Testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.11</version>
+				<scope>test</scope>
+			</dependency>
+			
+			<!-- Caching -->
+			<dependency>
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache-core</artifactId>
+				<version>2.6.5</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache-web</artifactId>
+				<version>2.0.4</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+</project>

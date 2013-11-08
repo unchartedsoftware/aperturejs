@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="0.39672in" height="0.396594in" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 2.22826 2.22755"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str0 {stroke:#666666;stroke-width:0.0663169;stroke-linejoin:round}
+    .str1 {stroke:#4C4C4C;stroke-width:0.136526;stroke-linejoin:round}
+    .fil3 {fill:none;fill-rule:nonzero}
+    .fil0 {fill:url(#id0);fill-rule:nonzero}
+    .fil1 {fill:url(#id1);fill-rule:nonzero}
+    .fil2 {fill:url(#id2);fill-rule:nonzero}
+   ]]>
+  </style>
+  <linearGradient id="id0" gradientUnits="userSpaceOnUse" x1="0.405663" y1="0.521889" x2="1.36625" y2="2.18567">
+   <stop offset="0" style="stop-color:white"/>
+   <stop offset="0.811765" style="stop-color:#E3E3E3"/>
+   <stop offset="1" style="stop-color:#C6C6C6"/>
+  </linearGradient>
+  <linearGradient id="id1" gradientUnits="userSpaceOnUse" x1="1.6935" y1="0.719093" x2="2.16327" y2="1.53276">
+   <stop offset="0" style="stop-color:#F4F4F4"/>
+   <stop offset="1" style="stop-color:#C6C6C6"/>
+  </linearGradient>
+  <linearGradient id="id2" gradientUnits="userSpaceOnUse" x1="0.973724" y1="0.0718894" x2="1.24669" y2="0.544665">
+   <stop offset="0" style="stop-color:white"/>
+   <stop offset="0.870588" style="stop-color:whitesmoke"/>
+   <stop offset="1" style="stop-color:#EBEBEB"/>
+  </linearGradient>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <polygon class="fil0 str0" points="1.70365,0.53613 0.0682628,0.53613 0.0682628,2.17145 1.70365,2.17145 "/>
+  <polygon class="fil1 str0" points="2.16,0.080425 1.6968,0.53613 1.6968,2.17145 2.16,1.6215 "/>
+  <polygon class="fil2 str0" points="2.15215,0.080425 0.704918,0.080425 0.0682628,0.53613 1.70365,0.53613 "/>
+  <polygon class="fil3 str1" points="2.15215,0.0682628 0.704918,0.0682628 0.0682628,0.523968 0.0682628,2.15929 1.6968,2.15929 1.70365,2.15115 2.16,1.60934 2.16,0.0682628 "/>
+ </g>
+</svg>

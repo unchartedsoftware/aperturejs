@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>aperture</artifactId>
+		<groupId>oculus.aperture</groupId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>oculus.aperture.service</groupId>
+	<artifactId>aperture-cms</artifactId>
+
+	<name>aperture-cms</name>
+	<description>Reference implementation of Aperture CMS service provider and REST endpoint</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>aperture-spi</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>aperture-common</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<!-- Restlet - for REST Resource -->
+		<dependency>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet.ext.json</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+		</dependency>
+
+		<!-- For ehCache CMS -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+		</dependency>
+
+		<!-- For CouchDB -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.lightcouch</groupId>
+			<artifactId>lightcouch</artifactId>
+			<version>0.0.4</version>
+		</dependency>
+
+		<!-- Testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<reporting>
+		<plugins>
+			<!-- Generate JavaDocs -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.8</version>
+			</plugin>
+		</plugins>
+	</reporting>
+
+</project>

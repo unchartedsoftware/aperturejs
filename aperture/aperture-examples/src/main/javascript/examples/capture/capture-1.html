@@ -1,0 +1,52 @@
+	<style>
+		.aperture-log-error {
+			color: red;
+		}
+
+		.aperture-log-warn {
+			color: orange;
+		}
+
+		.aperture-log-info {
+			color: blue;
+		}
+
+		#htmlSource {
+			width: 300px;
+		}
+		#log {
+			border-style:ridge;
+			border-width:2px;
+			height:10em;
+			overflow-y:scroll;
+			overflow-x:hidden;
+			margin-bottom: 15px;
+		}
+	</style>
+	<p>The example demonstrates how to use the rendering service to render web content to an image.
+	</p>
+	<div>
+		<form>
+			Enter a source url (e.g. http://foo.com)<br>
+			<input type="text" id="htmlSource" style="margin-right: 20px;"/>
+			Format:
+			<input type="text" id="width" style="width: 50px; margin-left: 5px;"/> x 
+			<input type="text" id="height" style="width: 50px;"/> 
+			<input type="radio" name="format" value="PNG" checked="checked"/> png
+			<input type="radio" name="format" value="JPEG"/> jpeg
+			<br>
+		</form>
+		<div style="margin-top: 10px; margin-bottom: 10px;">
+			Enter a username and password (optional)<br>
+			<input type="text" id="username" style="margin-right: 20px;"/>
+			<input type="password" id="password" style="margin-right: 20px;"/>
+			<br>
+		</div>
+		<div style="margin-top: 10px; margin-bottom: 10px;">
+			<button id='storedRenderBtn'>Stored Render</button>
+			<button id='inlineRenderBtn'>Inline Render</button>
+		</div>
+		Log:
+	</div>
+	<div id='log'></div>
+	<div id='result'></div>

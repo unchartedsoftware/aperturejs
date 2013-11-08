@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X5 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="187px" height="187px" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 178943 178943"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .fil0 {fill:#4D4D4D}
+    .fil1 {fill:white}
+   ]]>
+  </style>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <rect class="fil0" width="171486" height="164029" rx="8642" ry="8642"/>
+  <rect class="fil0" x="14910" y="166939" width="37280" height="12003"/>
+  <rect class="fil0" x="118728" y="166939" width="37280" height="12003"/>
+  <circle class="fil1" transform="matrix(2.03416 2.03416 -2.03416 2.03416 105448 78505.5)" r="14903"/>
+  <circle class="fil0" transform="matrix(1.32657 1.32657 -1.32657 1.32657 105448 78505.5)" r="14903"/>
+  <polygon class="fil0" points="125162,73984 109969,58791 129961,48170 135405,53613 "/>
+  <circle class="fil1" cx="34614" cy="80149" r="9318"/>
+  <ellipse class="fil1" cx="34613" cy="103549" rx="7304" ry="23860"/>
+  <rect class="fil0" transform="matrix(8.11569E-014 2.30133 -3.06404 6.09445E-014 178943 22366.6)" width="12959" height="5184"/>
+  <rect class="fil0" transform="matrix(6.89775E-014 2.30133 -2.60422 6.09445E-014 178943 111839)" width="12959" height="5184"/>
+ </g>
+</svg>

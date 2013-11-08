@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<script>
+			var ask = function() {
+				var xmlHttp = new XMLHttpRequest();
+				var readAt = 0, msg;
+
+				// synchronous gets will time out, outside of our control.
+				xmlHttp.open('GET', './taskmanager', true);
+				xmlHttp.onreadystatechange = function() {
+					var i, s = xmlHttp.responseText;
+
+					while ((i = s.indexOf('}', readAt)) !== -1) {
+						msg = s.substring(readAt, ++i);
+
+						// issue the task.
+						console.log(msg);
+						readAt = i;
+						
+						if (msg === '{RECONNECT}') {
+							window.setTimeout(ask, 8);
+							return;
+						} 
+					}
+					
+					// shutdown if done for any reason and no reconnect message.
+					if (xmlHttp.readyState === 4 && msg !== '{RECONNECT}') {
+						console.log('{SHUTDOWN}');
+					}
+				};
+				
+				xmlHttp.send();
+			};
+			
+			ask();
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
