@@ -227,7 +227,7 @@ function(namespace) {
 						if (path === prevPath){
 							// No data change, update attributes and continue
 							if (segment.attr('stroke') != segmentInfo.stroke){
-								attrSet['stroke'] = segmentInfo.stroke;
+								attrSet.stroke = segmentInfo.stroke;
 							}
 							if (segment.attr('stroke-width') != strokeWidth){
 								attrSet['stroke-width'] = strokeWidth;

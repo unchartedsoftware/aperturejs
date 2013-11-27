@@ -111,9 +111,10 @@ function(namespace) {
 	function getFlowOffset(flowSpec){
 		// Find the matching link.
 		var matchLink = null,
-			target = flowSpec.target;
+			target = flowSpec.target,
+			i;
 
-		for (var i=0; i < target.links.length; i++){
+		for (i=0; i < target.links.length; i++){
 			if (target.links[i].id == flowSpec.link.data.id){
 				matchLink = target.links[i];
 				break;
@@ -139,9 +140,9 @@ function(namespace) {
 	}
 
 	function getStackedWidth(links, sankeyAnchor){
-		var width = 0;
+		var width = 0, i;
 		if (sankeyAnchor == 'middle'){
-			for (var i=0; i < links.length; i++){
+			for (i=0; i < links.length; i++){
 				width += this.valueFor('stroke-width', links[i], 0);
 			}
 			return width;
@@ -247,30 +248,32 @@ function(namespace) {
 				var nIndex=0;
 				var paths = [];
 				
-				var width=0, totalOffset=0;
+				var width=0, totalOffset=0, key, flowSpec, flowWidth, path;
 
 				// For each target node, iterate over all the incoming flows
 				// and determine the stacked, flow endpoint positions.
-				for (var key in targetMap){
-					var targetSpecList = targetMap[key].inflows;
-					
-					width=totalOffset=0;
-					for (nIndex = 0; nIndex < targetSpecList.length; nIndex++){
-						var flowSpec = targetSpecList[nIndex];
+				for (key in targetMap){
+					if (targetMap.hasOwnProperty(key)) {
+						var targetSpecList = targetMap[key].inflows;
 						
-						width = getStackedWidth.call(this, flowSpec.target.links, flowSpec['sankey-anchor']);
-						var flowWidth = getFlowOffset.call(this, flowSpec);
-						totalOffset += flowWidth*0.5;
-						
-						targetPt = {
-									'x' : flowSpec.target.x - flowSpec.target.r,
-									'y' : flowSpec.target.y + totalOffset - 0.5*width
-						};
-						if (targetMap[flowSpec.target.id]['stackPts'] == null){
-							targetMap[flowSpec.target.id] = {'stackPts' : {}};
+						width=totalOffset=0;
+						for (nIndex = 0; nIndex < targetSpecList.length; nIndex++){
+							flowSpec = targetSpecList[nIndex];
+							
+							width = getStackedWidth.call(this, flowSpec.target.links, flowSpec['sankey-anchor']);
+							flowWidth = getFlowOffset.call(this, flowSpec);
+							totalOffset += flowWidth*0.5;
+							
+							targetPt = {
+										'x' : flowSpec.target.x - flowSpec.target.r,
+										'y' : flowSpec.target.y + totalOffset - 0.5*width
+							};
+							if (targetMap[flowSpec.target.id]['stackPts'] == null){
+								targetMap[flowSpec.target.id] = {'stackPts' : {}};
+							}
+							targetMap[flowSpec.target.id].stackPts[flowSpec.source.id] = targetPt;
+							totalOffset += flowWidth*0.5;
 						}
-						targetMap[flowSpec.target.id].stackPts[flowSpec.source.id] = targetPt;
-						totalOffset += flowWidth*0.5;
 					}
 				}
 				
@@ -278,41 +281,43 @@ function(namespace) {
 				// and determine the stacked, flow endpoint positions.
 				// Then couple these source endpoints with the target endpoints
 				// from above and calculate the bezier path for that flow.
-				for (var key in sourceMap){
-					var sourceSpecList = sourceMap[key].outflows;
-					
-					width=totalOffset=0;
-					for (nIndex = 0; nIndex < sourceSpecList.length; nIndex++){
-						var flowSpec = sourceSpecList[nIndex];
-						width = getStackedWidth.call(this, flowSpec.source.links, flowSpec['sankey-anchor']);
-						var flowWidth = getFlowOffset.call(this, flowSpec);
-						totalOffset += flowWidth*0.5;
-
-						sourcePt = {
-									'x' : flowSpec.source.x + flowSpec.source.r,
-									'y' : flowSpec.source.y + totalOffset - 0.5*width
-						};
+				for (key in sourceMap){
+					if (sourceMap.hasOwnProperty(key)) {
+						var sourceSpecList = sourceMap[key].outflows;
 						
-						var path = calcFlowPath(sourcePt, targetMap[flowSpec.target.id].stackPts[flowSpec.source.id]);
-						
-						paths.push({
-							'link': flowSpec.link,
-							'path' : path
-						});
-						totalOffset += flowWidth*0.5;
+						width=totalOffset=0;
+						for (nIndex = 0; nIndex < sourceSpecList.length; nIndex++){
+							flowSpec = sourceSpecList[nIndex];
+							width = getStackedWidth.call(this, flowSpec.source.links, flowSpec['sankey-anchor']);
+							flowWidth = getFlowOffset.call(this, flowSpec);
+							totalOffset += flowWidth*0.5;
+	
+							sourcePt = {
+										'x' : flowSpec.source.x + flowSpec.source.r,
+										'y' : flowSpec.source.y + totalOffset - 0.5*width
+							};
+							
+							path = calcFlowPath(sourcePt, targetMap[flowSpec.target.id].stackPts[flowSpec.source.id]);
+							
+							paths.push({
+								'link': flowSpec.link,
+								'path' : path
+							});
+							totalOffset += flowWidth*0.5;
+						}
 					}
 				}
 				
 				// Iterate over the list of flow paths and render.
-				for (var i=0; i < paths.length; i++){
+				for (i=0; i < paths.length; i++){
 					var link = paths[i].link;
 					var linkData   = link.data;
-					var path = paths[i].path;
+					path = paths[i].path;
 
 					var attrs = {
 						'opacity': this.valueFor('opacity', linkData, 1),
 						'stroke' : this.valueFor('stroke', linkData, 'link'),
-						'stroke-width' : this.valueFor('stroke-width', linkData, 1),
+						'stroke-width' : this.valueFor('stroke-width', linkData, 1)
 					};
 
 					// extra processing on stroke style

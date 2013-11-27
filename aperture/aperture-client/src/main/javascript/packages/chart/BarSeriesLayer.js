@@ -37,8 +37,6 @@ function(namespace) {
 			xValue = this.valueFor('x', barSeriesData, 0, index),
 			yValue = this.valueFor('y', barSeriesData, 0, index),
 			strokeWidth = this.valueFor('stroke-width', barSeriesData, 1),
-			orientation = this.valueFor('orientation', null, 'vertical'),
-			borderWidth = this.valueFor('border-width', barSeriesData, 1),
 			barLayout = this.valueFor('bar-layout', null, this.DEFAULT_BAR_LAYOUT),
 			canvasY = yValue*h;
 		
@@ -75,7 +73,6 @@ function(namespace) {
 			}
 		}
 		else {
-			var canvasY = yValue*h;
 			// Take the y-point and calculate the height of the corresponding bar.
 			// We subtract the stroke width of the top and bottom borders so that
 			// the bar doesn't blead over the border.

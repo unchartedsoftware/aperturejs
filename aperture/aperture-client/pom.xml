@@ -41,6 +41,7 @@
 					<defaultSourceFolder>src/main/javascript</defaultSourceFolder>
 					<failOnError>false</failOnError>
 					<options>
+						<maxerr>100</maxerr>
 						<undef>true</undef>
 						<white>true</white>
 						<vars>true</vars>
