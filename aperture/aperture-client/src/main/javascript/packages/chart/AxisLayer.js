@@ -211,8 +211,10 @@ function(namespace) {
 				// Calculate the distance between bands by sampling the first 2 intervals.
 				bandwidth = (this.valueFor('x', tickArray, 0, 1)-this.valueFor('x', tickArray, 0, 0))*node.width;
 			}
-	
+
 			if (hasBands || axisRange.typeOf(aperture.Ordinal)){
+				var tickLast = false;
+				
 				for (tickId=0; tickId < tickArray.ticks.length; tickId++){
 					tick = tickArray.ticks[tickId];
 					if (!tick) {
@@ -220,6 +222,26 @@ function(namespace) {
 					}
 					tickMin = hasBands?tick.min:tick;
 					tickLimit = hasBands?tick.limit:tick;
+					
+					if (tickMin === -Number.MAX_VALUE) {
+						if (tickId === 0 && hasBands && this.valueFor('tick-first', null, 'band') === 'edge') {
+							tickMin = axisRange.start();
+						} else {
+							continue;
+						}
+					}
+					
+					if (tickId === tickArray.ticks.length - 1) {
+						tickLast = true;
+						if (tickLimit === Number.MAX_VALUE) {
+							if (hasBands && this.valueFor('tick-last', null, 'band') === 'edge') {
+								tickLimit = axisRange.end();
+							} else {
+								tickLast = false;
+							}
+						}
+					}
+					
 					if (type === 'x'){
 						mappedValue = this.valueFor('x', tickArray, 0, tickId);
 						xPos = (mappedValue*node.width) + left;
@@ -232,7 +254,7 @@ function(namespace) {
 						tickLabels.push({'x':tickMin,'y':0, 'text':axisRange.format(tickMin)});
 						// If we're on the last tick, and there is a bounded upper limit,
 						// include a tick mark for the upper boundary value as well.
-						if (tickId == tickArray.ticks.length-1 && tickLimit != Number.MAX_VALUE){
+						if (tickLast) {
 							// Create a fake data source so that the mapped value will account
 							// for any filters.
 							mappedValue = this.valueFor('x', {'ticks':[{'min':tickLimit}]}, 0, 0);
@@ -252,7 +274,7 @@ function(namespace) {
 	
 						// If we're on the last tick, and there is a bounded upper limit,
 						// include a tick mark for the upper boundary value as well.
-						if (tickId == tickArray.ticks.length-1 && tickLimit != Number.MAX_VALUE){
+						if (tickLast){
 							mappedValue = this.valueFor('y', {'ticks':[{'min':tickLimit}]}, 0, 0);
 							yPos = (mappedValue*h) + top;
 							path += 'M' + xPos + ',' + yPos + 'L' + (xPos+tickLength) + ',' + yPos;
@@ -373,6 +395,14 @@ function(namespace) {
 		 * 
 		 * @mapping {Number=0} tick-offset
 		 *   The gap (in pixels) between the beginning of the tick mark and the axis it belongs too.
+		 * 
+		 * @mapping {'band'|'edge'} tick-first
+		 *   When an axis range is banded but not rounded, the default behavior is to mark the first tick 
+		 *   at the start of the first whole band. Specifying 'edge' will force a tick at the edge of the axis range.
+		 * 
+		 * @mapping {'band'|'edge'} tick-last
+		 *   When an axis range is banded but not rounded, the default behavior is to mark the last tick 
+		 *   at the end of the last whole band. Specifying 'edge' will force a tick at the edge of the axis range.
 		 * 
 		 * @mapping {Number=0} label-offset-x
 		 *   The horizontal gap (in pixels) between the end of a tick mark, and the beginning of the tick mark's label.

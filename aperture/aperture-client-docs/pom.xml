@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>oculus.aperture</groupId>
 		<artifactId>aperture</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.2</version>
 	</parent>
 
 	<artifactId>aperture-client-docs</artifactId>
@@ -82,6 +82,7 @@
 									<arg value="-r=3" />
 									<arg value="-E=&quot;(pre|pre-package|post)\.js&quot;" />
 									<arg value="-E=raphael-group.js" />
+									<arg value="-E=tooltip.js" />
 									<arg value="-E=TableLayer.js" />
 									<arg value="-E=header.js" />
 									<arg value="-E=aperture-exampleconfig.js" />
@@ -110,6 +111,7 @@
 									<arg value="-r=3" />
 									<arg value="-E=&quot;(pre|pre-package|post)\.js&quot;" />
 									<arg value="-E=raphael-group.js" />
+									<arg value="-E=tooltip.js" />
 									<arg value="-E=TableLayer.js" />
 									<arg value="-E=header.js" />
 									<arg value="-E=aperture-exampleconfig.js" />

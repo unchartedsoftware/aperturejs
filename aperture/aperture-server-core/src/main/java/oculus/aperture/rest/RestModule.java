@@ -59,6 +59,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Closeables;
+import com.google.common.io.Files;
 import com.google.inject.Provides;
 import com.google.inject.servlet.ServletModule;
 
@@ -231,6 +232,10 @@ public class RestModule extends ServletModule {
 		try {
 			logger.info("Loading ehcache configuration...");
 
+			if (System.getProperty("ehcache.disk.store.dir") == null) {
+				System.setProperty("ehcache.disk.store.dir", Files.createTempDir().getPath());
+			}
+			
 			// Load properties
 			InputStream inp = ResourceHelper.getStreamForPath(filename, "res:///default-ehcache.xml");
 

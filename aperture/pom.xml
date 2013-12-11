@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>oculus.aperture</groupId>
 	<artifactId>aperture</artifactId>
-	<version>1.0.0</version>
 	<packaging>pom</packaging>
+	<version>1.0.2</version>
 
-	<name>aperture</name>
-	<description>Parent project for the aperture client-server framework</description>
+	<name>Aperture JS</name>
+	<description>Parent module for building the Aperture JS project modules</description>
+	<url>http://aperturejs.com</url>
+	<scm>
+		<url>https://github.com/oculusinfo/influent</url>
+		<connection>scm:git:https://github.com/oculusinfo/influent.git</connection>
+	</scm>
+	<licenses>
+		<license>
+			<name>The MIT License (MIT)</name>
+			<url>http://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>djonker</id>
+			<name>David Jonker</name>
+			<email>support@oculusinfo.com</email>
+		</developer>
+	</developers>
 
 	<build>
 		<plugins>
@@ -21,38 +39,8 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-site-plugin</artifactId>
-		        <version>3.0</version>
-		        <dependencies>
-		            <dependency><!-- add support for ssh/scp -->
-		            	<groupId>org.apache.maven.wagon</groupId>
-		            	<artifactId>wagon-ssh</artifactId>
-		            	<version>1.0</version>
-		            </dependency>
-		        </dependencies>
-        	</plugin>
 		</plugins>
 	</build>
-
-	<!-- Information on how/where to deploy -->
-	<distributionManagement>
-		<repository>
-			<id>archiva.internal</id>
-			<name>Internal Release Repository</name>
-			<url>http://maven.oculus.local:8080/archiva/repository/internal/</url>
-		</repository>
-		<snapshotRepository>
-			<id>archiva.snapshots</id>
-			<name>Internal Snapshot Repository</name>
-			<url>http://maven.oculus.local:8080/archiva/repository/snapshots/</url>
-		</snapshotRepository>
-		<site>
-	      <id>pathwaysbuild</id>
-	      <url>scp://pathwaysbuild.oculus.local/home/oculusbuild/aperture-www/</url>
-	    </site>
-	</distributionManagement>
 
 	<reporting>
 		<plugins>
@@ -64,32 +52,7 @@
 		</plugins>
 	</reporting>
 
-
-	<!-- Local Repositories -->
 	<repositories>
-		<repository>
-			<id>maven-repo</id>
-			<name>Global Maven Repository</name>
-			<url>http://repo1.maven.org/maven2/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-
-		<repository>
-			<id>Apache Snapshots</id>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<url>https://repository.apache.org/content/repositories/snapshots</url>
-		</repository>
-
 		<repository>
 			<id>maven-restlet</id>
 			<name>Public online Restlet repository</name>

@@ -177,6 +177,24 @@ function(namespace) {
 			},
 
 			/**
+			 * Returns the start of the range. For scalars this will be the minimum of the extents, and
+			 * for ordinals it will be the first case. To reset the start and end extents use the reset function.
+			 */
+			start : function() {
+				return this.get()[0];
+			},
+			
+			/**
+			 * Returns the end of the range. For scalars this will be the maximum of the extents, and
+			 * for ordinals it will be the last case. To reset the start and end extents use the reset function.
+			 */
+			end : function() {
+				var e = this.get();
+				
+				return e && e[e.length-1];
+			},
+			
+			/**
 			 * Formats a value as a String using the current formatter.
 			 *
 			 * @param value
@@ -818,6 +836,14 @@ function(namespace) {
 			},
 
 			// override to use extents instead of the result of get.
+			start : function() {
+				this.get();
+				return this.extents && this.extents[0];
+			},
+			end : function() {
+				this.get();
+				return this.extents && this.extents[1];
+			},
 			map : function( value ) {
 
 				// call function to update if necessary.

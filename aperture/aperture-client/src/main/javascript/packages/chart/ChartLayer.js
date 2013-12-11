@@ -187,10 +187,7 @@ function(namespace) {
 
 	//TODO: Add min-ticklength for other examples.
 	isManagedChild = function( layer ) {
-		switch (layer) {
-		case this.axisArray.x[0]:
-		case this.axisArray.y[0]:
-		case this.titleLayer:
+		if (layer == this.titleLayer || layer.typeOf(namespace.AxisLayer)) {
 			return true;
 		}
 		return false;
