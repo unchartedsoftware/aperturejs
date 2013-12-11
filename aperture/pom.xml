@@ -4,7 +4,7 @@
 	<groupId>oculus.aperture</groupId>
 	<artifactId>aperture</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2</version>
 
 	<name>Aperture JS</name>
 	<description>Parent module for building the Aperture JS project modules</description>
