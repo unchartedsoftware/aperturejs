@@ -132,6 +132,10 @@ aperture.io = (function() {
 				if( opts.contentType ) {
 					params.contentType = opts.contentType;
 				}
+
+                if( opts.async != null ) {
+                    params.async = opts.async;
+                }
 				
 				if( opts.postData && method === "POST" ) {
 					params.data = opts.postData;

@@ -49,7 +49,7 @@ function(namespace) {
 		 * @mapping {'middle'|'start'|'end'} text-anchor
 		 *   How the label is aligned with respect to its x position.
 
-		 * @mapping {'middle'|'start'|'end'} text-anchor-y
+		 * @mapping {'middle'|'top'|'bottom'} text-anchor-y
 		 *   How the label is aligned with respect to its y position.
 
 		 * @mapping {'horizontal'|'vertical'| Number} orientation

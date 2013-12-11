@@ -93,6 +93,11 @@ function(namespace) {
 		{
 			/**
 			 * @private
+			 */
+			decimals : 0,
+			
+			/**
+			 * @private
 			 *
 			 * @param {Number} [precision]
 			 *      The optional precision of the value to format. For numbers this
@@ -106,7 +111,14 @@ function(namespace) {
 					if (isNaN(precision)) {
 						aperture.log.warn('Invalid precision "' + precision + '" in NumberFormat');
 					} else {
-						this.precision = precision;
+						var p = this.precision = Number(precision);
+						if (p < 1) {
+							var s = p.toString();
+							var i = s.indexOf('.');
+							if (i !== -1) {
+								this.decimals = s.length-1-i;
+							}
+						}
 					}
 				}
 			},
@@ -130,7 +142,14 @@ function(namespace) {
 					value = Number(value);
 				}
 
-				return String(value);
+				var s = value.toFixed(this.decimals);
+				var i = s.indexOf('.');
+				
+				for (i = (i!==-1?i:s.length)-3; i > 0; i -= 3) {
+					s = s.substring(0, i).concat(',').concat(s.substring(i));
+				}
+				
+				return s;
 			}
 		}
 	);
@@ -150,6 +169,125 @@ function(namespace) {
 	 */
 	namespace.Format.getNumberFormat = function( precision ) {
 		return new namespace.NumberFormat( precision );
+	};
+	
+	/**
+	 * @private
+	 * @class A Format object that translates numbers to currency
+	 * Strings. Format objects are used by {@link aperture.Scalar Scalars} for formatting
+	 * values, but may be used independently as well.
+	 *
+	 * @extends aperture.Format
+	 *
+	 * @description
+	 * Constructs a number format.
+	 *
+	 * @name aperture.NumberFormat
+	 */
+	namespace.CurrencyFormat = namespace.NumberFormat.extend( 'aperture.CurrencyFormat',
+		{
+			/**
+			 * @private
+			 *
+			 * @param {Number} [precision] [prefix] [suffix]
+			 *      The optional precision of the value to format. For numbers this
+			 *      will be a base number to round to, such as 1 or 0.01.
+			 *      
+			 *      The optional prefix is a string value for the currency (i.e. '$')
+			 *      
+			 *      The optional prefix is a string value for the currency (i.e. 'USD')
+			 *
+			 * @returns {aperture.NumberFormat}
+			 *      A new time format object.
+			 */
+			init : function (precision, prefix, suffix) {
+				if (precision) {
+					if (isNaN(precision)) {
+						aperture.log.warn('Invalid precision "' + precision + '" in CurrencyFormat');
+					} else {
+						var p = this.precision = Number(precision);
+						if (p < 1) {
+							var s = p.toString();
+							var i = s.indexOf('.');
+							if (i !== -1) {
+								this.decimals = s.length-1-i;
+							}
+						}
+					}
+				}
+				this.prefix = prefix || '';
+				this.suffix = suffix || '';
+			},
+
+			/**
+			 * @private
+			 * Formats the specified value.
+			 *
+			 * @param {Number} value
+			 *      The value to format.
+			 *
+			 * @returns {String}
+			 *      The formatted value.
+			 */
+			format : function (value) {
+
+				value = Number(value);
+				
+				var numberSuffix = '';
+				
+				var number = Math.abs(value);
+				
+				if (number >= 1000000000000) {
+					numberSuffix = 'T';
+					number *= 0.000000000001;
+				} else if (number >= 1000000000) {
+					numberSuffix = 'B';
+					number *= 0.000000001;
+				} else if (number >= 1000000) {
+					numberSuffix = 'M';
+					number *= 0.000001;
+				} else if (number >= 1000) {
+					numberSuffix = 'K';
+					number *= 0.001;
+				}
+				
+				if (this.precision) {
+					number = Math.round(number / this.precision) * this.precision;
+				}
+				
+				var sign = (value < 0) ? '-' : '';
+				
+				var s = number.toFixed(this.decimals);
+				var i = s.indexOf('.');
+				
+				for (i = (i!==-1?i:s.length)-3; i > 0; i -= 3) {
+					s = s.substring(0, i).concat(',').concat(s.substring(i));
+				}
+				
+				return sign + this.prefix + s + numberSuffix + this.suffix;
+			}
+		}
+	);
+
+	/**
+	 * Returns a number format object, suitable for formatting numeric values.
+	 *
+	 * @param {Number} [precision] [prefix] [suffix]
+	 *      The optional precision of the value to format. For numbers this
+	 *      will be a base number to round to, such as 1 or 0.01.
+	 *      
+	 *      The optional prefix is a string value for the currency (i.e. '$')
+	 *      
+	 *      The optional prefix is a string value for the currency (i.e. 'USD')
+	 *
+	 * @returns {aperture.Format}
+	 *      a number format object.
+	 *
+	 * @name aperture.Format.getNumberFormat
+	 * @function
+	 */
+	namespace.Format.getCurrencyFormat = function(precision, prefix, suffix) {
+		return new namespace.CurrencyFormat(precision, prefix, suffix);
 	};
 
 	// create the hash of time orders.

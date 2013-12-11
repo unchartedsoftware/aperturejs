@@ -48,10 +48,14 @@ function(namespace) {
 		 *   The number of points in a given bar chart data series.
 		 *   
 		 * @mapping {Number=0} x
-		 *   The horizontal position of the bar.
+		 *   The base horizontal position of the bar.
+         * @mapping {Number=0} offset-x
+         *   An offset from base horizontal position of the bar, in pixels
 
 		 * @mapping {Number=0} y
-		 *   The vertical position of the bar.
+		 *   The base vertical position of the bar.
+         * @mapping {Number=0} offset-y
+         *   An offset from the base vertical position of the bar, in pixels
 
 		 * @mapping {String='vertical'} orientation
 		 *   Sets the orientation of the chart. Vertically oriented charts will have bars that expand along the y-axis,
@@ -132,12 +136,15 @@ function(namespace) {
 							width = this.valueFor('width', node.data, 2, index),
 							length = this.valueFor('length', node.data, 0, index),
 							startPt = (startValue * node.width) + (node.position[0]||0),
-							yPoint = (this.valueFor('y', node.data, 0, index) * node.height) + (node.position[1]||0);
+							yPoint = (this.valueFor('y', node.data, 0, index) * node.height) + (node.position[1]||0),
+					        offsetX = this.valueFor('offset-x', node.data, 0, index),
+					        offsetY = this.valueFor('offset-y', node.data, 0, index);
+
 
 						var barSpec = {
 								id : index,
-								x : startPt,
-								y : yPoint,
+								x : startPt + offsetX,
+								y : yPoint + offsetY,
 								size : {
 									width : orientation == 'vertical'?width:length,
 									height : orientation == 'vertical'?length:width

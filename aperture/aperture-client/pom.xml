@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>aperture</artifactId>
 		<groupId>oculus.aperture</groupId>
-		<version>1.0.0</version>
+		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>aperture-client</artifactId>
@@ -137,6 +137,11 @@
 								<concat	destfile="${project.build.directory}/processed-packages/aperture-cms.js">
 									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/store.js" />
 								</concat>
+								
+								<!-- Create a single JS file for the tooltip api -->
+								<concat	destfile="${project.build.directory}/processed-packages/aperture-tooltip.js">
+									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/tooltip.js" />
+								</concat>
 
 								<!-- Create a single JS file for the new map vizlet -->
 								<concat	destfile="${project.build.directory}/processed-packages/aperture-geo.js">
@@ -190,6 +195,12 @@
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-cms.js" />
 									<fileset dir="${project.build.directory}/processed-scripts" includes="post.js" />
 								</concat>
+								<concat	destfile="${project.build.outputDirectory}/aperture-packages/aperture-tooltip.js">
+									<fileset dir="${project.build.directory}/processed-scripts" includes="header.js" />
+									<fileset dir="${project.build.directory}/processed-scripts" includes="pre-package.js" />
+									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-tooltip.js" />
+									<fileset dir="${project.build.directory}/processed-scripts" includes="post.js" />
+								</concat>
 								<concat	destfile="${project.build.outputDirectory}/aperture-packages/aperture-geo.js">
 									<fileset dir="${project.build.directory}/processed-scripts" includes="header.js" />
 									<fileset dir="${project.build.directory}/processed-scripts" includes="pre-package.js" />
@@ -219,6 +230,7 @@
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-layout.js" />
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-pubsub.js" />
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-cms.js" />
+									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-tooltip.js" />
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-geo.js" />
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-chart.js" />
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-raphael.js" />
