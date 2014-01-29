@@ -46,7 +46,7 @@ nodeLink.update = function(transition) {
 	this.plot.map('node-x').from('x').using(new aperture.Scalar('w', [0,w]).mapKey([0,w]));
 	this.plot.map('node-y').from('y').using(new aperture.Scalar('h', [0,h]).mapKey([0,h]));
 	this.plot.map('width').only().asValue(800);
-	this.plot.map('height').only().asValue(1000);
+	this.plot.map('height').only().asValue(1300);
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// SET UP A FEW HIGHLIGHT THINGS

@@ -33,14 +33,23 @@ import oculus.aperture.icons.batik.ImageRasterizer;
 import oculus.aperture.spi.palette.IconService;
 import oculus.aperture.spi.palette.ImageProcessingException;
 
+import com.google.inject.Singleton;
+
 /**
  * A small icon ontology focused on human social cultural behavior analysis,
  * and artifacts (sources and products) of that analysis.
  * 
  * @author djonker
  */
+@Singleton
 public class SocioCulturalIconService implements IconService {
 
+	private final SocioCulturalIconIndex index;
+	
+	public SocioCulturalIconService() {
+		index = new SocioCulturalIconIndex();
+	}
+	
 	/* (non-Javadoc)
 	 * @see oculus.aperture.spi.IconService#getIcon(java.lang.String, java.util.Map, int, int, oculus.aperture.spi.ImageService.Format)
 	 */
@@ -60,7 +69,7 @@ public class SocioCulturalIconService implements IconService {
 		}
 		
 		// get the source of the icon, to start.
-		final InputStream svg = SocioCulturalIconIndex.getStream(type, attributes);
+		final InputStream svg = index.getStream(type, attributes);
 
 		if (svg != null) {
 			
@@ -85,7 +94,7 @@ public class SocioCulturalIconService implements IconService {
 		}
 		
 		// get the source of the icon, to start.
-		final InputStream svg = SocioCulturalIconIndex.getStream(type, attributes);
+		final InputStream svg = index.getStream(type, attributes);
 
 		if (svg != null) {
 			

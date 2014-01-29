@@ -29,8 +29,8 @@ import java.util.Map;
 import oculus.aperture.spi.palette.ImageService.ImageType;
 
 import org.restlet.data.Status;
+import org.restlet.resource.Resource;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.UniformResource;
 
 import com.google.common.collect.Maps;
 
@@ -51,7 +51,7 @@ public class IconResourceRequest {
 	/**
 	 * Parses icon request parameters from the specified resource
 	 */
-	public IconResourceRequest(UniformResource resource) {
+	public IconResourceRequest(Resource resource) {
 		final Map<String, Object> typePath = resource.getRequest().getAttributes();
 		
 		// now get the type specifier

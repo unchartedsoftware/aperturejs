@@ -4,7 +4,7 @@
 	<groupId>oculus.aperture</groupId>
 	<artifactId>aperture</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 
 	<name>Aperture JS</name>
 	<description>Parent module for building the Aperture JS project modules</description>
@@ -86,17 +86,17 @@
 		<!-- Documentatoin for client-side libraries (JS) -->
 		<module>aperture-client-docs</module>
 
-		<!-- Core server components -->
-		<module>aperture-server-core</module>
-
 		<!-- Service Provider Interface definitions -->
 		<module>aperture-spi</module>
 
 		<!-- Docs for same -->
 		<module>aperture-spi-docs</module>
 
-		<!-- Sample server -->
-		<module>aperture-server</module>
+		<!-- Core server components -->
+		<module>aperture-server-core</module>
+
+		<!-- Basic Geocoding Service Implementation -->
+    	<module>aperture-geo</module>
 
 		<!-- HSCB Icon Service Implementation -->
     	<module>aperture-icons</module>
@@ -106,9 +106,6 @@
 
     	<!-- Image Capture Service Implementation -->
     	<module>aperture-capture-phantom</module>
-
-		<!-- Client-side examples (JS) -->
-		<module>aperture-examples</module>
 
 		<!-- Reference Content Management Service Implementations -->
 		<module>aperture-cms</module>
@@ -121,6 +118,14 @@
 		
 		<!-- Graph Utilities -->
 		<module>aperture-graph</module>
+
+		
+		<!-- Client-side examples (JS) -->
+		<module>aperture-examples</module>
+
+		<!-- Sample server -->
+		<module>aperture-server</module>
+
 	</modules>
 
 

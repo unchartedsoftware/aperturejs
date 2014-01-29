@@ -94,9 +94,12 @@ public class PhantomRendererPool implements RenderExecutor {
 	@Override
 	public void init(String rootRef) {
 		if (lookup.isEmpty()) {
+
+			final String platformDefault = "bin/"+ (System.getProperty("os.name").startsWith("Windows")? 
+					"phantomjs.exe" : "phantomjs");
 			
 			final int poolSize = config.getInteger("aperture.imagecapture.phantomjs.poolsize", 3);
-			final String exePath = config.getString("aperture.imagecapture.phantomjs.exepath", "bin\\windows\\phantomjs.exe");
+			final String exePath = config.getString("aperture.imagecapture.phantomjs.exepath", platformDefault);
 			
 			logger.debug("Creating " + poolSize + " phantom renderers");
 			

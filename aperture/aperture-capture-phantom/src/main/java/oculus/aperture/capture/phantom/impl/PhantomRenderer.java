@@ -110,7 +110,7 @@ public class PhantomRenderer implements CaptureService {
 			);
 			
 		} catch (IOException e) {
-			throw new RuntimeException("Failed to start phantom.exe", e);
+			throw new RuntimeException("Failed to start phantom JS process: "+ exePath, e);
 		}
 		
 		cmsResult = new SynchronousQueue<DocumentDescriptor>();

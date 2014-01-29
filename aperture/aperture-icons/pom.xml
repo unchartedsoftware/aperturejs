@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>aperture</artifactId>
 		<groupId>oculus.aperture</groupId>
-		<version>1.0.2</version>
+		<version>1.0.3-SNAPSHOT</version>
 	</parent>
 	<groupId>oculus.aperture.service</groupId>
 	<artifactId>aperture-icons</artifactId>
@@ -25,6 +25,12 @@
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>aperture-common</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>aperture-geo</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>
 		</dependency>

@@ -25,7 +25,14 @@
 package oculus.aperture.icons;
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Map.Entry;
+
+import oculus.aperture.geo.BasicCountryLevelGeocodingService;
+import oculus.aperture.icons.attr.BasicPlaceTypeHandler;
+import oculus.aperture.icons.attr.BasicTypeHandler;
+import oculus.aperture.icons.attr.BasicSingleAttributeHandler;
+import oculus.aperture.icons.attr.TypeHandler;
+import oculus.aperture.icons.util.TypeUtils;
+import oculus.aperture.spi.geo.GeocodingService;
 
 import com.google.common.collect.Maps;
 
@@ -37,68 +44,92 @@ import com.google.common.collect.Maps;
  */
 class SocioCulturalIconIndex {
 	
-	/**
-	 * Where our resources lie.
-	 */
+	private static final String LOGO_PATH = "/oculus/aperture/icons/logo.svg";
 	private static final String RESOURCE_DIR = "/oculus/aperture/icons/hscb/";
-	
+	private static final String NOTFOUND_PATH = "/oculus/aperture/icons/hscb/notfound.svg";
+
+
 	/**
 	 * Resource paths to types
 	 */
-	private static final Map<String, String> TYPE_PATHS= Maps.newHashMap();
-	
+	private final Map<String, TypeHandler> typePaths= Maps.newHashMap();
+
 	/**
-	 * Generate shortform aliases for types at class loading time.
+	 * On construction, generate shortform aliases for types at class loading time.
 	 * 
 	 * This could be generated programmatically at build time,
 	 * however to keep things simple we build it manually here.
 	 */
-	static {
-		TYPE_PATHS.put("logo", "/oculus/aperture/icons");
+	public SocioCulturalIconIndex() {
 		
-		add("concept");
-		add("concept/belief");
-		add("entity");
-		add("entity/actor");
-		add("entity/actor/organization");
-		add("entity/actor/person");
-		add("entity/place");
-		add("event");
-		add("artifact");
-		add("artifact/account");
-		add("artifact/account/ledger");
-		add("artifact/annotation");
-		add("artifact/annotation/stamp");
-		add("artifact/annotation/warning");
-		add("artifact/document");
-		add("artifact/document/map");
-		add("artifact/document/snippet");
-		add("artifact/image");
-		add("artifact/video");
+		// could bind this abstractly but we know this one is fast for our uncomplicated needs
+		GeocodingService geoCoding = new BasicCountryLevelGeocodingService();
+		
+		// one non-standard fixed lookup for the logo
+		typePaths.put("logo", new TypeHandler() {
+			public InputStream getStream(String type, Map<String, String> attributes) {
+				return SocioCulturalIconIndex.class.getResourceAsStream(LOGO_PATH);
+			}
+		});
+		
+		addBasic("concept");
+		addBasic("concept/belief");
+		
+		addBasic("entity");
+		addBasic("entity/actor");
+		addATTRd("entity/actor/organization");
+		addATTRd("entity/actor/person");
+		addPlace("entity/place", geoCoding);
+		
+		addBasic("event");
+		
+		addBasic("artifact");
+		addBasic("artifact/account");
+		addATTRd("artifact/account/ledger");
+		addBasic("artifact/annotation");
+		addATTRd("artifact/annotation/stamp");
+		addATTRd("artifact/annotation/warning");
+		addATTRd("artifact/document");
+		addBasic("artifact/document/map");
+		addATTRd("artifact/document/snippet");
+		addBasic("artifact/image");
+		addBasic("artifact/video");
 		// future additions: more events
 		// future additions: relationships
 	}
 
-	/**
-	 * Extracts the right most term in a slash delimited path
-	 */
-	private static String shortform(String longform) {
-		final int i = longform.lastIndexOf('/');
-		
-		return i < 0? longform : 
-				i == longform.length() - 1? 
-					longform.substring(0, i) : 
-						longform.substring(i + 1);
+	private String pathFromType(String type) {
+		return RESOURCE_DIR + type + "/";
 	}
 	
 	/**
 	 * Add the short form type and the full path as valid keys.
 	 */
-	private static void add(String type) {
-		final String path = RESOURCE_DIR + type;
+	private void addBasic(String type) {
+		final TypeHandler h = new BasicTypeHandler(pathFromType(type));
 		
-		TYPE_PATHS.put(type, path);
-		TYPE_PATHS.put(shortform(type), path);
+		typePaths.put(type, h);
+		typePaths.put(TypeUtils.shortform(type), h);
+	}
+	
+	/**
+	 * Add the short form type and the full path as valid keys.
+	 */
+	private void addATTRd(String type) {
+		final TypeHandler h = new BasicSingleAttributeHandler(pathFromType(type));
+		
+		typePaths.put(type, h);
+		typePaths.put(TypeUtils.shortform(type), h);
+	}
+	
+	/**
+	 * Add the short form type and the full path as valid keys.
+	 */
+	private void addPlace(String type, GeocodingService geoCoding) {
+		final TypeHandler h = new BasicPlaceTypeHandler(pathFromType(type), geoCoding);
+		
+		typePaths.put(type, h);
+		typePaths.put(TypeUtils.shortform(type), h);
 	}
 	
 	/**
@@ -107,14 +138,14 @@ class SocioCulturalIconIndex {
 	 * @param attributes
 	 * @return
 	 */
-	public static InputStream getStream(String type, Map<String, String> attributes) {
-		String path = null;
+	public InputStream getStream(String type, Map<String, String> attributes) {
+		TypeHandler path = null;
 		
 		// case insensitive
 		type = type.toLowerCase();
 		
 		// find the type that we have icons for - falling back to super types if necessary.
-		while ((path = TYPE_PATHS.get(type)) == null) {
+		while ((path = typePaths.get(type)) == null) {
 			final int i = type.lastIndexOf('/');
 			
 			if (i < 0) break;
@@ -124,34 +155,11 @@ class SocioCulturalIconIndex {
 		
 		if (path == null) {
 			// if no valid type path, return the default icon.
-			return SocioCulturalIconIndex.class.getResourceAsStream(RESOURCE_DIR + "notfound.svg");
+			return SocioCulturalIconIndex.class.getResourceAsStream(NOTFOUND_PATH);
 		}
-		
-		// now look for the icon. right now our attribute treatment is 
-		// simplistic in that we do not support more than one at once (and
-		// take the first match here). in the future should we have multiple
-		// attributes to support we may consider a layered approach...
-		for (Entry<String, String> attr : attributes.entrySet()) {
-			final String attrKey = attr.getKey().toLowerCase().trim();
-			final String attrValue = attr.getValue().toLowerCase().trim();
 
-			// sanity check.
-			if (attrKey.isEmpty() || attrValue.isEmpty())
-				continue;
-
-			// form full path
-			final String attrPath = path + "/attr/" + attrKey + "/" + attrValue + ".svg";
-
-			// check for it.
-			final InputStream stream = SocioCulturalIconIndex.class.getResourceAsStream(attrPath);
-			
-			// if valid, return it.
-			if (stream != null)
-				return stream;
-		}
-		
-		// otherwise return the default icon for that type.
-		return SocioCulturalIconIndex.class.getResourceAsStream(path + "/" + shortform(type) + ".svg");
+		// delegate
+		return path.getStream(type, attributes);
 	}
 	
 }

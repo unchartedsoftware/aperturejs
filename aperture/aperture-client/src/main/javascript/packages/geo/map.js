@@ -4,13 +4,43 @@
  * @fileOverview Aperture Map APIs
  */
 
+ aperture.geo = (typeof aperture.geo !== 'undefined') ? aperture.geo : {};
+
+/**
+ * The idea here is that the aperture.geo.Map function is used to create an Aperture Map to which 
+ * nodes etc... can be added.  Originally, this function pointed at a function created when the
+ * loadOpenLayersMap was executed (this call set a function to the global namespace identifier 
+ * 'aperture.geo.Map').  In order to allow Esri or OpenLayers maps to be used seamlessly,  we
+ * replace that function with this one.  Once this function has been called, it cannot be
+ * called again as the reference is overridden by the Esri or OpenLayers map reference.  This 
+ * has the consequence that Esri Maps and OpenLayers maps cannot be shown in the same page. 
+ */
+aperture.geo.Map = function(divName) {
+	var mapType = 'OpenLayers';
+	aperture.config.register('aperture.map', function(config) {
+		if( config['aperture.map'] ) {
+			if( config['aperture.map'].defaultMapConfig ) {
+				if (typeof config['aperture.map'].defaultMapConfig.mapType !== 'undefined') {
+					mapType = config['aperture.map'].defaultMapConfig.mapType;
+				}
+			}
+		}
+	});
+	
+	if (mapType.toLowerCase() === 'esri') {
+		var constructor = aperture.geo.loadEsriMap.call(this, aperture.geo);
+		return aperture.geo.Map.call(this, divName);	
+	} else {
+		var constructor = aperture.geo.loadOpenLayersMap.call(this, aperture.geo);
+		return aperture.geo.Map.call(this, divName);
+	}
+};
+
 /**
  * @namespace Geospatial vizlet layers. If not used the geospatial package may be excluded.
  * @requires OpenLayers
- */
-aperture.geo = (
-/** @private */
-function(ns) {
+ */ 
+aperture.geo.loadOpenLayersMap = function(ns) {
 
 	// util is always defined by this point
 	var util = aperture.util, ol = 'OPEN_LAYERS_CANVAS';
@@ -1381,4 +1411,4 @@ function(ns) {
 	});
 
 	return ns;
-}(aperture.geo || {}));
+};

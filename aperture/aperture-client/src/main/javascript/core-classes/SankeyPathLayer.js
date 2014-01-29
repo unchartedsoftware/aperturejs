@@ -34,6 +34,8 @@ function(namespace) {
 	}
 
 	function removeSankeys(links){
+		var i;
+	
 		for (i=0; i<links.length; i++) {
 			var link = links[i];
 			var linkData   = link.data;
@@ -43,7 +45,7 @@ function(namespace) {
 		}
 	}
 	function preProcessor(links){
-		var sourceMap = {},
+		var i, sourceMap = {},
 			targetMap = {};
 		var n = links.length;
 		

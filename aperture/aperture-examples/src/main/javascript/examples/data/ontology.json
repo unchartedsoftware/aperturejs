@@ -151,6 +151,62 @@
             "attributes": null
         },
         {
+            "id": "entity_place_na",
+            "label": "NA",
+            "type" : "place",
+            "attributes": {
+                "continent": "na"
+            }
+        },
+        {
+            "id": "entity_place_eu",
+            "label": "EU",
+            "type" : "place",
+            "attributes": {
+                "continent": "eu"
+            }
+        },
+        {
+            "id": "entity_place_sa",
+            "label": "SA",
+            "type" : "place",
+            "attributes": {
+                "continent": "sa"
+            }
+        },
+        {
+            "id": "entity_place_af",
+            "label": "AF",
+            "type" : "place",
+            "attributes": {
+                "continent": "af"
+            }
+        },
+        {
+            "id": "entity_place_as",
+            "label": "AS",
+            "type" : "place",
+            "attributes": {
+                "continent": "as"
+            }
+        },
+        {
+            "id": "entity_place_oc",
+            "label": "OC",
+            "type" : "place",
+            "attributes": {
+                "continent": "oc"
+            }
+        },
+        {
+            "id": "entity_place_an",
+            "label": "AN",
+            "type" : "place",
+            "attributes": {
+                "continent": "an"
+            }
+        },
+        {
             "id": "entity_organization",
             "label": "Organization",
             "type": "organization",
@@ -471,6 +527,41 @@
             "id": "43",
             "sourceId": "default",
             "targetId": "event"
+        },
+        {
+            "id": "44",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_na"
+        },
+        {
+            "id": "45",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_eu"
+        },
+        {
+            "id": "46",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_sa"
+        },
+        {
+            "id": "47",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_af"
+        },
+        {
+            "id": "48",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_as"
+        },
+        {
+            "id": "49",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_oc"
+        },
+        {
+            "id": "50",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_an"
         }
     ]
 }
