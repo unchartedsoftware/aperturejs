@@ -8,9 +8,14 @@
  *
  */
 
-aperture.geo = (typeof aperture.geo !== 'undefined') ? aperture.geo : {};
- 
-aperture.geo.loadEsriMap = function(ns) {
+/**
+ * @namespace Geospatial vizlet layers. If not used the geospatial package may be excluded.
+ * @requires OpenLayers or ESRI
+ */
+aperture.geo = (
+/** @private */
+function(ns) {
+function esriMaps() {
 	var SpatialReference = require("esri/SpatialReference"), 
 		Extent = require("esri/geometry/Extent"), 
 		Point = require("esri/geometry/Point"), 
@@ -832,7 +837,21 @@ aperture.geo.loadEsriMap = function(ns) {
 			aperture.log.info('Map configuration set.');
 		}
 	});
+}
 
+	// load the esri map implementation if the default mapType is configured to be esri.
+	aperture.config.register('aperture.map', function(config) {
+		if( config['aperture.map'] ) {
+			if( config['aperture.map'].defaultMapConfig ) {
+				mapType = config['aperture.map'].defaultMapConfig.mapType;
+				
+				if ((mapType && mapType.toLowerCase()) === 'esri') {
+					esriMaps();
+				}
+			}
+		}
+	});
+	
 	return ns;
-};
+}(aperture.geo || {}));
 
