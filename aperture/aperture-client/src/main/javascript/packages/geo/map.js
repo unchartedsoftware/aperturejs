@@ -12,7 +12,13 @@ aperture.geo = (
 /** @private */
 function(ns) {
 function openLayersMaps() {
-
+	if (!OpenLayers) {
+		aperture.log.info('OpenLayers js not present. Skipping default map api implementation.');
+		return;
+	}
+	
+	aperture.log.info('Loading OpenLayers map api implementation...');
+	
 	// util is always defined by this point
 	var util = aperture.util, ol = 'OPEN_LAYERS_CANVAS';
 

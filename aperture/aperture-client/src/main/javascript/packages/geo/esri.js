@@ -16,6 +16,8 @@ aperture.geo = (
 /** @private */
 function(ns) {
 function esriMaps() {
+	aperture.log.info('Loading ESRI map api implementation...');
+	
 	var SpatialReference = require("esri/SpatialReference"), 
 		Extent = require("esri/geometry/Extent"), 
 		Point = require("esri/geometry/Point"), 
