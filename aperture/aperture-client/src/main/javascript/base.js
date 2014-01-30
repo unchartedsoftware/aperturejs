@@ -19,7 +19,7 @@ aperture = (function(aperture) {
 	 * The aperture release version number.
 	 * @type String
 	 */
-	aperture.VERSION = '1.0.0';
+	aperture.VERSION = '${project.version}';
 
 	return aperture;
 
