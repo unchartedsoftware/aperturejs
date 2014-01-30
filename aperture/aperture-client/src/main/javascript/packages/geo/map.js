@@ -12,7 +12,7 @@ aperture.geo = (
 /** @private */
 function(ns) {
 function openLayersMaps() {
-	if (!OpenLayers) {
+	if (!window.OpenLayers) {
 		aperture.log.info('OpenLayers js not present. Skipping default map api implementation.');
 		return;
 	}
