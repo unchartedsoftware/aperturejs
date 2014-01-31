@@ -128,34 +128,28 @@ function(namespace) {
 				var maxLength = orientation == 'vertical'?node.height:node.width;
 				
 				for (index=0; index < numBars; index++){
-					// Check if the point is visible.
+					var width = this.valueFor('width', node.data, 2, index),
+						length = this.valueFor('length', node.data, 0, index);
+					var renderBarDim = {width : orientation == 'vertical'?width:length,
+										height : orientation == 'vertical'?length:width};
 					var isVisible = this.valueFor('bar-visible', node.data, true, index, seriesId);
+					var startValue = this.valueFor('x', node.data, 0, index),
+						startPt = (startValue * node.width) + (node.position[0]||0),
+						yPoint = (this.valueFor('y', node.data, 0, index) * node.height) + (node.position[1]||0) - renderBarDim.height,
+				        offsetX = this.valueFor('offset-x', node.data, 0, index),
+				        offsetY = this.valueFor('offset-y', node.data, 0, index);
 
-					if (isVisible){
-						var startValue = this.valueFor('x', node.data, 0, index),
-							width = this.valueFor('width', node.data, 2, index),
-							length = this.valueFor('length', node.data, 0, index),
-							startPt = (startValue * node.width) + (node.position[0]||0),
-							yPoint = (this.valueFor('y', node.data, 0, index) * node.height) + (node.position[1]||0),
-					        offsetX = this.valueFor('offset-x', node.data, 0, index),
-					        offsetY = this.valueFor('offset-y', node.data, 0, index);
-
-
-						var barSpec = {
-								id : index,
-								x : startPt + offsetX,
-								y : yPoint + offsetY,
-								size : {
-									width : orientation == 'vertical'?width:length,
-									height : orientation == 'vertical'?length:width
-								},
-								strokeWidth : 1,
-								orientation : orientation,
-								visible : isVisible,
-								node : node
-						};
-						barSpecs.push(barSpec);
-					}
+					var barSpec = {
+							id : index,
+							x : startPt,
+							y : yPoint,
+							size : renderBarDim,
+							strokeWidth : 1,
+							orientation : orientation,
+							visible : isVisible,
+							node : node
+					};
+					barSpecs.push(barSpec);
 				}
 				seriesSpec[seriesId] = barSpecs; 
 			}
@@ -189,14 +183,22 @@ function(namespace) {
 							node.userData.bars = {};
 						}
 						
-						var barSeriesData = barSpec.node.data;
-						var lineStroke = this.valueFor('stroke', barSeriesData, 'none', index);
-						var barLayout =	this.valueFor('bar-layout', barSeriesData, null, index);
-
 						// Check if this bar already exists for this node. If it does
 						// we want to do an update. Otherwise we'll create a new graphic
 						// object for it.
 						var bar = node.userData.bars[index];
+
+						if (!barSpec.visible){
+							if (bar) {
+								node.graphics.remove(bar);
+								delete node.userData.bars[index];
+							}
+							continue;
+						}
+
+						var barSeriesData = barSpec.node.data;
+						var lineStroke = this.valueFor('stroke', barSeriesData, 'none', index);
+						var barLayout =	this.valueFor('bar-layout', barSeriesData, null, index);
 
 						// Check if the visual exceeds the current context size,
 						// culling if necessary.

@@ -297,7 +297,8 @@ function(namespace) {
 						y : yPoint,
 						size : renderBarDim,
 						strokeWidth : strokeWidth,
-						orientation : orientation
+						orientation : orientation,
+						visible: true
 					};
 					barSpecs.push(barSpec);
 				}
