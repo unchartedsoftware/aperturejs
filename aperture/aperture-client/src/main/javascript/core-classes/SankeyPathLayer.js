@@ -1,6 +1,6 @@
 /**
  * Source: SankeyPathLayer.js
- * Copyright (c) 2013 Oculus Info Inc.
+ * Copyright (c) 2013-2014 Oculus Info Inc.
  * @fileOverview Aperture Link Layer Implementation
  */
 

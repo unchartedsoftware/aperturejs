@@ -1,6 +1,6 @@
 /**
  * Source: MapKey.js
- * Copyright (c) 2013 Oculus Info Inc.
+ * Copyright (c) 2013-2014 Oculus Info Inc.
  * @fileOverview Map Keys for mapping from one space (e.g. data) into another (e.g. visual)
  */
 

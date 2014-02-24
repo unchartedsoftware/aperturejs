@@ -1,6 +1,6 @@
 /**
  * Source: BarLayer.js
- * Copyright (c) 2013 Oculus Info Inc.
+ * Copyright (c) 2013-2014 Oculus Info Inc.
  * @fileOverview Aperture Bar Layer
  */
 aperture = (
@@ -129,21 +129,29 @@ function(namespace) {
 				
 				for (index=0; index < numBars; index++){
 					var width = this.valueFor('width', node.data, 2, index),
-						length = this.valueFor('length', node.data, 0, index);
-					var renderBarDim = {width : orientation == 'vertical'?width:length,
-										height : orientation == 'vertical'?length:width};
+						length = this.valueFor('length', node.data, 0, index),
+						xp = this.valueFor('x', node.data, 0, index) * node.width,
+						yp = this.valueFor('y', node.data, 0, index) * node.height,
+						xd = orientation === 'vertical'? width:length,
+						yd = orientation === 'vertical'? length:width;
+					
 					var isVisible = this.valueFor('bar-visible', node.data, true, index, seriesId);
-					var startValue = this.valueFor('x', node.data, 0, index),
-						startPt = (startValue * node.width) + (node.position[0]||0),
-						yPoint = (this.valueFor('y', node.data, 0, index) * node.height) + (node.position[1]||0) - renderBarDim.height,
-				        offsetX = this.valueFor('offset-x', node.data, 0, index),
-				        offsetY = this.valueFor('offset-y', node.data, 0, index);
 
+					if (xd < 0) {
+						xp += xd;
+						xd = -xd;
+					}
+					
+					if (yd < 0) {
+						yp += yd;
+						yd = -yd;
+					}
+					
 					var barSpec = {
 							id : index,
-							x : startPt,
-							y : yPoint,
-							size : renderBarDim,
+							x : xp+ (node.position[0]||0),
+							y : yp+ (node.position[1]||0),
+							size : {width: xd, height: yd},
 							strokeWidth : 1,
 							orientation : orientation,
 							visible : isVisible,

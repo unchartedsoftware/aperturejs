@@ -1,6 +1,6 @@
 /**
  * Source: log.js
- * Copyright (c) 2013 Oculus Info Inc.
+ * Copyright (c) 2013-2014 Oculus Info Inc.
  * @fileOverview Aperture Logging API implementation
  */
 
@@ -9,7 +9,21 @@
  */
 
 /**
- * @namespace Aperture logging API
+ * @namespace Aperture logging API. Multiple appenders can be added to log to different
+ * destinations at a specified minimum log level. The logWindowErrors function can be 
+ * configured to log unhandled JavaScript errors as well. Logging can be configured
+ * in the aperture config file (<a href="#constructor">see example</a>) or programmatically.
+ * 
+ * @example 
+ * // example aperture config file section 
+ * aperture.log : {
+ *   level : 'info',
+ *   logWindowErrors : {log: true, preventDefault: true},
+ *     appenders : {
+ *       consoleAppender : {level: 'info'},
+ *       notifyAppender : {level: 'error'}
+ *   }
+ * }
  */
 aperture.log = (function() {
 
@@ -56,6 +70,11 @@ aperture.log = (function() {
 		// The global logging level
 		globalLevel = LEVEL.INFO,
 
+		// Log window errors too.
+		logWinErrs = false,
+		eatWinErrs = false,
+		otherWinErrHandler,
+		
 		// The current indentation level.
 		prefix = '',
 		eightSpaces = '        ',
@@ -280,6 +299,36 @@ aperture.log = (function() {
 				}
 				
 				return prefix;
+			},
+			
+			/**
+			 * Specifies whether or not to intercept and log Javascript errors, or if no arguments
+			 * are supplied returns true or false indicating the current state.
+			 * 
+			 * @param {Boolean} [log] whether or not to log window errors.
+			 * @param {Boolean} [preventDefault=false] whether or not to prevent the browser's default.
+			 * 
+			 */
+			logWindowErrors : function(log, preventDefault) {
+				if (log == null) {
+					return logWinErrs;
+				}
+				
+				// force it to a boolean.
+				log = !!log;
+
+				if (logWinErrs !== log) {
+					logWinErrs = log;
+					eatWinErrs = !!preventDefault;
+					
+					if (logWinErrs) {
+						otherWinErrHandler = window.onerror;
+						window.onerror = onErr;
+					} else {
+						window.onerror = otherWinErrHandler;
+						otherWinErrHandler = undefined;
+					}
+				}
 			}
 		};
 
@@ -353,6 +402,13 @@ aperture.log = (function() {
 		if( logConfig.level ) {
 			api.level( logConfig.level );
 		}
+		
+		// log JS errors?
+		var winErrs = logConfig.logWindowErrors;
+		
+		if (winErrs) {
+			api.logWindowErrors( !!winErrs.log, winErrs.preventDefault );
+		}
 
 		// For all defined appenders...
 		aperture.util.forEach( logConfig.appenders, function(value, key) {
@@ -369,6 +425,17 @@ aperture.log = (function() {
 			}
 		});
 	});
+	
+	function onErr(msg, url, line) {
+		api.error(msg + ' ' + url + ':' + line);
+		
+		// chain on
+		if (otherWinErrHandler) {
+			otherWinErrHandler.apply(this, arguments);
+		}
+		
+		return eatWinErrs;
+	}
 
 	return api;
 }());

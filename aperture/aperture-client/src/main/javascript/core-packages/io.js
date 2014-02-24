@@ -1,6 +1,6 @@
 /**
  * Source: io.js
- * Copyright (c) 2013 Oculus Info Inc.
+ * Copyright (c) 2013-2014 Oculus Info Inc.
  * @fileOverview APIs for client / server interaction.
  */
 
@@ -87,10 +87,11 @@ aperture.io = (function() {
 
 				// Error callback processes response and calls user's callback
 				innerError = function(jqXHR, textStatus, errorThrown) {
+					var responseData = jqXHR.responseText;
+					
+					aperture.log.error((errorThrown||textStatus||'unspecified error') + (responseData? (' : ' + responseData): ''));
+					
 					if( callback ) {
-						// Provide callback with data returned by server, if any
-						var responseData = jqXHR.responseText;
-
 						// Check content-type for json, parse if json
 						var ct = jqXHR.getResponseHeader( "content-type" );
 						if( responseData && ct && ct.indexOf('json') > -1 ) {

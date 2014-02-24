@@ -1,6 +1,6 @@
 /**
  * Source: esri.js
- * Copyright (c) 2013 Oculus Info Inc.
+ * Copyright (c) 2013-2014 Oculus Info Inc.
  * @fileOverview Aperture Map APIs
  *
  *This code was written to integrate maps created using the Esri JS/ArcGIS Javascript library 

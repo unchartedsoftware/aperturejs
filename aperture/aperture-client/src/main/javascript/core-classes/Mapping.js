@@ -1,6 +1,6 @@
 /**
  * Source: Mapping.js
- * Copyright (c) 2013 Oculus Info Inc.
+ * Copyright (c) 2013-2014 Oculus Info Inc.
  * @fileOverview Aperture Mappings are used to define supply pipelines for visual
  * properties of layers.
  */
@@ -288,18 +288,50 @@ function(namespace) {
 				value = this.dataAccessor.apply( dataItem, index || [] );
 			}
 
+			return this.value( value, dataItem, index );
+		},
+
+		/**
+		 * Maps a raw value by transforming it and applying filters, returning
+		 * a visual property value.
+		 * 
+		 * @param {Object} value
+		 *   The source value to map. 
+		 *   
+		 * @param {Object} [context]
+		 *   The optional context to supply to any filters. If omitted the value
+		 *   of this in the filter call will be the Mapping instance.
+		 *
+		 * @param {Array} [index] 
+		 *   Optional indices to pass to the filters.
+		 *  
+		 * @returns {Object}
+		 *   A transformed and filtered value.
+		 */
+		value : function( value, context, index ) {
+			
 			// Transform
 			if( this.transformation ) {
-				// If have a mapper, call it
 				value = this.transformation.map( value );
 			}
 
+			return this.filteredValue( value, context, index );
+		},
+		
+		/**
+		 * @protected
+		 * Execute the filter.
+		 */
+		filteredValue : function( value, context, index ) {
+			
 			// Filter
 			if( this.filters.length ) {
+				context = context || this;
 				var args = [value].concat(index);
+				
 				forEach( this.filters, function(filter) {
 					// Apply the filter
-					value = filter.apply(dataItem, args);
+					value = filter.apply(context, args);
 					// Update value in args for next filter
 					args[0] = value;
 				});
@@ -307,6 +339,7 @@ function(namespace) {
 
 			return value;
 		}
+		
 	});
 
 	return namespace;

@@ -1,0 +1,72 @@
+@CHARSET "ISO-8859-1";
+.aperture-log-notify {
+	display:block;
+	position:absolute;
+	background-color: rgba(0,0,0,0.75);
+	left:0;
+	right:0;
+	bottom:0;
+	z-index:99999;
+	height:15%;
+}
+
+.aperture-log-notify-scrollpane {
+	left:0;
+	top:0;
+	bottom:0;
+	right:25px;
+	position:absolute;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+
+.aperture-log-notify-button {
+	background:none;
+	border:none;
+	color:rgba(255,255,255,0.75);
+	position:absolute;
+	right:0;
+	width:24px;
+	height:24px;
+	padding:0;
+	font-family:sans-serif;
+	line-height:24px;
+}
+
+.aperture-log-notify-button:hover {
+	background:black;
+}
+
+.aperture-log-notify-close {
+	top:0px;
+	font-size:30px;
+}
+
+.aperture-log-notify-clear {
+	top:25px;
+	font-size:20px;
+}
+
+.aperture-log-old {
+	opacity:0.8;
+}
+
+.aperture-log-new {
+	opacity:1;
+}
+
+.aperture-log-error {
+	color: red;
+}
+
+.aperture-log-warn {
+	color: orange;
+}
+
+.aperture-log-info {
+	color: cyan;
+}
+
+.aperture-log-debug {
+	color: green;
+}

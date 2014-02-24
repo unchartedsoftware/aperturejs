@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013 Oculus Info Inc. 
+ * Copyright (c) 2013-2014 Oculus Info Inc. 
  * http://www.oculusinfo.com/
  * 
  * Released under the MIT License.
@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -87,29 +89,46 @@ public class DefaultServerConfigModule extends AbstractModule {
 			 */
 			logger.info("Loading app properties...");
 
-			// Read the charitynetConfig property from web.xml or override-web.xml
-			String filename = context.getInitParameter("apertureConfig");
+			
+			final LinkedList<String> filenames= new LinkedList<String>();
+			
+			// Read the property from web.xml or override-web.xml
+			final String filename = context.getInitParameter("apertureConfigDefaults");
+			final String filename2 = context.getInitParameter("apertureConfig");
+			final String filename3 = context.getInitParameter("apertureConfigOverrides");
 
-			// Load properties
-			inp = ResourceHelper.getStreamForPath(filename, "res:///aperture-app.properties");
+			// Set up all filenames.
+			appendCSV(filename, filenames);
+			appendCSV(filename2, filenames);
+			appendCSV(filename3, filenames);
+			
+			// default default
+			if (filenames.isEmpty()) {
+				filenames.add("res:///aperture-app.properties");
+			}
 
-			// Load overrides
-			if (inp != null) {
+			// Attempt to load as many as we have.
+			while (!filenames.isEmpty()) {
+				inp = ResourceHelper.getStreamForPath(filenames.pop(), null);
 				
-				properties = new Properties(properties);
-				properties.load(inp);
-	
-				build = properties.getProperty("app.buildnumber");
-				
-				// Output build number
-				if (build != null) {
-					logger.info("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
-					logger.info("Application version: " + build);
-					logger.info("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+				if (inp != null) {
+					Properties defaults = properties;
+					properties = new Properties();
+					properties.putAll(defaults); // can't use the built in defaults if merging more than two.
+					properties.load(inp);
+					
+					Closeables.closeQuietly(inp);
+					inp = null;
 				}
-				
-				Closeables.closeQuietly(inp);
-				inp = null;
+			}
+
+			build = properties.getProperty("app.buildnumber");
+			
+			// Output build number
+			if (build != null) {
+				logger.info("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+				logger.info("Application version: " + build);
+				logger.info("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
 			}
 
 			// trace
@@ -165,6 +184,20 @@ public class DefaultServerConfigModule extends AbstractModule {
 			}
 		}
 
+	}
+	
+	private void appendCSV(String csv, List<String> list) {
+		if (csv != null) {
+			final String files[]= csv.split(",");
+			
+			for (String f : files) {
+				f = f.trim();
+				
+				if (!f.isEmpty()) {
+					list.add(f);
+				}
+			}
+		}
 	}
 
 }

@@ -1,6 +1,6 @@
 /**
  * Source: AxisLayer.js
- * Copyright (c) 2013 Oculus Info Inc.
+ * Copyright (c) 2013-2014 Oculus Info Inc.
  * @fileOverview Aperture Axis Layer
  */
 
@@ -205,12 +205,7 @@ function(namespace) {
 	
 			// Draw the tick marks for a banded or ordinal range.
 			var hasBands = axisRange.typeOf(/banded/),
-				mappedValue, tickId, tick, tickMin, tickLimit,
-				bandwidth = 0;
-			if (tickArray.ticks.length > 1){
-				// Calculate the distance between bands by sampling the first 2 intervals.
-				bandwidth = (this.valueFor('x', tickArray, 0, 1)-this.valueFor('x', tickArray, 0, 0))*node.width;
-			}
+				mappedValue, tickId, tick, tickMin, tickLimit;
 
 			if (hasBands || axisRange.typeOf(aperture.Ordinal)){
 				var tickLast = false;
@@ -255,14 +250,18 @@ function(namespace) {
 						// If we're on the last tick, and there is a bounded upper limit,
 						// include a tick mark for the upper boundary value as well.
 						if (tickLast) {
-							// Create a fake data source so that the mapped value will account
-							// for any filters.
-							mappedValue = this.valueFor('x', {'ticks':[{'min':tickLimit}]}, 0, 0);
-							xPos = (mappedValue*node.width) + left;
-							path += 'M' + xPos + ',' + yPos + 'L' + xPos + ',' + (yPos+tickLength);
-							// If this is a banded scalar, we want to show the label.
-							if (axisRange.typeOf(aperture.Scalar)){
-								tickLabels.push({'x':tickLimit,'y':0, 'text':axisRange.format(tickLimit)});
+							var mapX = this.mappings()['x'];
+							
+							if (mapX) {
+								var isScalar = axisRange.typeOf(aperture.Scalar);
+								// if scalar pick upper limit, if ordinal pick end of list.
+								mappedValue = isScalar? mapX.value(tickLimit) : mapX.filteredValue(1);
+								xPos = (mappedValue*node.width) + left;
+								path += 'M' + xPos + ',' + yPos + 'L' + xPos + ',' + (yPos+tickLength);
+								// If this is a banded scalar, we want to show the label.
+								if (isScalar) {
+									tickLabels.push({'x':tickLimit,'y':0, 'text':axisRange.format(tickLimit)});
+								}
 							}
 						}
 					}

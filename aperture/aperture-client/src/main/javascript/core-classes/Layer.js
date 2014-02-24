@@ -1,6 +1,6 @@
 /**
  * Source: Layer.js
- * Copyright (c) 2013 Oculus Info Inc.
+ * Copyright (c) 2013-2014 Oculus Info Inc.
  * @fileOverview Aperture Abstract Layer Class Implementation
  */
 
@@ -246,6 +246,9 @@ function(namespace) {
 					
 				}, this);
 
+				if (prev) {
+					prev.next = null;
+				}
 				
 				// whatever is left is trash. these are already removed from our locally linked list.
 				for (i = existing.next; i != null; i = i.next) {
@@ -547,6 +550,42 @@ function(namespace) {
 				}
 				// No parent, no value, use default (or return undefined)
 				return defaultValue;
+			},
+
+			/**
+			 * ${protected}
+			 * Returns one or more values transformed using registered mappings. This method
+			 * is similar to valueFor but excludes the data lookup.
+			 *
+			 * @param {Object|String,Object} properties
+			 *      Named property values to transform using the layer's mapping, supplied
+			 *      as an object or a name argument and value argument.
+			 *
+			 * @returns the values of the visual properties as an object if called with an object,
+			 * 		or as a single transformed value if called with name, value arguments. If
+			 * 		no mapping exists this method will return undefined.
+			 */
+			transform : function( properties, value, filterData, filterIndex ) {
+				var mapping;
+				
+				if (properties) {
+					if (arguments.length > 1) {
+						if (mapping = this.maps_[properties]) {
+							return mapping.value( value, filterData, filterIndex );
+						}
+					} else {
+						var mapped = {};
+						var maps = this.maps_;
+						
+						forEach(properties, function(value, value) {
+							if (mapping = maps[name]) {
+								mapped[name] = mapping.value( value, filterData, filterIndex );
+							}
+						});
+						
+						return mapped;
+					}
+				}
 			},
 
 			/**
