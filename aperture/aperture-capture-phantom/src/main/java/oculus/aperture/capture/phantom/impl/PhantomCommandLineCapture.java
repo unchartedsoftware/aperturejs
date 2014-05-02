@@ -134,6 +134,7 @@ public class PhantomCommandLineCapture {
 	private final String cmdLocation;
 	private final PhantomRenderer resource;
 	private final String taskPageUrl;
+	private final String sslCertificatePath;
 	private final List<ShutdownListener> listeners = new ArrayList<ShutdownListener>();
 
 	private File jsFile;
@@ -150,12 +151,14 @@ public class PhantomCommandLineCapture {
 	public PhantomCommandLineCapture(
 		String location,
 		PhantomRenderer resource,
-		String taskPageUrl
+		String taskPageUrl,
+		String sslCertificatePath
 	) throws IOException {
 		this.cmdLocation = location;
 		this.resource = resource;
 		
 		this.taskPageUrl = taskPageUrl;
+		this.sslCertificatePath = sslCertificatePath;
 		
 		initialize();
 	}
@@ -231,11 +234,14 @@ public class PhantomCommandLineCapture {
 		out.close();
 		
 		// Populate the commandline arguments
-		String cmd[] = new String[4];
-		cmd[0] = cmdLocation;
-		cmd[1] = "--proxy-type=none";
-		cmd[2] = jsFile.getAbsolutePath();
-		cmd[3] = taskPageUrl;
+		List<String> cmd = new ArrayList<String>();
+		cmd.add(cmdLocation);
+		cmd.add("--proxy-type=none");
+		if(sslCertificatePath != null && !sslCertificatePath.isEmpty()) {
+			cmd.add("--ssl-certificates-path=" + sslCertificatePath);
+		}
+		cmd.add(jsFile.getAbsolutePath());
+		cmd.add(taskPageUrl);
 		
 		String args = "";
 		for (String arg : cmd){
@@ -244,7 +250,7 @@ public class PhantomCommandLineCapture {
 		logger.info("Running capture: " + args);
 		
 		// Start PhantomJS process and add shutdown hook
-		proc = Runtime.getRuntime().exec(cmd);
+		proc = Runtime.getRuntime().exec(cmd.toArray(new String[0]));
 		Runtime.getRuntime().addShutdownHook(closeProcess); 
 		
 		StreamGobbler errorGobbler = new StreamGobbler(proc.getErrorStream(), GobblerType.ERROR, resource);            

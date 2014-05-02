@@ -24,6 +24,7 @@
  */
 package oculus.aperture.capture.phantom.impl;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -97,7 +98,8 @@ public class PhantomRenderer implements CaptureService {
 	public PhantomRenderer(ContentService contentService,
 		String exePath,
 		String taskPageUrl,
-		String workerId
+		String workerId,
+		String sslCertificatePath
 	) {
 		this.contentService = contentService;
 		taskQueue = new SynchronousQueue<Map<String, Object>>();
@@ -106,7 +108,8 @@ public class PhantomRenderer implements CaptureService {
 			this.worker = new PhantomCommandLineCapture(
 				exePath, 
 				this, 
-				taskPageUrl
+				taskPageUrl,
+				sslCertificatePath
 			);
 			
 		} catch (IOException e) {
@@ -296,13 +299,15 @@ public class PhantomRenderer implements CaptureService {
 			if (success) {
 				try {
 		    		InputStream ins;
+		    		File file = new File(strValue(task.get("filename")));
 		    		byte[] data = null;
-						ins = new FileInputStream(strValue(task.get("filename")));
+						ins = new FileInputStream(file);
 						data = ByteStreams.toByteArray(ins);
 					final String cType = strValue(task.get("mimeType"));
 
 					// close file input stream.
 					ins.close();
+					file.delete();
 					
 					if (task.get("returnImage").equals(Boolean.TRUE)) {
 						// releases the waiting client.

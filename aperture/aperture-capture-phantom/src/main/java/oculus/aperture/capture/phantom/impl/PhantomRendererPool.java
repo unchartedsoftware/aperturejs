@@ -24,6 +24,7 @@
  */
 package oculus.aperture.capture.phantom.impl;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,11 +103,16 @@ public class PhantomRendererPool implements RenderExecutor {
 			
 			final int poolSize = config.getInteger("aperture.imagecapture.phantomjs.poolsize", 3);
 			final String exePath = config.getString("aperture.imagecapture.phantomjs.exepath", platformDefault);
+			final String sslCertificatePath = config.getString("aperture.imagecapture.phantomjs.ssl-certificates-path", null);
 			
 			logger.debug("Creating " + poolSize + " phantom renderers");
 			
 			available = new ArrayBlockingQueue<PhantomRenderer>(poolSize);
 			
+			if(!(new File(sslCertificatePath)).exists()) {
+				logger.warn("Specified a non-existant SSL certificate path: {}", sslCertificatePath);
+			}
+
 			// fill the pool for the kiddies
 			for( int i=0; i<poolSize; i++ ){
 				final String uid = UUID.randomUUID().toString();
@@ -118,7 +124,8 @@ public class PhantomRendererPool implements RenderExecutor {
 					contentService,
 					exePath,
 					taskPageUrl,
-					uid
+					uid,
+					sslCertificatePath
 				);
 				
 				renderer.addListener(new ShutdownListener() {
