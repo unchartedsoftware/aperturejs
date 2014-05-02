@@ -233,8 +233,8 @@ nodeLink.layout = function(type, transition) {
 				'x': n.x,
 				'y': n.y,
 				'tag': n.tag,
-				'width': 6,
-				'height': 6,
+				'width': 12,
+				'height': 12,
 				'weight': n.links.length
 			};
 		})

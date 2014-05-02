@@ -158,6 +158,7 @@ public class JGraphLayoutService extends BridgedLayoutGraph {
 			mxFastOrganicLayout organicLayout = new mxFastOrganicLayout(graph);
 			organicLayout.setForceConstant(forceConstant_);
 			organicLayout.setInitialTemp(initialTemp_);
+			organicLayout.setUseInputOrigin(true);
 			
 			layout = organicLayout;
 		}

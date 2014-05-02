@@ -31,7 +31,6 @@ import oculus.aperture.capture.phantom.data.ProcessedTaskInfo;
 import oculus.aperture.spi.store.ContentService.DocumentDescriptor;
 
 import org.restlet.data.Form;
-import org.restlet.data.Reference;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 
@@ -83,27 +82,17 @@ public class PhantomStoredImageResource extends PhantomCaptureResource {
 		if (taskInfo != ProcessedTaskInfo.NONE) {
 			
 			// Return a response containing a JSON block with the id/rev
-			response.put("ok", true); 
 			response.put("id", taskInfo.getId());
 			response.put("store", taskInfo.getStore());
 			
 	
-			// get the resource URI from this post
-			String resourceUri = getRootRef().toString() 
-				+ "/cms/" + Reference.encode(taskInfo.getStore()) 
-				+ "/" + Reference.encode(taskInfo.getId());
-			
 			// if have a revision append it.
 			if (taskInfo.getRevision() != null) {
 				response.put("rev", taskInfo.getRevision());
-				resourceUri += "?rev=" + Reference.encode(taskInfo.getRevision());
 			}
 			
-			// Return the resulting image in the location header
-			setLocationRef(new Reference(resourceUri));
-			
 		} else {
-			response.put("ok", false); 
+			return null;
 			
 		}
 

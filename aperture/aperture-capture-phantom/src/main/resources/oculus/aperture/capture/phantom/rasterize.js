@@ -43,7 +43,8 @@ var elapsed = (function() {
 
 var exportPage,
 	url,
-	task;
+	task,
+	timeoutTask;
 
 // Does the work of rendering.
 function render() {
@@ -54,6 +55,9 @@ function render() {
 	// Issue a 'Success" message to indicate to the
 	// listening parent process that this task has completed.
 	console.log('SUCCESS');
+	phantom.clearCookies();
+
+    window.clearTimeout(timeoutTask);	
 }
 
 // Called when the page is loaded.
@@ -72,7 +76,10 @@ function onLoad(status, immediate) {
 		if (immediate) {
 			render();
 		} else {
-			window.setTimeout(render, task.renderDelay);
+		    exportPage.onCallback = function(data) {
+		        render();
+		    }
+			timeoutTask = window.setTimeout(render, task.renderDelay);
 		}
 	}
 }
@@ -105,7 +112,14 @@ var renderNext = function(request) {
 			exportPage.settings.userName = task.username;
 			exportPage.settings.password = task.password;
 		}
-		
+
+		task.cookies.forEach(function(cookie) {
+			phantom.addCookie({
+				'name' : cookie.name,
+				'value' : cookie.value,
+				'domain' : cookie.domain
+			});
+		});		
 		exportPage.open(task.source, onLoad);
 	}
 	
@@ -131,4 +145,3 @@ requestPage.open(sourceUrl, function (status) {
 		
 	} 
 });
-

@@ -63,8 +63,8 @@ define(
 							
 							if (response != null) {
 								
-								aperture.log.info('***Done! Rendered to: ' + response);
-								var imgSrc = response;
+								var imgSrc = aperture.store.url(response);
+								aperture.log.info('***Done! Rendered to: ' + imgSrc);
 								
 								if (!!$('#captureImg').length){
 									$('#captureImg').attr('src', imgSrc);

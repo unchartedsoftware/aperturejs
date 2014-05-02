@@ -206,6 +206,13 @@ p {
 	margin: 0 0 1.5em 0;
 }
 
+footer {
+	padding-bottom: 60px;
+	background-image: url(footer-symbols.png);
+	background-repeat: no-repeat; 
+	background-position: left bottom; 
+}
+
 /*
  * END HTML ELEMENTS
  */

@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>aperture</artifactId>
 		<groupId>oculus.aperture</groupId>
-		<version>1.0.4</version>
+		<version>1.0.5</version>
 	</parent>
 
 	<artifactId>aperture-client</artifactId>
@@ -123,6 +123,11 @@
 									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/capture.js" />
 								</concat>
 
+								<!-- Create a single JS file for the graph api -->
+								<concat	destfile="${project.build.directory}/processed-packages/aperture-graph.js">
+									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/graph.js" />
+								</concat>
+
 								<!-- Create a single JS file for the layout api -->
 								<concat	destfile="${project.build.directory}/processed-packages/aperture-layout.js">
 									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/layout.js" />
@@ -137,7 +142,7 @@
 								<concat	destfile="${project.build.directory}/processed-packages/aperture-cms.js">
 									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/store.js" />
 								</concat>
-								
+
 								<!-- Create a single JS file for the new map vizlet -->
 								<concat	destfile="${project.build.directory}/processed-packages/aperture-geo.js">
 									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/geo/**" />
@@ -170,6 +175,12 @@
 									<fileset dir="${project.build.directory}/processed-scripts" includes="header.js" />
 									<fileset dir="${project.build.directory}/processed-scripts" includes="pre-package.js" />
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-capture.js" />
+									<fileset dir="${project.build.directory}/processed-scripts" includes="post.js" />
+								</concat>
+								<concat	destfile="${project.build.outputDirectory}/aperture-packages/aperture-graph.js">
+									<fileset dir="${project.build.directory}/processed-scripts" includes="header.js" />
+									<fileset dir="${project.build.directory}/processed-scripts" includes="pre-package.js" />
+									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-graph.js" />
 									<fileset dir="${project.build.directory}/processed-scripts" includes="post.js" />
 								</concat>
 								<concat	destfile="${project.build.outputDirectory}/aperture-packages/aperture-layout.js">
@@ -208,7 +219,7 @@
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-raphael.js" />
 									<fileset dir="${project.build.directory}/processed-scripts" includes="post.js" />
 								</concat>
-								
+
 								<!-- ALL IN ONE -->
 								<concat	destfile="${project.build.outputDirectory}/aperture.js">
 									<fileset dir="${project.build.directory}/processed-scripts" includes="header.js" />
@@ -216,6 +227,7 @@
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-core.js" />
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-log.js" />
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-capture.js" />
+									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-graph.js" />
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-layout.js" />
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-pubsub.js" />
 									<fileset dir="${project.build.directory}/processed-packages" includes="aperture-cms.js" />
@@ -229,7 +241,7 @@
 								<concat	destfile="${project.build.outputDirectory}/aperture-exampleconfig.js">
 									<fileset dir="${project.build.directory}/processed-scripts" includes="aperture-exampleconfig.js" />
 								</concat>
-								
+
 							</target>
 						</configuration>
 					</execution>
@@ -269,9 +281,9 @@
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
-				</plugin>	
+				</plugin>
 			</plugins>
-		</pluginManagement>	
+		</pluginManagement>
 	</build>
 
 	<!-- TODO: Compress -->

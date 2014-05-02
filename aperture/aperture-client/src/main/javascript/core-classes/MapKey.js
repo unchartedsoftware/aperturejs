@@ -20,8 +20,8 @@ function(namespace) {
 			/**
 			 * @class A MapKey object maps from a Range object, representing a variable in
 			 * data, to a color or numeric visual property such as a size or coordinate.
-			 * MapKey is abstract. Instances are constructed by calling 
-			 * {@link aperture.Range range.mapKey()}, and are used by {@link aperture.Mapping mappings}.
+			 * MapKey is abstract. Instances are constructed by calling
+			 * {@link aperture.Range range.mappedTo()}, and are used by {@link aperture.Mapping mappings}.
 			 *
 			 * @constructs
 			 * @factoryMade

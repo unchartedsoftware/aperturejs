@@ -207,6 +207,36 @@
             }
         },
         {
+            "id": "entity_facility",
+            "label": "facility",
+            "type" : "facility",
+            "attributes": null
+        },
+        {
+            "id": "entity_facility_factory",
+            "label": "factory",
+            "type" : "factory",
+            "attributes": null
+        },
+        {
+            "id": "entity_facility_store",
+            "label": "store",
+            "type" : "store",
+            "attributes": null
+        },
+        {
+            "id": "entity_facility_warehouse",
+            "label": "warehouse",
+            "type" : "warehouse",
+            "attributes": null
+        },
+        {
+            "id": "entity_facility_materials",
+            "label": "materials",
+            "type" : "materials",
+            "attributes": null
+        },
+        {
             "id": "entity_organization",
             "label": "Organization",
             "type": "organization",
@@ -562,6 +592,31 @@
             "id": "50",
             "sourceId": "entity_place",
             "targetId": "entity_place_an"
+        },        
+        {
+            "id": "51",
+            "sourceId": "entity",
+            "targetId": "entity_facility"
+        },
+        {
+            "id": "52",
+            "sourceId": "entity_facility",
+            "targetId": "entity_facility_factory"
+        },
+        {
+            "id": "52",
+            "sourceId": "entity_facility",
+            "targetId": "entity_facility_store"
+        },
+        {
+            "id": "52",
+            "sourceId": "entity_facility",
+            "targetId": "entity_facility_warehouse"
+        },
+        {
+            "id": "52",
+            "sourceId": "entity_facility",
+            "targetId": "entity_facility_materials"
         }
     ]
 }

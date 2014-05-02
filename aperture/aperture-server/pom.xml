@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>aperture</artifactId>
 		<groupId>oculus.aperture</groupId>
-		<version>1.0.4</version>
+		<version>1.0.5</version>
 	</parent>
 
 	<artifactId>aperture-server</artifactId>
@@ -25,7 +25,7 @@
 			<version>${project.parent.version}</version>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>aperture-client-docs</artifactId>
@@ -33,14 +33,14 @@
 			<classifier>jsdoc</classifier>
 			<type>zip</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>aperture-spi</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>aperture-spi-docs</artifactId>
@@ -48,41 +48,41 @@
 			<classifier>javadoc</classifier>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>aperture-server-core</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>oculus.aperture.service</groupId>
 			<artifactId>aperture-icons</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>oculus.aperture.service</groupId>
 			<artifactId>aperture-capture-phantom</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>oculus.aperture.service</groupId>
 			<artifactId>aperture-cms</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>oculus.aperture.service</groupId>
 			<artifactId>aperture-layout</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>aperture-examples</artifactId>
@@ -113,7 +113,7 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -139,9 +139,9 @@
 									<groupId>oculus.aperture.service</groupId>
 									<artifactId>aperture-capture-phantom</artifactId>
 									<version>${project.parent.version}</version>
-									<type>exe</type>
-									<outputDirectory>${basedir}/bin/windows</outputDirectory>
-									<destFileName>phantomjs.exe</destFileName>
+									<outputDirectory>${basedir}/bin</outputDirectory>
+									<type>${aperture.examples.phantomjs.type}</type>
+									<destFileName>${aperture.examples.phantomjs.binary}</destFileName>
 								</artifactItem>
 							</artifactItems>
 						</configuration>
@@ -191,13 +191,63 @@
 			                    <include>WEB-INF/web.xml</include>
 			                </includes>
 		                </resource>
-		            </webResources>					
+		            </webResources>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
 	<profiles>
+		<profile>
+			<id>windows</id>
+			<activation>
+				<os>
+					<family>windows</family>
+				</os>
+			</activation>
+			<properties>
+				<aperture.examples.phantomjs.type>exe</aperture.examples.phantomjs.type>
+				<aperture.examples.phantomjs.binary>phantomjs.exe</aperture.examples.phantomjs.binary>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux</id>
+			<activation>
+				<os>
+					<family>unix</family>
+				</os>
+			</activation>
+			<properties>
+				<aperture.examples.phantomjs.type>linux-x86-64</aperture.examples.phantomjs.type>
+				<aperture.examples.phantomjs.binary>phantomjs</aperture.examples.phantomjs.binary>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux-i686</id>
+			<activation>
+				<os>
+					<family>unix</family>
+					<arch>i686</arch>
+				</os>
+			</activation>
+			<properties>
+				<aperture.examples.phantomjs.type>linux-i686</aperture.examples.phantomjs.type>
+				<aperture.examples.phantomjs.binary>phantomjs</aperture.examples.phantomjs.binary>
+			</properties>
+		</profile>
+		<profile>
+			<id>macosx</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<aperture.examples.phantomjs.type>macosx</aperture.examples.phantomjs.type>
+				<aperture.examples.phantomjs.binary>phantomjs</aperture.examples.phantomjs.binary>
+			</properties>
+		</profile>
+
 		<!-- Development profile provides access to test files -->
 		<profile>
 		   <id>development</id>
@@ -217,26 +267,26 @@
 						<artifactId>jetty-maven-plugin</artifactId>
 						<version>7.2.0.v20101020</version>
 						<configuration>
-		
+
 							<reload>manual</reload>
-		
+
 							<webAppConfig>
 								<contextPath>/aperture</contextPath>
 								<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
 									<resourcesAsCSV>../aperture-client/src/main/javascript,../aperture-examples/src/main/javascript,src/test/webapp,src/test/javascript,${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
 								</baseResource>
-		
+
 								<!-- A bit of nasty to include the class files of other modules (avoids rebuild + install) -->
 								<!-- Remove following line unless you need to quickly rebuild/debug Aperture -->
 								<!-- See http://stackoverflow.com/questions/3636493/multi-module-maven-project-and-jettyrun -->
 								<extraClasspath>target/classes;../aperture-server-core/target/classes</extraClasspath>
-								
+
 								<!-- Specify an override web XML to use alternate configuration with no caching -->
 								<overrideDescriptor>src/main/resources/dev-override-web.xml</overrideDescriptor>
 							</webAppConfig>
-		
+
 						</configuration>
-		
+
 						<dependencies>
 							<dependency>
 								<groupId>org.eclipse.jetty</groupId>
@@ -267,18 +317,18 @@
 						<artifactId>jetty-maven-plugin</artifactId>
 						<version>7.2.0.v20101020</version>
 						<configuration>
-		
+
 							<reload>manual</reload>
-		
+
 							<webAppConfig>
 								<contextPath>/aperture</contextPath>
 								<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
 									<resourcesAsCSV>../aperture-client/src/main/javascript,../aperture-examples/src/main/javascript,src/test/webapp,src/test/javascript,${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
 								</baseResource>
 							</webAppConfig>
-		
+
 						</configuration>
-		
+
 						<dependencies>
 							<dependency>
 								<groupId>org.eclipse.jetty</groupId>
@@ -290,7 +340,7 @@
 				</plugins>
 		    </build>
 		</profile>
-		
+
 		<!-- Optionally include yworks module (commercial product). Profile is combined with one of the two above. -->
 		<profile>
 		   <id>yworks</id>
@@ -312,8 +362,8 @@
 				</dependency>
 			</dependencies>
 		</profile>
-		
+
 	</profiles>
 
-	
+
 </project>

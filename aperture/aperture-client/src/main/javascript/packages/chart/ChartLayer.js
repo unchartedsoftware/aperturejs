@@ -110,8 +110,8 @@ function(namespace) {
 			if (!this.titleLayer){
 				this.titleLayer = this.addLayer(aperture.LabelLayer);
 				this.titleLayer.map('text-anchor').asValue('middle');
-				this.titleLayer.map('x').from('x').only().using(this.DEFAULT_RANGE.mapKey([0,1]));
-				this.titleLayer.map('y').from('y').only().using(this.DEFAULT_RANGE.mapKey([1,0]));
+				this.titleLayer.map('x').from('x').only().using(this.DEFAULT_RANGE.mappedTo([0,1]));
+				this.titleLayer.map('y').from('y').only().using(this.DEFAULT_RANGE.mappedTo([1,0]));
 				this.titleLayer.map('text').from('text');
 				this.titleLayer.map('text-anchor-y').asValue('top');
 				this.titleLayer.map('orientation').asValue(null);
@@ -215,7 +215,7 @@ function(namespace) {
 	{
 		/**
 		 * @augments aperture.PlotLayer
-		 * 
+		 *
 		 * @class The underlying base layer for charts. Type-specific
 		 * charts are created by adding child layers (e.g. {@link aperture.chart.LineSeriesLayer LineSeriesLayer},
 		 * {@link aperture.chart.BarSeriesLayer BarSeriesLayer}) to this layer. Axes and "rules" / grid lines
@@ -224,32 +224,32 @@ function(namespace) {
 		 *
 		 * @mapping {Number} width
 		 *   The width of the chart.
-		 *   
+		 *
 		 * @mapping {Number} height
 		 *   The height of the chart.
-		 *   
+		 *
 		 * @mapping {String} stroke
 		 *   The line colour used to plot the graph.
-		 * 
+		 *
 		 * @mapping {Number=1} stroke-width
 		 *   The width of the line used to plot the graph.
-		 *   
-		 * @mapping {Number=1} border-width 
+		 *
+		 * @mapping {Number=1} border-width
 		 *   The width of the border (if any) around the chart. Setting this value to zero will hide the
 		 *   chart borders.
-		 *   
+		 *
 		 * @mapping {String='border'} border-stroke
 		 *   The line colour used to draw the chart border.
-		 * 
+		 *
 		 * @mapping {'vertical', 'horizontal'} orientation
 		 *   The direction that data points are plotted.
 		 *   E.g. A bar chart with a <span class="fixedFont">'vertical'</span> orientation will have bars drawn top-down.
 		 *   A bar chart with a <span class="fixedFont">'horizontal'</span> orientation will have bars drawn left-right
-		 *   
-		 * @mapping {Number} title-margin 
+		 *
+		 * @mapping {Number} title-margin
 		 *   The vertical space allocated to the chart title (in pixels).
-		 *   
-		 * @mapping {Object} title-spec 
+		 *
+		 * @mapping {Object} title-spec
 		 *   Defines the attributes of the chart's main title. For example:<br>
 		 *<pre>{
 		 *   text: 'Main Chart Title',
@@ -368,21 +368,21 @@ function(namespace) {
 							parentData.width, parentData.height] : null);
 				}
 			}, this);
-			
-			
+
+
 			layer.render( changeSet );
 		},
 
 		/**
 		 * This method retrieves the {@link aperture.chart.RuleLayer} with the given index.
 		 * @param {Number} index
-		 *  the index of the RuleLayer to retrieve. If no index is provided, a list of all 
-		 *  RuleLayers is returned. 
+		 *  the index of the RuleLayer to retrieve. If no index is provided, a list of all
+		 *  RuleLayers is returned.
 		 *
 		 * @returns {aperture.chart.RuleLayer|Array}
 		 *  the RuleLayer for the given index. If no order is specified, a list of all RuleLayer is returned.
 		 * @function
-		 */		
+		 */
 		ruleLayer : function(index) {
 			var ruleLayers = this.ruleLayers || [];
 			if (index == undefined) {
@@ -392,10 +392,10 @@ function(namespace) {
 				index = 0;
 			}
 			var layer = ruleLayers[index];
-			
+
 			if (!layer) {
 				layer = ruleLayers[index] = this.addLayer(aperture.chart.RuleLayer);
-				// Since we only allow panning along the x-axis, we only want to allow 
+				// Since we only allow panning along the x-axis, we only want to allow
 				// rule layers for the x-axis to pan.
 				var that = this;
 				layer.map('rule').filter(function( value ){
@@ -407,23 +407,23 @@ function(namespace) {
 						}
 					}
 				);
-				
+
 				this.ruleLayers = ruleLayers;
 				layer.toBack(); // Send the rule layer to the back.
 			}
 			return layer;
 		},
-		
+
 		/**
 		 * This method retrieves the {@link aperture.chart.AxisLayer} of the given order for the X axis.
-		 * 
-		 * @param {Number} [order] 
+		 *
+		 * @param {Number} [order]
 		 *  the order of the axis to be retrieved (e.g. the primary axis would be order=0), or
-		 *  -1 to retrieve an array of all axes. If no order is provided, the primary axis is returned. 
+		 *  -1 to retrieve an array of all axes. If no order is provided, the primary axis is returned.
 		 *
 		 * @returns {aperture.chart.AxisLayer|Array}
 		 *  the AxisLayer for the given order, or a list of all X AxisLayers.
-		 */		
+		 */
 		xAxis : function (order) {
 			if (order === -1) {
 				return this.axisArray.x;
@@ -431,7 +431,7 @@ function(namespace) {
 				// Currently, charts only support secondary axes.
 				order = 0;
 			}
-			
+
 			var axisLayer = this.axisArray.x[order];
 			if (!axisLayer){
 				axisLayer = this.addLayer( aperture.chart.AxisLayer );
@@ -441,17 +441,17 @@ function(namespace) {
 			}
 			return axisLayer;
 		},
-		
+
 		/**
 		 * This method retrieves the {@link aperture.chart.AxisLayer} of the given order for the Y axis.
-		 * 
-		 * @param {Number} [order] 
+		 *
+		 * @param {Number} [order]
 		 *  the order of the axis to be retrieved (e.g. the primary axis would be order=0), or
-		 *  -1 to retrieve an array of all axes. If no order is provided, the primary axis is returned. 
+		 *  -1 to retrieve an array of all axes. If no order is provided, the primary axis is returned.
 		 *
 		 * @returns {aperture.chart.AxisLayer|Array}
 		 *  the AxisLayer for the given order, or a list of all Y axis AxisLayers.
-		 */		
+		 */
 		yAxis : function (order) {
 			if (order === -1) {
 				return this.axisArray.y;
@@ -484,7 +484,7 @@ function(namespace) {
 	/**
 	 * @class Chart is a {@link aperture.chart.ChartLayer ChartLayer} vizlet, suitable for adding to the DOM.
 	 * See the layer class for a list of supported mappings.
-	 * 
+	 *
 	 * @augments aperture.chart.ChartLayer
 	 * @name aperture.chart.Chart
 	 *
@@ -542,7 +542,7 @@ function(namespace) {
 				var rangeX = mapKeyX.from();
 				// Reband the range to reflect the desired zoom level.
 				var bandedX = rangeX.banded(bandCount*this.zoomValue);
-				mapKeyX = bandedX.mapKey([0,1]);
+				mapKeyX = bandedX.mappedTo([0,1]);
 				this.map('x').using(mapKeyX);
 				this.xAxis(0).all(mapKeyX);
 				// Update the rule layers of the x-axis, if any.
@@ -562,7 +562,7 @@ function(namespace) {
 						'span' : 1,
 						'units' : nextOrder
 					});
-					this.xAxis(1).all(secBandedX.mapKey([0,1]));
+					this.xAxis(1).all(secBandedX.mappedTo([0,1]));
 				}
 				// If the next time order is undefined, hide the secondary axis.
 				this.xAxis(1).map('visible').asValue(!!nextOrder);

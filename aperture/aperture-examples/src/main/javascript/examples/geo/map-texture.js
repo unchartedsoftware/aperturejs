@@ -14,9 +14,9 @@ map.zoomTo( 37, -95, 4 );
 var texturemap = { '-50':1, '-40':2, '-30':3, '-20':4, '-10':5, '0':6, '10':7, '20':8, '30':9, '32':10}
 
 //Create the lookup function
-var dataLookup = function() {	
+var dataLookup = function() {
 	var range = this.DEGF.value.substr(2, this.DEGF.value.length).split(' ');
-	
+
 	var textureno = 1;
 	if (range.length < 3) {
 		if (texturemap[range[1]] == undefined) {
@@ -30,8 +30,8 @@ var dataLookup = function() {
 		}
 		textureno = texturemap[range[2]];
 	}
-	
-	return 'img/tiles/tile-5-' + textureno + '.svg';
+
+	return '../img/tiles/tile-5-' + textureno + '.svg';
 };
 
 //Map data to visual properties

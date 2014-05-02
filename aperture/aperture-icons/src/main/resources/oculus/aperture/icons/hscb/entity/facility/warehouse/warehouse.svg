@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X5 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="955px" height="954px" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 14617892 14599994"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str0 {stroke:black;stroke-width:510215;stroke-linecap:round;stroke-linejoin:round}
+    .fil0 {fill:none}
+    .fil4 {fill:#999999}
+    .fil2 {fill:#B3B3B3}
+    .fil6 {fill:#B4CED2}
+    .fil5 {fill:#D3EDEF}
+    .fil1 {fill:white}
+    .fil3 {fill:black;fill-opacity:0.101961}
+   ]]>
+  </style>
+ </defs>
+ <g id="Layer_x0020_3">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <rect class="fil0" x="88600" y="3" width="14529287" height="14529014"/>
+ </g>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_1Corel-Layer"/>
+  <polygon class="fil1" points="6949950,10906367 6949950,14344923 8471122,13467422 8471122,11759624 12413872,9484845 12413872,11204122 13850996,10374422 13850996,6935848 10412423,7774896 "/>
+  <polygon class="fil2" points="6949950,14344923 6949950,10906367 645913,7266723 645913,10705279 "/>
+  <polygon class="fil3" points="12364083,11217464 12413872,9484845 8471122,11759624 8471122,12936597 11373013,11217464 "/>
+  <polygon class="fil4" points="6949950,14344923 6949950,10906367 645913,7266723 645913,10705279 "/>
+  <polygon class="fil0 str0" points="6949950,14344923 8471122,13478902 8471122,11759624 10327616,10688520 10581657,10541956 10762534,10437606 12365801,9512595 12365801,11231873 13850996,10374422 13808150,6960598 10590516,7426846 6943622,11175341 645913,7646031 645913,10705279 "/>
+  <polygon class="fil5" points="14317190,6987408 10590516,7426828 3992828,3621945 7719485,3178205 "/>
+  <path class="fil6" d="M10623021 7393256l-3738932 3859878 -6628982 -3773625 3771437 -3823829c2196318,1267999 4398404,2468510 6596476,3737576z"/>
+  <polygon class="fil0 str0" points="6591631,11086647 547566,7646013 255108,7479509 4026545,3587126 7719485,3178205 8009068,3345396 8011942,3344691 14315979,6984335 10623021,7393256 6884089,11253133 "/>
+  <rect class="fil0" x="88600" y="3" width="14529287" height="14529014"/>
+ </g>
+</svg>

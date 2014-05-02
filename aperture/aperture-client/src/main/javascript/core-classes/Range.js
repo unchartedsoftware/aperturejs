@@ -125,6 +125,15 @@ function(namespace) {
 			 */
 
 			/**
+			 * See the mappedTo function.
+			 *
+			 * @deprecated
+			 */
+			mapKey : function ( to ) {
+				return this.mappedTo( to );
+			},
+
+			/**
 			 * Creates a key for mapping from this model range to a visual property
 			 * range. This method is abstract and implemented by specific types
 			 * of ranges.
@@ -136,7 +145,7 @@ function(namespace) {
 			 * @returns {aperture.MapKey}
 			 *      a new map key.
 			 *
-			 * @name aperture.Range.prototype.mapKey
+			 * @name aperture.Range.prototype.mappedTo
 			 * @function
 			 */
 
@@ -183,17 +192,17 @@ function(namespace) {
 			start : function() {
 				return this.get()[0];
 			},
-			
+
 			/**
 			 * Returns the end of the range. For scalars this will be the maximum of the extents, and
 			 * for ordinals it will be the last case. To reset the start and end extents use the reset function.
 			 */
 			end : function() {
 				var e = this.get();
-				
+
 				return e && e[e.length-1];
 			},
-			
+
 			/**
 			 * Formats a value as a String using the current formatter.
 			 *
@@ -469,16 +478,28 @@ function(namespace) {
 			 * @returns {aperture.MapKey}
 			 *      a new map key.
 			 */
-			mapKey : function ( to ) {
+			mappedTo : function ( to ) {
 
 				// allow for array wrapping or not.
 				if (arguments.length > 1) {
 					to = Array.prototype.slice.call(arguments);
 				}
 				// diagnose problems early so they don't cascade later
-				if ( to.length === 0 || (util.isNumber(to[0]) && isNaN(to[0])) || (!util.isNumber(to[0]) && !to[0].blend) ) {
-					aperture.log.error('Mappings of Scalar ranges must map to numbers or objects with a blend function.');
+				if ( to.length === 0 || (util.isNumber(to[0]) && isNaN(to[0]))) {
+					aperture.log.error('Cannot map a scalar range to array length zero or NaN values.');
 					return;
+				}
+
+				if ( !util.isNumber(to[0]) && !to[0].blend ) {
+					// assume colors are strings
+					if (util.isString(to[0])) {
+						to = util.map(to, function(s) {
+							return new aperture.Color(s);
+						});
+					} else {
+						aperture.log.error('Mappings of Scalar ranges must map to numbers or objects with a blend function.');
+						return;
+					}
 				}
 
 				return new namespace.ScalarMapKey( this, to );
@@ -931,10 +952,10 @@ function(namespace) {
 			},
 
 			// Implemented to create an ordinal mapping.
-			mapKey : function ( to ) {
+			mappedTo : function ( to ) {
 
 				// co-opt this method from ordinal
-				return namespace.Ordinal.prototype.mapKey.call( this, to );
+				return namespace.Ordinal.prototype.mappedTo.call( this, to );
 			},
 
 			// Implemented to map a scalar value to an ordinal value by finding its band.
@@ -1234,16 +1255,12 @@ function(namespace) {
 				if (!order) {
 					var interval = Math.max(1, (end - start) / spec), len;
 
-					// find minimum order.
+					// find first under interval.
 					for (len = timeOrders.length; i < len; i++) {
-						if ((order = timeOrders[i]).span <= interval) {
+						if ((order = timeOrders[i]).span < interval) {
+							order = order.next || order; // then pick the next higher
 							break;
 						}
-					}
-
-					// pick closer order of the min and next up
-					if (order.next && order.next.span - interval < interval - order.span) {
-						order = order.next;
 					}
 
 					// step in base units. in years? use multiple of base then.
@@ -1414,7 +1431,7 @@ function(namespace) {
 			 * @returns {aperture.MapKey}
 			 *      a new map key.
 			 */
-			mapKey : function ( to ) {
+			mappedTo : function ( to ) {
 
 				// allow for array wrapping or not.
 				if (arguments.length > 1) {
@@ -1508,10 +1525,10 @@ function(namespace) {
 			},
 
 			// Implemented to create an ordinal mapping.
-			mapKey : function ( to ) {
+			mappedTo : function ( to ) {
 
 				// co-opt this method from scalar
-				return namespace.Scalar.prototype.mapKey.call( this, to );
+				return namespace.Scalar.prototype.mappedTo.call( this, to );
 			},
 
 			// Implemented to map an ordinal value to a scalar value.

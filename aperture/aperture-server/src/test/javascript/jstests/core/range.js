@@ -322,7 +322,7 @@ test('scalar with number format formats precision correctly', function() {
 	equal( range.format(3.678), '3.68', 'number format rounds decimals correctly');
 
 	range.formatter( aperture.Format.getNumberFormat(10) );
-	equal( range.format(3678), '3680', 'number format rounds bigger numbers correctly');
+	equal( range.format(3678), '3,680', 'number format rounds bigger numbers correctly');
 
 });
 

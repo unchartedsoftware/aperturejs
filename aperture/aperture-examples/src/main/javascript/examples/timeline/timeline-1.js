@@ -45,8 +45,7 @@ var createTimeLine = function(data){
 	var width = data.width || 600;
 	var height = data.height || 120;
 
-	// band every sixty pixels or so.
-	var bandCount = width / 100;
+	var bandCount = 12;
 
 
 	// FIND THE DATA RANGE
@@ -113,12 +112,12 @@ var createTimeLine = function(data){
 		}
 	);
 	barLayer.all(data.series);
-	
+
 	var positionKey = new aperture.Ordinal('y-position', ['vessel1', 'vessel2']).mapKey([0.25, 0.6]);
 	var colorKey = new aperture.Ordinal('colour key', ['vessel1', 'vessel2']).mapKey(['#B1B1B1', '#F8B671']);
 	barLayer.map('y').from('id').using(positionKey);
 	barLayer.map('fill').from('id').using(colorKey);
-	
+
 	barLayer.map('bar-count').from('events.length');
 	barLayer.map('x').from(function(index){
 		return new Date(this.events[index].start)
@@ -139,7 +138,7 @@ var createTimeLine = function(data){
 		var diff = (endPct-startPct)*width*timeline.zoomValue;
 
 		return diff;
-	});	
+	});
 
 	// Example layer event handler (e.g. for callouts).
 //	barLayer.on('click', function(event){
@@ -147,7 +146,7 @@ var createTimeLine = function(data){
 
 	//***************************
 	// CONSTRUCT ICONLAYER
-	//***************************	
+	//***************************
 	var iconLayer = timeline.addLayer(aperture.IconLayer, {
 			'width'    : 24,
 			'height'   : 24,
@@ -161,12 +160,12 @@ var createTimeLine = function(data){
 	iconLayer.map('x').from(function(index){
 		return new Date(this.events[index].start)
 	}).using(mapKey);
-	
+
 	iconLayer.map('y').from('id').using(positionKey);
 	iconLayer.map('url').from(function(index){
 		return './data/' + this.events[index].icon;
 	});
-	
+
 	var zoom = 1;
 
 	$('#zoomBtn').click( function() {

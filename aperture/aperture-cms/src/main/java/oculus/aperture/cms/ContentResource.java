@@ -35,7 +35,10 @@ import oculus.aperture.spi.store.DocumentNotFoundException;
 import oculus.aperture.spi.store.ContentService.Document;
 import oculus.aperture.spi.store.ContentService.DocumentDescriptor;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.restlet.data.CharacterSet;
+import org.restlet.data.Disposition;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -65,9 +68,15 @@ public class ContentResource extends ApertureServerResource {
 	private String store = null;
 	private String id = null;
 	private String rev = null;
-
-
-
+	private String filename = null;
+	private Action action = Action.GET;
+	
+	public enum Action {
+		GET,
+		REMOVE,
+		POP
+	}
+	
 	@Inject
 	public ContentResource(ContentService contentService ) {
 		this.contentService = contentService;
@@ -88,6 +97,19 @@ public class ContentResource extends ApertureServerResource {
 		// Get parameters from query
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		this.rev = form.getFirstValue("rev");
+		
+		// optional local filename to save to for gets
+		this.filename = form.getFirstValue("downloadAs");
+
+		// action (other than get)
+		final String action = form.getFirstValue("action");
+		
+		if (action != null) {
+			try {
+				this.action = Action.valueOf(action.toUpperCase());
+			} catch (Exception e) {
+			}
+		}
 	}
 
 
@@ -200,22 +222,49 @@ public class ContentResource extends ApertureServerResource {
 		// Get the document
 		Document doc;
 		try {
-			doc = contentService.getDocument(store, id, rev);
+			doc = Action.GET.equals(this.action)? 
+				contentService.getDocument(store, id, rev) 
+					: contentService.removeDocument(store, id, rev);
 		} catch (DocumentNotFoundException e) {
 			doc = null;
 		}
+		
+		// if a straight remove we just need to return a response
+		if (Action.REMOVE.equals(this.action)) {
+			JSONObject status = new JSONObject();
+			try {
+				status.append("removed", doc != null? "true":"false");
+			} catch (JSONException e) {
+			}
+			return new JsonRepresentation(status);
+		}
+		
 		if( doc == null ) {
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, 
 					"Document " + id + " revision "+ rev + " could not be found.");
 		}
 
+		BlobRepresentation resp;
+		
 		if( doc.getEncoding() != null ) {
 			// Has character encoding set, use it
-			return new BlobRepresentation(MediaType.valueOf(doc.getContentType()),
+			resp = new BlobRepresentation(MediaType.valueOf(doc.getContentType()),
 					CharacterSet.valueOf(doc.getEncoding()), doc.getDocument());
-		} 
-		
+		} else {
+			
 			// No character encoding, don't set
-			return new BlobRepresentation(MediaType.valueOf(doc.getContentType()), doc.getDocument());
+			resp = new BlobRepresentation(MediaType.valueOf(doc.getContentType()), doc.getDocument());
+			
 		}
+		
+		// download prompt?
+		if (filename != null && !filename.isEmpty()) {
+			final Disposition disposition = new Disposition(Disposition.TYPE_ATTACHMENT);
+			disposition.setFilename(filename);
+			
+			resp.setDisposition(disposition);
+		}
+		
+		return resp;
 	}
+}

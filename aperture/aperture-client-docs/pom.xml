@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>oculus.aperture</groupId>
 		<artifactId>aperture</artifactId>
-		<version>1.0.4</version>
+		<version>1.0.5</version>
 	</parent>
 
 	<artifactId>aperture-client-docs</artifactId>

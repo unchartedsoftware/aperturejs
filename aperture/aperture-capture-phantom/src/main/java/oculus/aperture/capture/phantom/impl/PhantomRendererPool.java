@@ -32,6 +32,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import oculus.aperture.capture.phantom.RenderExecutor;
+import oculus.aperture.capture.phantom.impl.PhantomCommandLineCapture.ShutdownEvent;
+import oculus.aperture.capture.phantom.impl.PhantomCommandLineCapture.ShutdownListener;
 import oculus.aperture.common.EmptyProperties;
 import oculus.aperture.spi.common.Properties;
 import oculus.aperture.spi.store.ContentService;
@@ -119,6 +121,15 @@ public class PhantomRendererPool implements RenderExecutor {
 					uid
 				);
 				
+				renderer.addListener(new ShutdownListener() {
+					
+					@Override
+					public void fireShutdownEvent(ShutdownEvent e) {
+						available.remove(renderer);
+						lookup.remove(uid);
+					}
+				});
+
 				available.add(renderer);
 				lookup.put(uid, renderer);
 			}

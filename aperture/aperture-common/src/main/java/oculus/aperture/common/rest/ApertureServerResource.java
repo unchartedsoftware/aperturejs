@@ -24,12 +24,16 @@
  */
 package oculus.aperture.common.rest;
 
+import java.util.Map;
+
 import org.restlet.data.Status;
-import org.restlet.representation.StringRepresentation;
+import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Maps;
 
 /**
  * Extends the basic restlet server resource to handle, log and return
@@ -76,8 +80,21 @@ public class ApertureServerResource extends ServerResource {
 
         if(getResponse() != null) {
             getResponse().setStatus(status);
-            getResponse().setEntity(new StringRepresentation(throwable.toString()));
+            getResponse().setEntity(new JsonRepresentation(getErrorObject(throwable)));
         }
+	}
+
+	/**
+	 * Creates a JSON-encoded error response with an optional message
+	 * @param message a message to include in the error response, if null no message is included
+	 * @return a JSONRepresentation object
+	 */
+	private Map<String,Object> getErrorObject(Throwable e) {
+		Map<String,Object> content = Maps.newHashMap();
+		content.put("ok", false);
+		content.put("message", e.toString());
+
+		return content;
 	}
 
 }

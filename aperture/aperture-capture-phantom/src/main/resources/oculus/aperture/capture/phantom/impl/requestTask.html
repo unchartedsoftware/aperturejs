@@ -8,9 +8,20 @@
 				// synchronous gets will time out, outside of our control.
 				xmlHttp.open('GET', './taskmanager', true);
 				xmlHttp.onreadystatechange = function() {
-					var i, s = xmlHttp.responseText;
+					var i, s = xmlHttp.responseText, open = 0;
 
 					while ((i = s.indexOf('}', readAt)) !== -1) {
+						for (i = readAt; i < s.length; i++) {
+							if(s.charAt(i) === '{') {
+								++open;
+							} else if (s.charAt(i) === '}') {
+								if(open === 1) break;
+								--open;
+							}
+						}
+
+						if(open === 0) break;
+
 						msg = s.substring(readAt, ++i);
 
 						// issue the task.

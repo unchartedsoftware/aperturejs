@@ -17,7 +17,8 @@ function(namespace) {
 			'x' : 0,
 			'y' : 0,
 			'width' : 24,
-			'height' : 24
+			'height' : 24,
+			'opacity': ''
 		},
 		ontoDefaults = {
 			'ontology' : 'aperture-hscb',
@@ -35,22 +36,25 @@ function(namespace) {
 			 * @class Represents a layer of point located icons representing ontological
 			 * types with attributes. Icons may vary in size.<br><br>
 			 *
-			 * In addition to core {@link aperture.Layer Layer} properties, icon layer properties include all icon 
+			 * In addition to core {@link aperture.Layer Layer} properties, icon layer properties include all icon
 			 * <a href='aperture.palette.html#.icon'>palette</a> properties, and the following:
-			 * 
+			 *
 			 * @mapping {String} url
 			 *   The url of the icon to use. This optional property is provided for situations when a
 			 *   specific image is desired, outside of the ontological resolution of types to symbols.
-			 *   
-			 * @mapping {Number} anchor-x
-			 *   The x-anchor point in the range [0,1] for the icon.
-			 * 
-			 * @mapping {Number} anchor-x
-			 *   The y-anchor point in the range [0,1] for the icon.
-			 *      
-			 * @mapping {Number} icon-count
+			 *
+			 * @mapping {Number=0.5} anchor-x
+			 *   The x-anchor point in the range [0,1] for the icon, where 0.5 is the centre.
+			 *
+			 * @mapping {Number=0.5} anchor-y
+			 *   The y-anchor point in the range [0,1] for the icon, where 0.5 is the centre.
+			 *
+			 * @mapping {Number=1.0} opacity
+			 *   How opaque the icon will be in the range [0,1].
+			 *
+			 * @mapping {Number=1} icon-count
 			 *   The number of icons to be drawn.
-			 * 
+			 *
 			 * @constructs
 			 * @factoryMade
 			 * @extends aperture.Layer
@@ -77,7 +81,7 @@ function(namespace) {
 					var node = toProcess[i],
 						data = node.data,
 						gfx = node.graphics,
-						w = node.width, 
+						w = node.width,
 						h = node.height,
 						icons = node.userData.icons || (node.userData.icons = []),
 						index;
@@ -93,7 +97,7 @@ function(namespace) {
 						rattrs.src = this.valueFor('url', data, '', index);
 						if (!rattrs.src) {
 							var oattrs = this.valuesFor(ontoDefaults, data);
-							
+
 							if (oattrs.format !== 'svg') {
 								oattrs.width = rattrs.width;
 								oattrs.height = rattrs.height;
@@ -101,38 +105,31 @@ function(namespace) {
 							rattrs.src = aperture.palette.icon(oattrs);
 						}
 
-						// culling
-						if (rattrs.x > w || rattrs.x + rattrs.width < 0 ||
-								rattrs.y > h || rattrs.y + rattrs.height < 0) {
-							// Only draw points that are within the bounds of the current node.
-							// TODO: this will repurpose existing but changes the visual to item match.
-							continue;
+						var visual = icons[visiblePoints];
+
+						// PROCESS GRAPHICS.
+						if (visual) {
+							gfx.update(visual, rattrs, changeSet.transition);
 						} else {
-							var visual = icons[visiblePoints];
+							visual = gfx.image(
+									rattrs.src,
+									rattrs.x,
+									rattrs.y,
+									rattrs.width,
+									rattrs.height);
 
-							// PROCESS GRAPHICS.
-							if (visual) {
-								gfx.update(visual, rattrs, changeSet.transition);
-							} else {
-								visual = gfx.image(
-										rattrs.src,
-										rattrs.x,
-										rattrs.y,
-										rattrs.width,
-										rattrs.height);
-
-								gfx.apparate(visual, changeSet.transition);
-								icons.push(visual);								
-							}
-
-							gfx.data( visual, data );
-							visiblePoints++;
+							gfx.update(visual, rattrs);
+							gfx.apparate(visual, changeSet.transition);
+							icons.push(visual);
 						}
+
+						gfx.data( visual, data );
+						visiblePoints++;
 					}
 					// Remove any obsolete visuals.
 					if (icons.length > visiblePoints){
 						gfx.removeAll(icons.splice(visiblePoints));
-					}		
+					}
 				}
 			}
 		}

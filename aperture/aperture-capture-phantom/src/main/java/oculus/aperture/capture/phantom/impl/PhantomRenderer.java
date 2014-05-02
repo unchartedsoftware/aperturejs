@@ -120,6 +120,12 @@ public class PhantomRenderer implements CaptureService {
 	
 	
 	
+	public void addListener(PhantomCommandLineCapture.ShutdownListener listener) {
+		this.worker.addListener(listener);
+	}
+	
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * @see oculus.aperture.spi.ImageRenderService#cachedImageRender(java.util.Map)
@@ -214,7 +220,7 @@ public class PhantomRenderer implements CaptureService {
 	/**
 	 * Package level - used internally.
 	 */
-	Map<String, Object> nextTask() {
+	Map<String, Object> nextTask(int timeout) {
 		try {
 			logger.debug("poll");
 
@@ -222,7 +228,7 @@ public class PhantomRenderer implements CaptureService {
 			worker.onTaskRequest();
 			
 			// this will block for 5s or until there is a task supplied.
-			final Map<String, Object> task = taskQueue.poll(12, TimeUnit.SECONDS);
+			final Map<String, Object> task = taskQueue.poll(timeout, TimeUnit.SECONDS);
 			
 			evaluateMessageSize(task);
 			

@@ -46,6 +46,9 @@ function(namespace) {
 		 * @mapping {Number=0} offset-y
 		 *   The offset along the y-axis by which to shift the text after it has been positioned at (x,y).
 
+		 * @mapping {Number=1.0} opacity
+		 *   How opaque the label will be in the range [0,1].
+
 		 * @mapping {'middle'|'start'|'end'} text-anchor
 		 *   How the label is aligned with respect to its x position.
 
@@ -71,6 +74,9 @@ function(namespace) {
 		 *   
 		 * @mapping {Number=3} font-outline-width
 		 *   The width of the outline drawn around each character of text, if font-outline is not none.
+		 *   
+		 * @mapping {Number=1.0} font-outline-opacity
+		 *   How opaque the font outline will be.
 		 *   
 		 * @constructs
 		 * @factoryMade
@@ -121,11 +127,12 @@ function(namespace) {
 
 					// Make the outline and fill colour the same.
 					var fillColor = this.valueFor('fill', node.data, '#000000', index);
+					var opacity = this.valueFor('opacity', node.data, '', index);
 					var outlineColor = this.valueFor('font-outline', node.data, 'none', index);
 					var xPoint = (this.valueFor('x', node.data, 0, index) * node.width) + (node.position[0]||0);
 					var yPoint = (this.valueFor('y', node.data, 0, index) * node.height) + (node.position[1]||0);
 					var outlineWidth = outlineColor !== 'none' && this.valueFor('font-outline-width', node.data, 3, index);
-
+					
 					var connect = this.valueFor('connect', node.data, false, index);
 
 					var str = this.valueFor('text', node.data, '', index);
@@ -176,7 +183,8 @@ function(namespace) {
 							'font-size': fontSize,
 							'font-weight': fontWeight,
 							'text-anchor': textAnchor,
-							'transform': transform
+							'transform': transform,
+							'opacity': opacity
 							};
 					var fattr;
 
@@ -190,6 +198,18 @@ function(namespace) {
 							'fill': fillColor
 						}, attr);
 						
+						var oopacity = 
+							this.valueFor('font-outline-opacity', node.data, 1.0, index);
+						
+						if (oopacity !== '' && oopacity != null && oopacity !== 1) {
+							if (opacity !== '' && opacity != null) {
+								oopacity = Math.min(1.0, opacity * oopacity);
+							}
+						} else {
+							oopacity = opacity;
+						}
+						
+						attr['opacity']= oopacity !== 1? oopacity : '';
 						attr['stroke-width']= outlineWidth;
 						attr['stroke']= outlineColor;
 						attr['stroke-linecap']= 'round';

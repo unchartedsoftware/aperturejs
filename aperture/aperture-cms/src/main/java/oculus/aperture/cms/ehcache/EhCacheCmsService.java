@@ -165,13 +165,23 @@ public class EhCacheCmsService implements ContentService {
 	}
 
 
-
+	public StoredDocument removeDocument(String storeName, String id, String rev) {
+		try {
+			return getDocument(storeName, id, rev, true);
+		} catch (DocumentNotFoundException e) {
+			return null;
+		}
+	}
 
 	public StoredDocument getDocument(String storeName, String id, String rev) throws DocumentNotFoundException {
+		return getDocument(storeName, id, rev, false);
+	}
+
+	private StoredDocument getDocument(String storeName, String id, String rev, boolean remove) throws DocumentNotFoundException {
 		Cache store = getCMS().getCache(storeName);
 		if( store != null ) {
 			// Get only using id, ignore rev for now
-			Element e = store.get(id);
+			Element e = remove? store.removeAndReturnElement(id) : store.get(id);
 			if( e != null ) {
 				// Get the revision from the map or the most recent if no revision
 				@SuppressWarnings("unchecked")

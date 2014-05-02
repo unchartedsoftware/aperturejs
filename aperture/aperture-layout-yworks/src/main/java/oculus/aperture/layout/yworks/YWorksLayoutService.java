@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import oculus.aperture.layout.impl.BridgedLayoutGraph;
+import oculus.aperture.spi.common.Extents;
 import oculus.aperture.spi.common.Link;
 import oculus.aperture.spi.common.Node;
 import oculus.aperture.spi.layout.options.GraphLayoutOptions;
@@ -160,14 +161,19 @@ public class YWorksLayoutService extends BridgedLayoutGraph {
 			//layouter.setScope(SmartOrganicLayouter.SCOPE_SUBSET);
 			layouter.setScope(SmartOrganicLayouter.SCOPE_ALL);
 			layouter.setNodeSizeAware(true);
-			layouter.setNodeOverlapsAllowed(true);
+			layouter.setNodeOverlapsAllowed(false);
 			layouter.setPreferredMinimalNodeDistance(gopts.getNodeDistance());
 			layouter.setPreferredEdgeLength(gopts.getLinkLength());
 			
+			final Extents ex = options.getPageExtents();
+
 			// layout selected graph
 			ComponentLayouter componentLayouter = (ComponentLayouter)layouter.getComponentLayouter();
 			componentLayouter.setStyle(ComponentLayouter.STYLE_ROWS);
 			componentLayouter.setComponentArrangementEnabled(true);
+			if (ex != null) {
+				componentLayouter.setPreferredLayoutSize(ex.getWidth(), ex.getHeight());
+			}
 			
 			impl = layouter;
 		}

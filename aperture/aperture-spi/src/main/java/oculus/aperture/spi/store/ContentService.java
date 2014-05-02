@@ -130,7 +130,7 @@ public interface ContentService {
 	 *
 	 * @param store the document store to access
 	 * @param id the document id to get
-	 * @param rev the document revision to get.  If null, the most recent revision of teh document
+	 * @param rev the document revision to get.  If null, the most recent revision of the document
 	 * with the given id will be returned.
 	 *
 	 * @return A stored document object containing all the available information about the document
@@ -142,4 +142,19 @@ public interface ContentService {
 	public StoredDocument getDocument( String store, String id, String rev )
 		throws DocumentNotFoundException;
 
+	
+	
+	/**
+	 * Removes and returns the given document from the store.
+	 *
+	 * @param store the document store to access
+	 * @param id the document id to get
+	 * @param rev the document revision to get.  If null, the most recent revision of the document
+	 * with the given id will be returned.
+	 *
+	 * @return A stored document object containing all the available information about the document
+	 * including the stored data itself, or null if not found
+	 */
+	public StoredDocument removeDocument(String storeName, String id, String rev);
+	
 }

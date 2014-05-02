@@ -24,7 +24,6 @@
  */
 package oculus.aperture.capture.phantom.impl;
 
-import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +31,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ public class PhantomCommandLineCapture {
 	
 	private static final String LOG_SUCCESS = "SUCCESS";
 	private static final String LOG_ERROR = "LOAD ERROR";
-	private static final String LOG_SHUTDOWN = "SHUTDOWN";
+	private static final String LOG_SHUTDOWN = "{SHUTDOWN}";
 	
 	/**
 	 * Sinks stream contents to the log
@@ -93,18 +94,9 @@ public class PhantomCommandLineCapture {
 		            	} else if (line.startsWith(LOG_ERROR)) {
 		            		resource.putResponse(false);
 		            	} else if (line.equals(LOG_SHUTDOWN)) {
-		            		// premature shutdown? restart
-		            		EventQueue.invokeLater(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										initialize();
-									} catch (IOException e) {
-										logger.error("Failed to restart phantom.");
-									}
-								}
-							});
-		            		// exit thread.
+		            		for(ShutdownListener listener : listeners) {
+		            			listener.fireShutdownEvent(new ShutdownEvent(PhantomCommandLineCapture.this));
+		            		}
 		            		return;
 		            	}
 	            	}
@@ -119,6 +111,22 @@ public class PhantomCommandLineCapture {
 	    }
 	}
 	
+	interface ShutdownListener {
+		void fireShutdownEvent(ShutdownEvent e);
+	}
+
+	class ShutdownEvent {
+
+		private final PhantomCommandLineCapture capturer;
+
+		ShutdownEvent(PhantomCommandLineCapture capturer) {
+			this.capturer = capturer;
+		}
+
+		PhantomCommandLineCapture getCapturer() {
+			return capturer;
+		}
+	}
 	
 	
 	
@@ -126,6 +134,7 @@ public class PhantomCommandLineCapture {
 	private final String cmdLocation;
 	private final PhantomRenderer resource;
 	private final String taskPageUrl;
+	private final List<ShutdownListener> listeners = new ArrayList<ShutdownListener>();
 
 	private File jsFile;
 	private Process proc;
@@ -172,6 +181,14 @@ public class PhantomCommandLineCapture {
 		cleanInitFiles();
 	}
 
+	void addListener(ShutdownListener listener) {
+		listeners.add(listener);
+	}
+
+	boolean removeListener(ShutdownListener listener) {
+		return listeners.remove(listener);
+	}
+
 	/*
 	 * Delete temporary file created in constructor if haven't already done so
 	 */
@@ -214,10 +231,11 @@ public class PhantomCommandLineCapture {
 		out.close();
 		
 		// Populate the commandline arguments
-		String cmd[] = new String[3];
+		String cmd[] = new String[4];
 		cmd[0] = cmdLocation;
-		cmd[1] = jsFile.getAbsolutePath();
-		cmd[2] = taskPageUrl;
+		cmd[1] = "--proxy-type=none";
+		cmd[2] = jsFile.getAbsolutePath();
+		cmd[3] = taskPageUrl;
 		
 		String args = "";
 		for (String arg : cmd){

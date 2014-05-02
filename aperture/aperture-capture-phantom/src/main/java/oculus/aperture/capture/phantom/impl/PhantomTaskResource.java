@@ -85,11 +85,12 @@ public class PhantomTaskResource extends ApertureServerResource {
 		@Override
 		public void write(OutputStream outputStream) throws IOException {
 			Writer writer = new OutputStreamWriter(outputStream, "UTF-8");
+			int timeout = 12;
 			
 			while (true) {
 				// get the next task. this will block for a period of time waiting to
 				// keep phantom.js from having to ask too often.
-				Map<String, Object> task = owner.nextTask();
+				Map<String, Object> task = owner.nextTask(timeout);
 
 				try {
 					// return the task as JSON
@@ -101,6 +102,7 @@ public class PhantomTaskResource extends ApertureServerResource {
 						// flush this task.
 						writer.write(new JSONObject(task).toString());
 						writer.flush();
+						timeout = 0;
 							
 					} else {
 						writer.write(RECONNECT_RESPONSE);

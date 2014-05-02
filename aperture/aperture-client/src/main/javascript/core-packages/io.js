@@ -17,7 +17,9 @@ aperture.io = (function() {
 
 	var id = 0,
 		securityFn,
-		restEndpoint = "%host%/rest";
+		restEndpoint = "%host%/rest",
+		pendingRequests = 0,
+		handlers = [];
 
 
 	// Register to receive RPC endpoint url from config
@@ -73,6 +75,11 @@ aperture.io = (function() {
 
 				// Success callback processes response and calls user's callback
 				innerSuccess = function(results, textStatus, jqXHR) {
+					pendingRequests -= 1;
+					aperture.util.forEach(handlers, function(handler) {
+						handler.onRequestComplete(pendingRequests);
+					});
+
 					if( callback ) {
 						// Return results data object plus a hash of
 						// other available data.  Also include a success
@@ -89,6 +96,11 @@ aperture.io = (function() {
 				innerError = function(jqXHR, textStatus, errorThrown) {
 					var responseData = jqXHR.responseText;
 					
+					pendingRequests -= 1;
+					aperture.util.forEach(handlers, function(handler) {
+						handler.onRequestComplete(pendingRequests);
+					});
+
 					aperture.log.error((errorThrown||textStatus||'unspecified error') + (responseData? (' : ' + responseData): ''));
 					
 					if( callback ) {
@@ -159,8 +171,30 @@ aperture.io = (function() {
 				}
 			}
 
+			pendingRequests += 1;
+
 			//  Make the AJAX call using jQuery
 			$.ajax( params );
+		},
+
+		addRestListener : function( listener ) {
+			if( listener && typeof listener !== "function") {
+				return;
+			}
+
+			handlers.push(listener);
+		},
+
+		removeRestListener : function( listener ) {
+			if( listener && typeof listener !== "function") {
+				return;
+			}
+
+			handlers.splice(aperture.util.indexOf(handlers, listener), 1);
+		},
+
+		getPendingRequests : function() {
+			return pendingRequests;
 		},
 
 		/**

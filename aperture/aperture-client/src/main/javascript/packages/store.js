@@ -11,9 +11,34 @@
  */
 aperture.store = (function() {
 
+	function get(descriptor, callback, action) {
+		var url = this.url(descriptor, action);
+		
+		if (url) {
+			var innerCallback = callback && function( result, info ) {
+				if( info.success ) {
+					// Call user's callback with the document data
+					// TODO Get the latest revision via ETAG
+					callback( result, descriptor );
+				} else {
+					// TODO Better error handling?
+					callback(null, descriptor);
+				}
+			};
 
-	return {
+			// Make the call
+			aperture.io.rest(url, "GET", innerCallback);
+			
+		} else {
+			callback(null, descriptor);
+		}		
+	}
+
+	var api = {
 		/**
+		 * @name aperture.store.store
+		 * @function
+		 * @description
 		 * Store a data item in the CMS.
 		 * @param {String|Object} data the data item to store.  Can be a string or a javascript object.
 		 * If a string it will be stored as is.  If an object, it will be converted to JSON
@@ -88,6 +113,9 @@ aperture.store = (function() {
 		},
 
 		/**
+		 * @name aperture.store.url
+		 * @function
+		 * @description
 		 * Gets the url of a document in the store given a descriptor.
 		 *
 		 * @param {Object} descriptor an object describing the document to get
@@ -96,8 +124,12 @@ aperture.store = (function() {
 		 * @param {String} descriptor.id the id of the document to get
 		 * @param {String} [descriptor.rev] the revision of the document to get.  If not
 		 * provided, the most recent revision will be retrieved.
+		 * @param {String='get'|'remove'|'pop'} [action='get'] the action to perform, which defaults to get 
+		 * @param {String} [downloadAs] the local filename of the document if is to be downloaded 
+		 * rather than opened by the browser. Do not specify this argument if the document should
+		 * be subject to normal browser MIME type viewing.
 		 */
-		getURL : function(descriptor) {
+		url : function(descriptor, action, downloadAs) {
 			if( !descriptor || descriptor.id == null || descriptor.id === '' ) {
 				aperture.log.error('get from store must specify an id');
 				return;
@@ -107,16 +139,24 @@ aperture.store = (function() {
 			descriptor.store = descriptor.store || 'aperture';
 
 			// Construct the url
-			var url = '/cms/'+descriptor.store+'/'+descriptor.id;
+			var url = aperture.io.restUrl('/cms/'+descriptor.store+'/'+descriptor.id
+				+ '?action='+ (action||'get'));
+			
 			// Have a rev?  Use it
 			if( descriptor.rev ) {
-				url += '?rev='+descriptor.rev;
+				url += '&rev='+descriptor.rev;
+			}
+			if (downloadAs) {
+				url += '&downloadAs='+encodeURI(downloadAs);
 			}
 
 			return url;
 		},
 		
 		/**
+		 * @name aperture.store.get
+		 * @function
+		 * @description
 		 * Gets a document from the server given a descriptor.
 		 *
 		 * @param {Object} descriptor an object describing the document to get
@@ -131,27 +171,38 @@ aperture.store = (function() {
 		 * document descriptor.
 		 */
 		get : function(descriptor, callback) {
-			var url = getURL(descriptor);
-			
-			if (url) {
-				var innerCallback = callback && function( result, info ) {
-					if( info.success ) {
-						// Call user's callback with the document data
-						// TODO Get the latest revision via ETAG
-						callback( result, descriptor );
-					} else {
-						// TODO Better error handling?
-						callback(null, descriptor);
-					}
-				};
-
-				// Make the call
-				aperture.io.rest(uri, "GET", innerCallback);
-				
-			} else {
-				callback(null, descriptor);
-			}
+			return get(descriptor, callback, 'get');
+		},
+		
+		/**
+		 * @name aperture.store.remove
+		 * @function
+		 * @description
+		 * Removes a document from the server given a descriptor, optionally fetching it.
+		 *
+		 * @param {Object} descriptor an object describing the document to get
+		 * @param {String} [descriptor.store] the name of the content store to use.  If not
+		 * provided the default will be used.
+		 * @param {String} descriptor.id the id of the document to get
+		 * @param {String} [descriptor.rev] the revision of the document to get.  If not
+		 * provided, the most recent revision will be retrieved.
+		 *
+		 * @param {Function(data,descriptor)} [callback] a callback to be called when the document
+		 * data is available.  The callback will be provided with the data and a hash of the
+		 * document descriptor.
+		 * 
+		 * @param {boolean=false} fetch optionally return the removed document.
+		 */
+		remove : function(descriptor, callback, fetch) {
+			return get(descriptor, callback, fetch? 'pop':'remove');
 		}
 	};
 
+	/**
+	 * deprecated
+	 * @private
+	 */
+	api.getURL = api.url;
+	
+	return api;
 }());

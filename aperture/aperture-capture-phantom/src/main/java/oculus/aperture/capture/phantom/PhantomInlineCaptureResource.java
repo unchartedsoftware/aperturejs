@@ -31,6 +31,8 @@ import oculus.aperture.capture.phantom.data.PhantomImageData;
 import oculus.aperture.common.rest.BlobRepresentation;
 import oculus.aperture.spi.palette.ImageService.ImageData;
 
+import org.restlet.data.Disposition;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -58,15 +60,26 @@ public class PhantomInlineCaptureResource extends PhantomCaptureResource {
 	
 	@Override
 	protected Representation executeTask(Map<String, Object> params) {
+		final Form form = getRequest().getResourceRef().getQueryAsForm();
+		final String filename = form.getFirstValue("downloadAs");
 		
 		ImageData imageData = phantomManager.inlineImageRender(params);
 
 		if (imageData != PhantomImageData.NONE) {
 			// Return a blob response
-			return new BlobRepresentation(
+			final Representation resp = new BlobRepresentation(
 				MediaType.valueOf(imageData.getMediaType()),
 				imageData.getData()
 			);
+			
+			if (filename != null && !filename.isEmpty()) {
+				final Disposition disposition = new Disposition(Disposition.TYPE_ATTACHMENT);
+				disposition.setFilename(filename);
+				
+				resp.setDisposition(disposition);
+			}
+			
+			return resp;
 		}
 
 		// blame the client

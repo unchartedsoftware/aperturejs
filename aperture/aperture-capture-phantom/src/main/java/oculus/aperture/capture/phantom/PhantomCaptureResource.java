@@ -34,7 +34,10 @@ import oculus.aperture.common.rest.ApertureServerResource;
 import oculus.aperture.spi.capture.CaptureService;
 import oculus.aperture.spi.common.Properties;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.restlet.data.CacheDirective;
+import org.restlet.data.Cookie;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -90,6 +93,8 @@ public abstract class PhantomCaptureResource extends ApertureServerResource {
 	@Get
 	public Representation getCapturedImage() throws ResourceException {
 
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+
 		// make sure this is initialized and ready to go
 		phantomManager.init(getRootRef().toString());
 
@@ -98,7 +103,6 @@ public abstract class PhantomCaptureResource extends ApertureServerResource {
 		int captureHeight = 16;
 		CaptureService.ImageType format = CaptureService.ImageType.PNG;
 
-		Form form = getRequest().getResourceRef().getQueryAsForm();
 		
 		// get url from query
 		String url = form.getFirstValue("page");
@@ -186,6 +190,17 @@ public abstract class PhantomCaptureResource extends ApertureServerResource {
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
 				"Unable to crate temporary file for image rendering.");
 		}
+
+		JSONArray cookies = new JSONArray();
+		for(Cookie cookie : getRequest().getCookies()) {
+			String hostDomain = getRequest().getResourceRef().getHostDomain();
+			if(cookie.getDomain() == null) {
+				cookie.setDomain(hostDomain);
+			} else if(!cookie.getDomain().equals(hostDomain)) {
+				continue; // filter out cookies from other domains
+			}
+			cookies.put(new JSONObject(cookie));
+		}
 		
 		// Create JSON object to that packages up information needed by phantomJS
 		Map<String,Object> params = Maps.newHashMap();
@@ -198,6 +213,7 @@ public abstract class PhantomCaptureResource extends ApertureServerResource {
 		params.put("filename", tempFile);
 		params.put("username", username);
 		params.put("password", password);
+		params.put("cookies", cookies);
 		
 		// execute task
 		Representation rep = executeTask(params);

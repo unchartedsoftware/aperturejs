@@ -10,18 +10,18 @@ var nodeLink = {
 	zoom_ : 1,
 	zoomLevel_ : 0,
 	nodeWidth_ : 20,
-	
+
 	graphId_ : graphId,
 	contentsId_ : '#ap-graph-contents',
-	
+
 	// PUBLIC
 	data : function(graph) {
 		this.graph_= graph;
 	},
-	
+
 	// issue a layout request for the graph.
 	layout : undefined,
-	
+
 	// construct or update the graph with new data (called by layout)
 	update : undefined,
 
@@ -32,7 +32,7 @@ var nodeLink = {
 	zoomIn : function(transition) {
 		this.zoom(this.zoomLevel_+1, transition);
 	},
-	
+
 	// zoom out a level
 	zoomOut : function(transition) {
 		this.zoom(this.zoomLevel_-1, transition);
@@ -42,66 +42,52 @@ var nodeLink = {
 // Calculates the total stacked height of the
 // in/outgoing links of a given node.
 function getStackedSize(node, mapKey){
-	var links = node.links;
-	var stackedOutHeight = 0,
-		stackedInHeight = 0,
-		size=0;
-	for (var i=0; i < links.length; i++){	
-		size = Math.round(mapKey.map(links[i].value));
-		if (links[i].type == 'outgoing'){
-			stackedOutHeight += size;
-		}
-		else {
-			stackedInHeight += size;
-		}			
-	}
-	size = Math.max(stackedInHeight, stackedOutHeight);
-	return size; 	
+	return mapKey.map(Math.max(node.totalIncoming, node.totalOutgoing));
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ADD AN UPDATE FUNCTION : ON FIRST UPDATE IT WILL CONSTRUCT.
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 nodeLink.update = function(transition) {
-	
+
 	// if constructed this is all we need to do.
 	if (this.plot) {
 		this.plot.all().redraw(transition).toFront('labeled');
-		
+
 		return;
 	}
-	
+
 	var graph = this.graph_;
-	
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// CREATE THE BASE NODE LAYER
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// add a contents div to our container.
-	var container = $(this.graphId_), 
+	var container = $(this.graphId_),
 		w = container.width(), h = container.height();
 	container.append('<div id="'+ this.contentsId_.substr(1) + '" class="dragger" style="width: '+ w +
 			'px; height: ' + h + 'px;"/>');
-	
+
 	// create the base plot
 	this.plot = new aperture.NodeLink(this.contentsId_);
 	this.plot.map('node-x').from('x').using(new aperture.Scalar('w', [0,w]).mapKey([0,w]));
 	this.plot.map('node-y').from('y').using(new aperture.Scalar('h', [0,h]).mapKey([0,h]));
 
-	// add a node layer	
+	// add a node layer
 	var nodeLayer = this.plot.addLayer(aperture.NodeLayer);
 	nodeLayer.all(graph.nodes, 'id');
-	
+
 	// size of node is based on overall flow volume.
 	var nodeSize = nodeLayer.map('length').from(function(){
 		return getStackedSize(this, graph.volumeMapKey);
 	});
-	
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// SET UP A FEW HIGHLIGHT THINGS
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	var focusNodes = new aperture.Set('id');
 	var highlightedNodes = new aperture.Set('id');
 	var highlightedLinks = new aperture.Set('id');
-	
+
 	// the graph will be sorted into three planes based on highlight state.
 	nodeLayer.map('plane').from(function() {
 			return this.tag.visible? 'labeled' : 'normal';
@@ -109,7 +95,7 @@ nodeLink.update = function(transition) {
 		.filter(highlightedNodes.constant('highlight'))
 		.filter(focusNodes.constant('focus'));
 
-	
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// CREATE THE LINK REPRESENTATION.
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -122,10 +108,10 @@ nodeLink.update = function(transition) {
 	linkLayer.map('stroke-width').from('value').using(graph.volumeMapKey);
 
 	var defaultColor = new aperture.Color("#B9B9B9");
-	
+
 	var highlightColor = new aperture.Color('#F8B045'),
 		highlightHue = highlightColor.hue();
-	
+
 	// these mappings will be assigned a source later
 	nodeLayer.map('fill').asValue(new aperture.Color('#DCF3FB'))
 		.filter(highlightedNodes.filter(function(color) {
@@ -133,25 +119,25 @@ nodeLink.update = function(transition) {
 		}));
 	linkLayer.map('stroke').asValue(defaultColor)
 		.filter(highlightedLinks.constant(highlightColor));
-	
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// CREATE THE NODE REPRESENTATION.
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	var barLayer = nodeLayer.addLayer( aperture.BarLayer );
 	barLayer.map('stroke').from(function() {
 		return this.tag.visible? '#222': 'none';
-	}); 
+	});
 	barLayer.map('width').asValue(nodeLink.nodeWidth_);
 	barLayer.map('orientation').asValue('vertical');
-	
+
 	// the same offset is used for links and labels, derived from the radius mapping
-	
+
 	// link offsets from the radius of each node.
 	linkLayer.map('source-offset').asValue(nodeLink.nodeWidth_);
 	linkLayer.map('target-offset').asValue(0);
-	
+
 	var toTa = {left: 'start', middle: 'middle', right: 'end'};
-	
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// ADD NODE LABELS.
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -165,9 +151,9 @@ nodeLink.update = function(transition) {
 	labelLayer.map('text-anchor-y').from('tag.anchorY');
 	labelLayer.map('font-size').asValue(12);
 	labelLayer.map('offset-x').from('tag.offsetX');
-	
+
 	var that = this;
-	
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// WHEN HOVERING OVER A NODE HIGHLIGHT JUST IT AND ITS CONNECTED NODES.
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -177,8 +163,8 @@ nodeLink.update = function(transition) {
 		}
 
 		var changed = [highlightedNodes.add(event.data.id)];
-		
-		// Add the appropriate target nodes to the selection set. 
+
+		// Add the appropriate target nodes to the selection set.
 		aperture.util.forEach(event.data.links, function(link) {
 			var add= highlightedNodes.add(link.other);
 			changed.push(add);
@@ -192,20 +178,20 @@ nodeLink.update = function(transition) {
 		// update graphics then pop the nodes of interest to front.
 		nodeLayer.all().where('id', changed).and(linkLayer.all()).redraw().toFront(['labeled', 'highlight', 'focus']);
 	});
-	
+
 	barLayer.on('mouseout', function(event) {
 		if (focusNodes.clear()) {
 
 			// clear everything.
 			highlightedLinks.clear();
 			var updated= highlightedNodes.clear();
-			
+
 			labelLayer.map('font-outline').asValue(null);
-			
+
 			nodeLayer.all().where('id', updated).and(linkLayer.all()).redraw().toFront('labeled');
 		}
 	});
-	
+
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// SET UP ZOOM AND PAN
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -231,10 +217,10 @@ nodeLink.update = function(transition) {
 		that.noHover_ = false;
 	});
 
-	
+
 	this.plot.all().redraw();
 	nodeLayer.all().toFront('labeled');
-	
+
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -242,7 +228,7 @@ nodeLink.update = function(transition) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 nodeLink.layout = function(type, transition) {
 	var graphData = this.graph_;
-	
+
 	// form the layout request
 	var layoutData = {
 		links : graphData.links,
@@ -266,27 +252,27 @@ nodeLink.layout = function(type, transition) {
 	var con = $(this.graphId_);
 	// TODO: if layout was also integrated into layers view extents could be provided.
 	var view = {
-		'top': con.scrollTop(), 
-		'left': con.scrollLeft(), 
-		'width': con.width(), 
+		'top': con.scrollTop(),
+		'left': con.scrollLeft(),
+		'width': con.width(),
 		'height': con.height(),
 		'margin': 100,
 		'zoom' : this.zoom_
 	};
-	
+
 	var layouts = type? [{'type' : type, 'fit' : 'stretch'}] : [];
-	
+
 	// add tag layout
 	layouts.push({
 		'type' : 'tag',
 		'tagWidth' : 100,
 		'tagHeight' : 18,
 		'alignments' : 'bottomAny',
-		'preferCurrent' : !type 
+		'preferCurrent' : !type
 	});
-	
+
 	var that = this;
-	
+
 	// initiate the layout request and handle the result.
 	aperture.layout.multipass(layoutData, view, layouts, function(response, info) {
 		if ( !info.success ){
@@ -302,9 +288,9 @@ nodeLink.layout = function(type, transition) {
 		var nodeCount=0;
 		for (i in response.nodes){
 			var layoutNode = response.nodes[i];
-			var node = graphData.nodeMap[layoutNode.id]; 
+			var node = graphData.nodeMap[layoutNode.id];
 			var tag = layoutNode.tag;
-			
+
 			node.x = layoutNode.x;
 			node.y = layoutNode.y;
 			node.tag = layoutNode.tag;
@@ -338,14 +324,14 @@ nodeLink.zoom = function(zoom, transition) {
 	// get graph content and container
 	var content = $(this.contentsId_),
 		container = $(this.graphId_),
-		
+
 		vpw = container.width(), vph = container.height(),
 
 		// Get the current scroll position, taken from the centre of the viewport.
 		scrollCx = (container.scrollTop()+0.5*vph)/content.height(),
 		scrollCy = (container.scrollLeft()+0.5*vpw)/content.width(),
 		w, h;
-	
+
 	// Update the content size.
 	content.width(w = vpw*this.zoom_);
 	content.height(h = vph*this.zoom_);
@@ -360,7 +346,7 @@ nodeLink.zoom = function(zoom, transition) {
 
 	// redraw
 	this.plot.all().redraw(transition);
-	
+
 	this.layout('', transition);
 };
 
@@ -386,14 +372,14 @@ $('#layoutType').change(function() {
 // LOAD AND PROCESS THE SOURCE DATA.
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 $.getJSON("./data/f1_race.json", function(data) {
-	
+
 	// Register all the nodes.
 	var i=0,
 		nodes= data.nodes,
 		links= data.links,
-		nodeMap= {}, 
+		nodeMap= {},
 		linkFlowRange= new aperture.Scalar('Flow Volume');
-	
+
 	// Create a map of nodes
 	for (i=0; i < nodes.length; i++){
 		var node = nodes[i];
@@ -408,10 +394,10 @@ $.getJSON("./data/f1_race.json", function(data) {
 	// Create a list of all links and find the range of the sankey flow values
 	// so that we can normalize them against the desired visual width of the flows.
 	var minVal=0, maxVal=0;
-	
+
 	for (i=0; i < links.length; i++) {
 		var link = links[i];
-		
+
 		// Manually create a link ID from the source and target nodes.
 		link.id = link.sourceId + '_' + link.targetId;
 		// for expedience have the link reference the nodes and have the nodes
@@ -419,21 +405,19 @@ $.getJSON("./data/f1_race.json", function(data) {
 		link.source = nodeMap[link.sourceId];
 		var outlinks = link.source.links;
 		outlinks.push({id: link.id, other: link.targetId, value : link.value, 'type' : 'outgoing'});
-		
+
 		link.target = nodeMap[link.targetId];
 		var inlinks = link.target.links;
 		inlinks.push({id: link.id, other: link.sourceId, value : link.value, 'type' : 'incoming'});
-		
+
 		//Update the total value of flows going through each node.
 		//Expand the range for flow width
 		link.source.totalOutgoing += link.value;
 		link.target.totalIncoming += link.value;
-		// This only provides a rough estimate of the range since the
-		// mapping function may have a non-zero minimum value.
 		linkFlowRange.expand(link.source.totalOutgoing);
 		linkFlowRange.expand(link.target.totalIncoming);
 	}
-	
+
 	// Now initiate the layout.
 	nodeLink.data({
 		nodes: nodes,

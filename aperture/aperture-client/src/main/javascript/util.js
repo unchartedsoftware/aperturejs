@@ -117,7 +117,7 @@ aperture.util = (function(ns) {
 	 *      the three arguments
 	 *      <span class="fixedFont">(item, indexOrKey, collection)</span>.
 	 *
-	 * @param until
+	 * @param [until=true]
 	 *      the return value to test for when deciding whether to break iteration.
 	 *
 	 * @param [context]
@@ -131,8 +131,13 @@ aperture.util = (function(ns) {
 	 * @function
 	 */
 	ns.forEachUntil = function ( obj, operation, until, context ) {
-		if ( obj == null ) return;
+		if ( obj == null || operation == null ) return;
 
+		// default to true
+		if (arguments.length === 2) {
+			until = true;
+		}
+		
 		var result;
 
 		// array-like?

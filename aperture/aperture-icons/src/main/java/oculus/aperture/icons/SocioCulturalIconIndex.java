@@ -81,6 +81,12 @@ class SocioCulturalIconIndex {
 		addATTRd("entity/actor/person");
 		addPlace("entity/place", geoCoding);
 		
+		addBasic("entity/facility");
+		addBasic("entity/facility/factory");
+		addBasic("entity/facility/store");
+		addBasic("entity/facility/warehouse");
+		addBasic("entity/facility/materials");
+		
 		addBasic("event");
 		
 		addBasic("artifact");

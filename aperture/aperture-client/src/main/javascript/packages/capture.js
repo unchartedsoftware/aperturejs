@@ -17,12 +17,9 @@ aperture.capture = (function() {
 	var callbackWrapper = function( callback ) {
 		return function(result, info) {
 			if( info.success ) {
-				// Success, get the location ref header
-				var image = info.xhr && info.xhr.getResponseHeader && info.xhr.getResponseHeader("Location");
-				callback( image );
+				callback( result, info );
 			} else {
-				// TODO Support an error callback?
-				callback( null );
+				callback( null, info );
 			}
 		};
 	};
@@ -87,9 +84,9 @@ aperture.capture = (function() {
 	 *
 	 * @param {DOMElement} element
 	 *            DOM element to capture
-	 * @param {Function(String)} callback
-	 *            the callback to call when the image (or error) is ready. On error will
-	 *            be called with null.
+	 * @param {Function(Object)} callback
+	 *            The callback to call when the image is ready, with the document
+	 *            descriptor suitable for use with aperture.store.
 	 * @param {Object} settings
 	 *            A set of key/value pairs that configure the image
 	 *            capture
@@ -185,9 +182,9 @@ aperture.capture = (function() {
 		 *
 		 * @param {String} url 
 		 *            URL of the page to be captured
-		 * @param {Function(String)} callback
-		 *            The callback to call when the image is ready.  On error will
-		 *            be called with null.
+		 * @param {Function(Object)} callback
+		 *            The callback to call when the image is ready, with the document
+		 *            descriptor suitable for use with aperture.store.
 		 * @param {Object} settings
 		 *            A set of key/value pairs that configure the image
 		 *            capture

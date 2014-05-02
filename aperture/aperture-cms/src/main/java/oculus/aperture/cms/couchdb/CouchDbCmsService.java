@@ -49,7 +49,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
-import com.google.common.io.Closeables;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
@@ -186,8 +185,27 @@ class CouchDbCmsService implements ContentService {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see oculus.aperture.spi.store.ContentService#removeDocument(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public StoredDocument removeDocument(String storeName, String id, String rev) {
+		try {
+			StoredDocument doc = getDocument(storeName, id, rev, true);
+			dbClientsByDbName.get(storeName).remove(id, rev);
+			
+			return doc;
+		} catch (DocumentNotFoundException e) {
+			return null;
+		}		
+	}
+	
 
 	public StoredDocument getDocument(String store, String id, String rev) throws DocumentNotFoundException {
+		return getDocument(store, id, rev, false);		
+	}
+	
+	public StoredDocument getDocument(String store, String id, String rev, boolean remove) throws DocumentNotFoundException {
 		
 		init();
 
@@ -228,7 +246,14 @@ class CouchDbCmsService implements ContentService {
 			logger.error("Could not read data returned from CouchDB", e);
 			throw new DocumentNotFoundException();
 		} finally {
-			Closeables.closeQuietly(in);
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					logger.warn("Unexpectedly failed to close input stream.", e);
+				}
+			}
 		}
 	}
+
 }

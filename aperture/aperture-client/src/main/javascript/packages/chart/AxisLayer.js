@@ -19,14 +19,14 @@ function(namespace) {
 	var DEFAULT_TICK_LENGTH = 4,
 		DEFAULT_TICK_WIDTH = 1,
 		palette = aperture.palette.color,
-	
+
 	createTitleLayer = function(node){
 		// Lazy creation of the title LabelLayer.
 		this.titleLayer = this.addLayer(aperture.LabelLayer);
 		// Detach the title of the axis from inheriting any parent x-mappings.
 		// We don't want the label to be able to pan horizontally.
-		this.titleLayer.map('x').from('x').only().using(this.DEFAULT_RANGE.mapKey([0,1]));
-		this.titleLayer.map('y').from('y').using(this.DEFAULT_RANGE.mapKey([1,0]));
+		this.titleLayer.map('x').from('x').only().using(this.DEFAULT_RANGE.mappedTo([0,1]));
+		this.titleLayer.map('y').from('y').using(this.DEFAULT_RANGE.mappedTo([1,0]));
 		this.titleLayer.map('text').from('text');
 		this.titleLayer.map('text-anchor').asValue('middle');
 
@@ -176,14 +176,14 @@ function(namespace) {
 			var tickArray = {ticks:axisRange.get()};
 			var xPos=0,yPos=0;
 			var tickLabels = [];
-	
+
 			// Check if the label layer is visible.
 			if (this.labelLayer){
 				if (type === 'y'){
 					// We use a default mapper for the x-coordinate of the labels so that we can
 					// align the vertical labels with the left side of the chart by mapping them
 					// to zero.
-					this.labelLayer.map('x').from('labels[].x').using(this.DEFAULT_RANGE.mapKey([0,1]));
+					this.labelLayer.map('x').from('labels[].x').using(this.DEFAULT_RANGE.mappedTo([0,1]));
 					this.labelLayer.map('y').from('labels[].y');
 					//this.labelLayer.map('text-anchor').asValue('end');
 				}
@@ -192,24 +192,24 @@ function(namespace) {
 					// We use a default mapper for the y-coordinate of the labels so that we can
 					// align the horizontal labels with the bottom of the chart by mapping them
 					// to zero.
-					this.labelLayer.map('y').from('labels[].y').using(this.DEFAULT_RANGE.mapKey([1,0]));
+					this.labelLayer.map('y').from('labels[].y').using(this.DEFAULT_RANGE.mappedTo([1,0]));
 					//this.labelLayer.map('text-anchor').asValue('middle');
 				}
-	
+
 				// Setup optional font attribute mappings. Default values are provided by label layer
 				// if no explicit value is provided locally.
 				this.labelLayer.map('font-family').asValue(this.valueFor('font-family', node.data, null));
 				this.labelLayer.map('font-size').asValue(this.valueFor('font-size',node.data,null));
 				this.labelLayer.map('font-weight').asValue(this.valueFor('font-weight', node.data, null));
 			}
-	
+
 			// Draw the tick marks for a banded or ordinal range.
 			var hasBands = axisRange.typeOf(/banded/),
 				mappedValue, tickId, tick, tickMin, tickLimit;
 
 			if (hasBands || axisRange.typeOf(aperture.Ordinal)){
 				var tickLast = false;
-				
+
 				for (tickId=0; tickId < tickArray.ticks.length; tickId++){
 					tick = tickArray.ticks[tickId];
 					if (!tick) {
@@ -217,7 +217,7 @@ function(namespace) {
 					}
 					tickMin = hasBands?tick.min:tick;
 					tickLimit = hasBands?tick.limit:tick;
-					
+
 					if (tickMin === -Number.MAX_VALUE) {
 						if (tickId === 0 && hasBands && this.valueFor('tick-first', null, 'band') === 'edge') {
 							tickMin = axisRange.start();
@@ -225,7 +225,7 @@ function(namespace) {
 							continue;
 						}
 					}
-					
+
 					if (tickId === tickArray.ticks.length - 1) {
 						tickLast = true;
 						if (tickLimit === Number.MAX_VALUE) {
@@ -236,7 +236,7 @@ function(namespace) {
 							}
 						}
 					}
-					
+
 					if (type === 'x'){
 						mappedValue = this.valueFor('x', tickArray, 0, tickId);
 						xPos = (mappedValue*node.width) + left;
@@ -244,14 +244,14 @@ function(namespace) {
 						if (xPos < left || xPos > right){
 							continue;
 						}
-	
+
 						path += 'M' + xPos + ',' + yPos + 'L' + xPos + ',' + (yPos+tickLength);
 						tickLabels.push({'x':tickMin,'y':0, 'text':axisRange.format(tickMin)});
 						// If we're on the last tick, and there is a bounded upper limit,
 						// include a tick mark for the upper boundary value as well.
 						if (tickLast) {
 							var mapX = this.mappings()['x'];
-							
+
 							if (mapX) {
 								var isScalar = axisRange.typeOf(aperture.Scalar);
 								// if scalar pick upper limit, if ordinal pick end of list.
@@ -270,7 +270,7 @@ function(namespace) {
 						xPos = left - (tickLength + offset) - (0.5*ruleWidth);
 						yPos = (mappedValue*h) + top;
 						path += 'M' + xPos + ',' + yPos + 'L' + (xPos+tickLength) + ',' + yPos;
-	
+
 						// If we're on the last tick, and there is a bounded upper limit,
 						// include a tick mark for the upper boundary value as well.
 						if (tickLast){
@@ -283,7 +283,7 @@ function(namespace) {
 					}
 				}
 			}
-	
+
 			// Draw the tick marks for a scalar range.
 			else {
 				for (tickId=0; tickId < tickArray.ticks.length; tickId++){
@@ -301,7 +301,7 @@ function(namespace) {
 							path += 'M' + xPos + ',' + yPos + 'L' + xPos + ',' + (yPos+tickLength);
 							tickLabels.push({'x':tick,'y':0, 'text':axisRange.format(tick)});
 						}
-	
+
 						else if (type === 'y'){
 							xPos = left - (tickLength + offset) - ruleWidth;
 							// Calculate the axis position in a top-down fashion since the origin
@@ -310,7 +310,7 @@ function(namespace) {
 							if (yPos < top || yPos > bottom){
 								continue;
 							}
-							
+
 							path += 'M' + xPos + ',' + yPos + 'L' + (xPos+tickLength) + ',' + yPos;
 							tickLabels.push({'x':0,'y':tick, 'text':axisRange.format(tick)});
 						}
@@ -370,62 +370,62 @@ function(namespace) {
 	{
 		/**
 		 * @augments aperture.PlotLayer
-		 * @class An AxisLayer provides visual representation of a single axis 
-		 * for its parent {@link aperture.chart.ChartLayer ChartLayer}. AxisLayers are not added 
+		 * @class An AxisLayer provides visual representation of a single axis
+		 * for its parent {@link aperture.chart.ChartLayer ChartLayer}. AxisLayers are not added
 		 * to a chart in conventional layer fashion, rather they are instantiated the first time
 		 * they are referenced via chart.{@link aperture.chart.ChartLayer#xAxis xAxis} or
 		 * chart.{@link aperture.chart.ChartLayer#yAxis yAxis}
 
 		 * @mapping {String} stroke
 		 *   The color of the axis rule and ticks.
-		 * 
+		 *
 		 * @mapping {Number=0} rule-width
 		 *   The width of the line (in pixels) used to visually represent the baseline of an axis. Typically, the
 		 *   parent {@link aperture.chart.ChartLayer ChartLayer} will have a border visible, which subsequently provides
 		 *   the baseline for the axis, thus 'rule-width' is set to zero by default. If no border is present in
 		 *   the parent chart, then this property should be assigned a non-zero value.
 		 *   Tick marks will extend perpendicularly out from this line.
-		 * 
+		 *
 		 * @mapping {Number=0} tick-length
 		 *   The length of a tick mark on the chart axis.
-		 * 
+		 *
 		 * @mapping {Number=0} tick-width
 		 *   The width of a tick mark on the chart axis.
-		 * 
+		 *
 		 * @mapping {Number=0} tick-offset
 		 *   The gap (in pixels) between the beginning of the tick mark and the axis it belongs too.
-		 * 
+		 *
 		 * @mapping {'band'|'edge'} tick-first
-		 *   When an axis range is banded but not rounded, the default behavior is to mark the first tick 
+		 *   When an axis range is banded but not rounded, the default behavior is to mark the first tick
 		 *   at the start of the first whole band. Specifying 'edge' will force a tick at the edge of the axis range.
-		 * 
+		 *
 		 * @mapping {'band'|'edge'} tick-last
-		 *   When an axis range is banded but not rounded, the default behavior is to mark the last tick 
+		 *   When an axis range is banded but not rounded, the default behavior is to mark the last tick
 		 *   at the end of the last whole band. Specifying 'edge' will force a tick at the edge of the axis range.
-		 * 
+		 *
 		 * @mapping {Number=0} label-offset-x
 		 *   The horizontal gap (in pixels) between the end of a tick mark, and the beginning of the tick mark's label.
-		 * 
+		 *
 		 * @mapping {Number=0} label-offset-y
 		 *   The vertical gap (in pixels) between the end of a tick mark, and the beginning of the tick mark's label.
-		 * 
+		 *
 		 * @mapping {Number} margin
 		 *   The space (in pixels) to allocate for this axis.
 		 *   For vertical (y) axes, this refers to the width reserved for the axis.
 		 *   For horizontal (x) axes, this refers to the height reserved for the axis.
-		 * 
+		 *
 		 * @mapping {String} title
 		 *   The text of the axis title.
-		 * 
+		 *
 		 * @mapping {String='Arial'} font-family
 		 *   The font family used to render all the text of this layer.
-		 * 
+		 *
 		 * @mapping {Number=10} font-size
 		 *   The font size (in pixels) used to render all the text of this layer.
-		 * 
+		 *
 		 * @mapping {String='normal'} font-weight
 		 *   The font weight used to render all the text of this layer.
-		 * 
+		 *
 		 * @constructs
 		 * @factoryMade
 		 */
@@ -457,7 +457,7 @@ function(namespace) {
 				createAxis.call(this, node);
 			}, this);
 
-			
+
 			// will call renderChild for each child.
 			aperture.PlotLayer.prototype.render.call(this, changeSet);
 		},
@@ -489,7 +489,7 @@ function(namespace) {
 
 				// (may be better to use these constant values instead).
 				var anchorMap = {left: 'start', right: 'end', middle: 'middle'};
-						
+
 				if (layer === this.labelLayer){
 					var vAlign = this.valueFor('text-anchor-y', null, 'bottom');
 					var textAlign = this.valueFor('text-anchor', null, null);
