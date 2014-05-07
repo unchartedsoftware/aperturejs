@@ -109,8 +109,8 @@ public class PhantomRendererPool implements RenderExecutor {
 			
 			available = new ArrayBlockingQueue<PhantomRenderer>(poolSize);
 			
-			if(!(new File(sslCertificatePath)).exists()) {
-				logger.warn("Specified a non-existant SSL certificate path: {}", sslCertificatePath);
+			if(sslCertificatePath != null && !(new File(sslCertificatePath)).exists()) {
+				logger.warn("Specified a non-existent SSL certificate path: {}", sslCertificatePath);
 			}
 
 			// fill the pool for the kiddies
