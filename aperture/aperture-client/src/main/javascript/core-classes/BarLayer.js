@@ -137,6 +137,9 @@ function(namespace) {
 					
 					var isVisible = this.valueFor('bar-visible', node.data, true, index, seriesId);
 
+					xp += this.valueFor('offset-x', node.data, 0, index);
+                    yp += this.valueFor('offset-y', node.data, 0, index);
+
 					if (xd < 0) {
 						xp += xd;
 						xd = -xd;
