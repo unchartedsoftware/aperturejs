@@ -122,6 +122,18 @@ public class PhantomRenderer implements CaptureService {
 	
 	
 	
+	void kill() {
+		worker.kill();
+		try {
+			// close threads blocked on the task queue
+			Map<String, Object> empty_message = new HashMap<String, Object>();
+			taskQueue.offer(empty_message, 1, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+	}
+
+
 	
 	public void addListener(PhantomCommandLineCapture.ShutdownListener listener) {
 		this.worker.addListener(listener);

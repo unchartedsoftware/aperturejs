@@ -58,6 +58,9 @@ function openLayersMaps() {
 			if ( !this.canvas_ ) {
 				throw new Error('Map layer must be constructed by a parent layer through an addLayer call');
 			}
+			if (this.canvas_.olMap_ === undefined) {
+				this.canvas_.olMap_ = spec.parent.olMap_;
+			}
 		},
 
 		/**
@@ -1347,6 +1350,19 @@ function openLayersMaps() {
 			}
 			this.olMap_.setCenter( center, zoom );
 		},
+
+		/**
+         * Smoothly pans the map to a given center point in lat/lon.
+         * @param lat latitude to pan to
+         * @param lon longitude to pan to
+         */
+        panTo : function( lat, lon ) {
+            var center = new OpenLayers.LonLat(lon,lat);
+            if( this.olMap_.getProjection() !== apiProjection.projCode ) {
+                center.transform(apiProjection, this.olMap_.projection);
+            }
+            this.olMap_.panTo( center );
+        },
 
 		/**
 		 * Sets visible extents of the map in lat/lon (regardless of current coordinate
