@@ -65,14 +65,12 @@ public class PhantomCommandLineCapture {
 	    private GobblerType type;
 	    private String filename = null;
 	    private final PhantomRenderer resource;
-		private volatile boolean isRunning = true;
 	    
 	    StreamGobbler(
 	    	InputStream is,
 	    	GobblerType type,
 	    	PhantomRenderer resource
 	    ) {
-	    	setDaemon(false); // wait for thread to terminate so it's not reported as a leak 
 	        this.is = is;
 	        this.type = type;
 	        this.resource = resource;
@@ -88,7 +86,7 @@ public class PhantomCommandLineCapture {
 	            BufferedReader br = new BufferedReader(isr);
 	            String line=null;
 	      
-	            while ((line = br.readLine()) != null && isRunning) {
+	            while ((line = br.readLine()) != null) {
 	            	logger.debug(line = line.trim()); 
 	            	if (type == GobblerType.OUTPUT) {
 		            	if (line.startsWith(LOG_SUCCESS)) {
@@ -107,11 +105,7 @@ public class PhantomCommandLineCapture {
 	        	ioe.printStackTrace();  
 			}
 	    }
-
-	    public void kill() {
-	    	isRunning = false;
-	    }
-
+	    
 	    public String getFilename() {
 	    	return filename;
 	    }
@@ -142,11 +136,9 @@ public class PhantomCommandLineCapture {
 	private final String taskPageUrl;
 	private final String sslCertificatePath;
 	private final List<ShutdownListener> listeners = new ArrayList<ShutdownListener>();
-	StreamGobbler errorGobbler;
-	StreamGobbler outputGobbler;
 
 	private File jsFile;
-	Process proc;
+	private Process proc;
 	
 	
 	/**
@@ -261,15 +253,9 @@ public class PhantomCommandLineCapture {
 		proc = Runtime.getRuntime().exec(cmd.toArray(new String[0]));
 		Runtime.getRuntime().addShutdownHook(closeProcess); 
 		
-		errorGobbler = new StreamGobbler(proc.getErrorStream(), GobblerType.ERROR, resource);            
-		outputGobbler = new StreamGobbler(proc.getInputStream(), GobblerType.OUTPUT, resource);
+		StreamGobbler errorGobbler = new StreamGobbler(proc.getErrorStream(), GobblerType.ERROR, resource);            
+        StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream(), GobblerType.OUTPUT, resource);
         errorGobbler.start();
         outputGobbler.start();
-	}
-
-	void kill() {
-		errorGobbler.kill();
-		outputGobbler.kill();
-		proc.destroy();
 	}
 }

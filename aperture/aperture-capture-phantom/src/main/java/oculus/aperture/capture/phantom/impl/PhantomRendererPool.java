@@ -27,12 +27,10 @@ package oculus.aperture.capture.phantom.impl;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import oculus.aperture.capture.phantom.RenderExecutor;
 import oculus.aperture.capture.phantom.impl.PhantomCommandLineCapture.ShutdownEvent;
@@ -58,8 +56,6 @@ import com.google.inject.name.Named;
 public class PhantomRendererPool implements RenderExecutor {
 
 	final Logger logger = LoggerFactory.getLogger(getClass());
-
-	static List<PhantomRendererPool> POOLS = new CopyOnWriteArrayList<PhantomRendererPool>();
 
 	// A queue of actors ready to service our requests
 	private BlockingQueue<PhantomRenderer> available;
@@ -92,7 +88,6 @@ public class PhantomRendererPool implements RenderExecutor {
 		this.requestEndpoint = requestEndpoint;
 		
 		lookup = Collections.synchronizedMap(new HashMap<String, PhantomRenderer>());
-		POOLS.add(this);
 	}
 
 	
@@ -221,12 +216,5 @@ public class PhantomRendererPool implements RenderExecutor {
 	 */
 	public PhantomRenderer getRenderer(String workerId) {
 		return lookup.get(workerId);
-	}
-
-	void kill() {
-		for(Map.Entry<String, PhantomRenderer> renderer : lookup.entrySet()) {
-			renderer.getValue().kill();
-		}
-		POOLS.remove(this);
 	}
 }
