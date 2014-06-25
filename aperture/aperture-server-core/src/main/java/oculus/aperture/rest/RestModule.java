@@ -34,6 +34,8 @@ import java.util.Map.Entry;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,6 +46,7 @@ import net.sf.ehcache.constructs.web.AlreadyGzippedException;
 import net.sf.ehcache.constructs.web.GenericResponseWrapper;
 import net.sf.ehcache.constructs.web.Header;
 import net.sf.ehcache.constructs.web.PageInfo;
+import net.sf.ehcache.constructs.web.ShutdownListener;
 import net.sf.ehcache.constructs.web.filter.FilterNonReentrantException;
 import net.sf.ehcache.constructs.web.filter.SimplePageCachingFilter;
 import oculus.aperture.common.rest.ResourceDefinition;
@@ -58,7 +61,6 @@ import org.restlet.routing.TemplateRoute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 import com.google.inject.Provides;
 import com.google.inject.servlet.ServletModule;
@@ -74,7 +76,7 @@ import com.google.inject.servlet.ServletModule;
  * @author rharper
  *
  */
-public class RestModule extends ServletModule {
+public class RestModule extends ServletModule implements ServletContextListener {
 
 	private static final String REST_BASE = "/rest";
 
@@ -242,7 +244,11 @@ public class RestModule extends ServletModule {
 			// Create cache manager with provided configuration
 			CacheManager.create(inp);
 
-			Closeables.closeQuietly(inp);
+			try {
+				inp.close();
+			} catch (IOException ioe) {
+				logger.warn("Failed to close ehcache configuration input stream.", ioe);
+			}
 
 		} catch (IOException e) {
 			// Failed to load properties, error
@@ -297,6 +303,18 @@ public class RestModule extends ServletModule {
         application.setInboundRoot(router);
 
         return application;
+	}
+
+
+	@Override
+	public void contextInitialized(ServletContextEvent sce) {
+	}
+
+
+	@Override
+	public void contextDestroyed(ServletContextEvent sce) {
+		final ShutdownListener listener = new ShutdownListener();
+		listener.contextDestroyed(sce);
 	}
 
 }

@@ -13,6 +13,8 @@ aperture = (
 /** @private */
 function(namespace) {
 
+	var util = namespace.util;
+
 	// TODO: extend these to take precise format specifications as a string.
 
 	/**
@@ -62,7 +64,7 @@ function(namespace) {
 			 * of doing so:
 			 *
 			 * @example
-			 * var hourFormat = aperture.Format.getTimeFormat( 'Hours' );
+			 * var hourFormat = aperture.Format.getTimeFormat( {precision: 'Hours'} );
 			 *
 			 * // displays 'Date'
 			 * alert( hourFormat.nextOrder() );
@@ -304,38 +306,38 @@ function(namespace) {
 			return num < 10? '0' + num : String(num);
 		}
 		function hh12( date ) {
-			var h = date.getHours();
+			var h = date.get('Hours');
 			return h? (h < 13? String(h) : String(h - 12)) : '12';
 		}
 		function ampm( date ) {
-			return date.getHours() < 12? 'am' : 'pm';
+			return date.get('Hours') < 12? 'am' : 'pm';
 		}
 		function millis( date ) {
-			return ':' + ((date.getSeconds()*1000 + date.getMilliseconds())/1000) + 's';
+			return ':' + ((date.get('Seconds')*1000 + date.get('Milliseconds'))/1000) + 's';
 		}
 		function ss( date ) {
-			return ':' + pad2(date.getSeconds()) + 's';
+			return ':' + pad2(date.get('Seconds')) + 's';
 		}
 		function hhmm( date ) {
-			return hh12(date) + ':' + pad2(date.getMinutes()) + ampm(date);
+			return hh12(date) + ':' + pad2(date.get('Minutes')) + ampm(date);
 		}
 		function hh( date ) {
 			return hh12(date) + ampm(date);
 		}
 		function mondd( date ) {
-			return months[date.getMonth()] + ' '+ date.getDate();
+			return months[date.get('Month')] + ' '+ date.get('Date');
 		}
 		function day( date ) {
-			return days[date.getDay()] + ' ' + mondd(date);
+			return days[date.get('Day')] + ' ' + mondd(date);
 		}
 		function mon( date ) {
-			return months[date.getMonth()];
+			return months[date.get('Month')];
 		}
 		function year( date ) {
-			return String(date.getFullYear());
+			return String(date.get('FullYear'));
 		}
 		function yy( date ) {
-			return "'" + String(date.getFullYear()).substring(start, end);
+			return "'" + String(date.get('FullYear')).substring(start, end);
 		}
 
 		return {
@@ -368,24 +370,42 @@ function(namespace) {
 	namespace.TimeFormat = namespace.Format.extend( 'aperture.TimeFormat',
 
 		{
+			/** @private */
+			_utc: true,
+
 			/**
 			 * @private
 			 *
-			 * @param {String} [precision]
+			 * @param {Object|String} [options]
+			 *      Optional options hash to affect time formatting behaviour. For backwards 
+			 *      compatibility also supports passing precision (see below) as a string
+			 *
+			 * @param {String} [options.precision]
 			 *      The optional precision of the value to format. For times this
 			 *      will be a Date field reference, such as 'FullYear' or 'Seconds'.
+			 *
+			 * @param {Boolean} [options.local]
+			 *      When true, causes the formatter to display times using the local 
+			 *      timezone (vs the default UTC)
 			 *
 			 * @returns {aperture.TimeFormat}
 			 *      A new time format object.
 			 */
-			init : function ( precision ) {
-				if (precision) {
-					this.order = timeOrders[precision];
-
-					if (!this.order) {
-						aperture.log.warn('Invalid precision "' + precision + '" in TimeFormat');
+			init : function ( options ) {
+				if (util.isString(options)) {
+					options = {
+						precision: options
 					}
 				}
+				if (options && options.precision) {
+					this.order = timeOrders[options.precision];
+
+					if (!this.order) {
+						aperture.log.warn('Invalid precision "' + options.precision + '" in TimeFormat');
+					}
+				}
+
+				this._utc = !(options && options.local);
 			},
 
 			/**
@@ -402,8 +422,8 @@ function(namespace) {
 
 				// precision based formatting?
 				if ( value != null ) {
-					if (!value.getTime) {
-						value = new Date(value);
+					if (!value.typeOf || !value.typeOf(aperture.Date)) {
+						value = new aperture.Date(value, {local: !this._utc});
 					}
 					if ( this.order ) {
 						return this.order.format( value );
@@ -429,9 +449,17 @@ function(namespace) {
 	/**
 	 * Returns a time format object, suitable for formatting dates and times.
 	 *
-	 * @param {String} [precision]
+	 * @param {Object|String} [options]
+	 *      Optional options hash to affect time formatting behaviour. For backwards 
+	 *      compatibility also supports passing precision (see below) as a string
+	 *
+	 * @param {String} [options.precision]
 	 *      The optional precision of the value to format. For times this
 	 *      will be a Date field reference, such as 'FullYear' or 'Seconds'.
+	 *
+	 * @param {Boolean} [options.local]
+	 *      When true, causes the formatter to display times using the local 
+	 *      timezone (vs the default UTC)
 	 *
 	 * @returns {aperture.Format}
 	 *      a time format object.
@@ -439,8 +467,8 @@ function(namespace) {
 	 * @name aperture.Format.getTimeFormat
 	 * @function
 	 */
-	namespace.Format.getTimeFormat = function( precision ) {
-		return new namespace.TimeFormat( precision );
+	namespace.Format.getTimeFormat = function( options ) {
+		return new namespace.TimeFormat( options );
 	};
 
 	return namespace;

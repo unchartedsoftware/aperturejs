@@ -21,6 +21,7 @@ function(namespace) {
 		switch (style) {
 		case 'none':
 			attrs.opacity = 0;
+			break;
 		case '':
 		case 'solid':
 			return '';
@@ -33,6 +34,7 @@ function(namespace) {
 		return style;
 	}
 
+
 	function removeSankeys(links){
 		var i;
 
@@ -44,6 +46,8 @@ function(namespace) {
 			}
 		}
 	}
+
+
 	function stackLinks(links){
 		var i, sourceMap = {},
 			targetMap = {};
@@ -73,13 +77,15 @@ function(namespace) {
 
 			var flowSpec = {
 				'source': {
-					'id' : sourceData.id,
-					'x' : this.valueFor('node-x', sourceData, 0, linkData),
-					'y': this.valueFor('node-y', sourceData, 0, linkData) ,
-					'r': this.valueFor('source-offset', sourceData, 0, linkData)
+					uid : this.valueFor('node-uid', sourceData, '', linkData),
+					duplicateId : this.valueFor('node-id', sourceData, null, linkData),
+					x : this.valueFor('node-x', sourceData, 0, linkData),
+					y : this.valueFor('node-y', sourceData, 0, linkData) ,
+					r : this.valueFor('source-offset', sourceData, 0, linkData)
 				},
 				'target' : {
-					'id' : targetData.id,
+					uid : this.valueFor('node-uid', targetData, '', linkData),
+					duplicateId : this.valueFor('node-id', targetData, null, linkData),
 					'x': this.valueFor('node-x', targetData, 0, linkData),
 					'y': this.valueFor('node-y', targetData, 0, linkData),
 					'r': this.valueFor('target-offset', targetData, 0, linkData)
@@ -88,42 +94,40 @@ function(namespace) {
 				'width' : width
 			};
 
-			var src = sourceMap[sourceData.id];
+			var src = sourceMap[sourceData.uid];
 			if (src == null) {
-				src = sourceMap[sourceData.id] = {'outflows':[]};
+				src = sourceMap[sourceData.uid] = {'outflows':[]};
 			}
 			src.outflows.push(flowSpec);
 			src.anchor = this.valueFor('sankey-anchor', sourceData, 'top');
 
-			var trg = targetMap[targetData.id];
+			var trg = targetMap[targetData.uid];
 			if (trg == null) {
-				trg = targetMap[targetData.id] = {'inflows':[]};
+				trg = targetMap[targetData.uid] = {'inflows':[]};
 			}
 			trg.inflows.push(flowSpec);
 			trg.anchor = this.valueFor('sankey-anchor', targetData, 'top');
 		}
+
 		// Order the source endpoints based on the target endpoints's y-position.
-		var flows, key;
-		for (key in sourceMap){
-			if (sourceMap.hasOwnProperty(key)) {
-				flows = sourceMap[key].outflows;
-				flows.sort(function(a, b) {
-					return a.target.y <= b.target.y? -1 : 1;
-				});
-			}
-		}
+		aperture.util.forEach(sourceMap, function(source) {
+			var flows = source.outflows;
+			flows.sort(function(a, b) {
+				return a.target.y <= b.target.y ? -1 : 1;
+			});
+		});
 
 		// Order the incoming flows of each target node by the flow's target y-position.
-		for (key in targetMap){
-			if (targetMap.hasOwnProperty(key)) {
-				flows = targetMap[key].inflows;
-				flows.sort(function(a, b) {
-					return a.source.y <= b.source.y? -1 : 1;
-				});
-			}
-		}
+		aperture.util.forEach(targetMap, function(target) {
+			var flows = target.inflows;
+			flows.sort(function(a, b) {
+				return a.source.y <= b.source.y ? -1 : 1;
+			});
+		});
+
 		return {sourceMap : sourceMap, targetMap : targetMap, minWidth: minWidth};
 	}
+
 
 	function calcFlowPath(source, target){
 		//TODO: Account for different flow styles and layout orientations.
@@ -140,6 +144,7 @@ function(namespace) {
 
 		return path;
 	}
+
 
 	// assumes pre-existence of layer.
 	namespace.SankeyPathLayer = aperture.Layer.extend( 'aperture.SankeyPathLayer',
@@ -175,7 +180,7 @@ function(namespace) {
 			 *
 			 * @mapping {Object} source
 			 *  The source node data object representing the starting point of the link. The source node
-			 *  data object is supplied for node mappings 'node-x', 'node-y', and 'source-offset' for
+			 *  data object is supplied for node mappings 'node-uid', 'node-id', 'node-x', 'node-y', and 'source-offset' for
 			 *  convenience of shared mappings.
 			 *
 			 * @mapping {Number=0} source-offset
@@ -184,12 +189,18 @@ function(namespace) {
 			 *
 			 * @mapping {Object} target
 			 *  The target node data object representing the ending point of the link. The target node
-			 *  data object is supplied for node mappings 'node-x', 'node-y', and 'target-offset' for
+			 *  data object is supplied for node mappings 'node-uid', 'node-id', 'node-x', 'node-y', and 'target-offset' for
 			 *  convenience of shared mappings.
 			 *
 			 * @mapping {Number=0} target-offset
 			 *  The distance from the target node position at which to begin the link. The target-offset
 			 *  mapping is supplied the target node as a data object when evaluated.
+			 *
+			 * @mapping {String} node-uid
+			 *  A node's unique identifier.
+			 *
+			 * @mapping {String} node-id
+			 *  A node's secondary id. This does not need to be unique and can be used for type or property identification.
 			 *
 			 * @mapping {Number} node-x
 			 *  A node's horizontal position, evaluated for both source and target nodes.
@@ -218,11 +229,11 @@ function(namespace) {
 					links = changeSet.updates,
 					transition = changeSet.transition;
 
-
 				// Remove any obsolete visuals.
 				if (changeSet.removed.length > 0){
 					removeSankeys(changeSet.removed);
 				}
+
 				// PRE-PROCESSING
 				// Iterate through each link and create a map describing the
 				// source and target endpoints for each flow.
@@ -235,81 +246,109 @@ function(namespace) {
 				var nIndex=0;
 				var paths = [];
 
-				var totalOffset, key, flowSpec, flowWidth;
+				var totalOffset, flowSpec, flowWidth;
 				var targetPt, sourcePt;
+
 
 
 				// For each target node, iterate over all the incoming flows
 				// and determine the stacked, flow endpoint positions.
-				for (key in targetMap){
-					if (targetMap.hasOwnProperty(key)) {
-						var target = targetMap[key];
-						var targetSpecList = target.inflows;
+				aperture.util.forEach(targetMap, function(target) {
+					var targetSpecList = target.inflows;
 
-						totalOffset=0;
+					totalOffset=0;
 
-						if (target.anchor === 'middle' || target.anchor === 'bottom') {
-							for (nIndex = 0; nIndex < targetSpecList.length; nIndex++){
-								totalOffset -= targetSpecList[nIndex].width;
-							}
-							if (target.anchor === 'middle') {
-								totalOffset *= 0.5;
+					if (target.anchor === 'middle' || target.anchor === 'bottom') {
+						for (nIndex = 0; nIndex < targetSpecList.length; nIndex++){
+							totalOffset -= targetSpecList[nIndex].width;
+						}
+						if (target.anchor === 'middle') {
+							totalOffset *= 0.5;
+						}
+					}
+
+					var sourceEndpointMap = {};
+					for (nIndex = 0; nIndex < targetSpecList.length; nIndex++){
+						flowSpec = targetSpecList[nIndex];
+						flowWidth = Math.max(minWidth, flowSpec.width);
+						var updateTargetOffset = true;
+
+						var targetY;
+						if (sourceEndpointMap.hasOwnProperty(flowSpec.source.duplicateId)) {
+							targetY = sourceEndpointMap[flowSpec.source.duplicateId];
+							updateTargetOffset = false;
+						} else {
+							targetY = flowSpec.target.y + totalOffset + flowWidth * 0.5;
+							if (flowSpec.source.duplicateId != null) {
+								sourceEndpointMap[flowSpec.source.duplicateId] = targetY;
 							}
 						}
 
-						for (nIndex = 0; nIndex < targetSpecList.length; nIndex++){
-							flowSpec = targetSpecList[nIndex];
-							flowWidth = Math.max(minWidth, flowSpec.width);
-							flowSpec.targetPt = {
-								x : flowSpec.target.x - flowSpec.target.r,
-								y : flowSpec.target.y + totalOffset + flowWidth*0.5
-							};
+						flowSpec.targetPt = {
+							x : flowSpec.target.x - flowSpec.target.r,
+							y : targetY
+						};
+
+						if (updateTargetOffset) {
 							totalOffset += flowSpec.width;
 						}
 					}
-				}
+				});
 
 				// For each source node, iterate overall all the outgoing flows
 				// and determine the stacked, flow endpoint positions.
 				// Then couple these source endpoints with the target endpoints
 				// from above and calculate the bezier path for that flow.
-				for (key in sourceMap){
-					if (sourceMap.hasOwnProperty(key)) {
-						var source = sourceMap[key];
-						var sourceSpecList = source.outflows;
+				aperture.util.forEach(sourceMap, function(source) {
+					var sourceSpecList = source.outflows;
 
-						totalOffset=0;
+					totalOffset=0;
 
-						if (source.anchor === 'middle' || source.anchor === 'bottom') {
-							for (nIndex = 0; nIndex < sourceSpecList.length; nIndex++){
-								totalOffset -= sourceSpecList[nIndex].width;
-							}
-							if (source.anchor === 'middle') {
-								totalOffset *= 0.5;
-							}
-						}
-
+					if (source.anchor === 'middle' || source.anchor === 'bottom') {
 						for (nIndex = 0; nIndex < sourceSpecList.length; nIndex++){
-							flowSpec = sourceSpecList[nIndex];
-							targetPt = flowSpec.targetPt;
-
-							if (targetPt) {
-								flowWidth = Math.max(minWidth, flowSpec.width);
-								sourcePt = {
-									x : flowSpec.source.x + flowSpec.source.r,
-									y : flowSpec.source.y + totalOffset + flowWidth*0.5
-								};
-								totalOffset += flowSpec.width;
-
-								paths.push({
-									'link': flowSpec.link,
-									'path' : calcFlowPath(sourcePt, targetPt),
-									 width : flowWidth
-								});
-							}
+							totalOffset -= sourceSpecList[nIndex].width;
+						}
+						if (source.anchor === 'middle') {
+							totalOffset *= 0.5;
 						}
 					}
-				}
+
+					var targetEndpointMap = {};
+					for (nIndex = 0; nIndex < sourceSpecList.length; nIndex++){
+						flowSpec = sourceSpecList[nIndex];
+						targetPt = flowSpec.targetPt;
+						var updateSourceOffset = true;
+
+						var sourceY;
+						if (targetEndpointMap.hasOwnProperty(flowSpec.target.duplicateId)) {
+							sourceY = targetEndpointMap[flowSpec.target.duplicateId];
+							updateSourceOffset = false;
+						} else {
+							sourceY = flowSpec.source.y + totalOffset + flowWidth * 0.5;
+							if (flowSpec.target.duplicateId != null) {
+								targetEndpointMap[flowSpec.target.duplicateId] = sourceY;
+							}
+						}
+
+						if (targetPt) {
+							flowWidth = Math.max(minWidth, flowSpec.width);
+							sourcePt = {
+								x : flowSpec.source.x + flowSpec.source.r,
+								y : sourceY
+							};
+
+							if (updateSourceOffset) {
+								totalOffset += flowSpec.width;
+							}
+
+							paths.push({
+								'link': flowSpec.link,
+								'path' : calcFlowPath(sourcePt, targetPt),
+								width : flowWidth
+							});
+						}
+					}
+				});
 
 				// Iterate over the list of flow paths and render.
 				for (i=0; i < paths.length; i++){

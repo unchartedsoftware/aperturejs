@@ -32,6 +32,18 @@
 			up underscore (causes it not to add _ to global) so must add the test
 			libs after the aperture required libs -->
 
+		<script>
+			// Adds "skip" test type for skipping failing tests
+			QUnit.testSkip = function() {
+				QUnit.test(arguments[0] + ' (SKIPPED)', function() {
+					QUnit.expect(0);//dont expect any tests
+					var li = document.getElementById(QUnit.config.current.id);
+					li.style.background = '#FFFF99';
+				});
+			};
+			window.testSkip = QUnit.testSkip;
+		</script>
+
 		<!-- Files under test -->
 		<script>var aperture = {};</script>
 		<script type="text/javascript" src="../base.js"></script>
@@ -42,6 +54,7 @@
 		<script type="text/javascript" src="../core-packages/io.js"></script>
 		<script type="text/javascript" src="../core-packages/filter.js"></script>
 		<script type="text/javascript" src="../core-packages/canvas.js"></script>
+		<script type="text/javascript" src="../core-classes/Date.js"></script>
 		<script type="text/javascript" src="../core-classes/Format.js"></script>
 		<script type="text/javascript" src="../core-classes/Range.js"></script>
 		<script type="text/javascript" src="../core-classes/MapKey.js"></script>

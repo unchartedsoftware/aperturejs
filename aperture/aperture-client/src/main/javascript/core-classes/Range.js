@@ -1084,26 +1084,60 @@ function(namespace) {
 	var timeOrders = (function () {
 
 		function roundY( date, base ) {
-			date.setFullYear(Math.floor(date.getFullYear() / base) * base, 0,1);
-			date.setHours(0,0,0,0);
+			date.set({
+				FullYear: Math.floor(date.get('FullYear') / base) * base, 
+				Month: 0,
+				Date: 1, 
+				Hours: 0,
+				Minutes: 0,
+				Seconds: 0,
+				MilliSeconds: 0});
 		}
 		function roundM( date, base ) {
-			date.setMonth(Math.floor(date.getMonth() / base) * base, 1);
-			date.setHours(0,0,0,0);
+			date.set({
+				Month: Math.floor(date.get('Month') / base) * base,
+				Date: 1, 
+				Hours: 0,
+				Minutes: 0,
+				Seconds: 0,
+				MilliSeconds: 0});
 		}
 		function roundW( date, base ) {
-			date.setDate(date.getDate() - date.getDay());
-			date.setHours(0,0,0,0);
+			date.set({
+				Date: date.get('Date') - date.get('Day'), 
+				Hours: 0,
+				Minutes: 0,
+				Seconds: 0,
+				MilliSeconds: 0});
 		}
 		function roundD( date, base ) {
-			date.setDate(1 + Math.floor((date.getDate() - 1) / base) * base);
-			date.setHours(0,0,0,0);
+			date.set({
+				Date: 1 + Math.floor((date.get('Date') - 1) / base) * base, 
+				Hours: 0,
+				Minutes: 0,
+				Seconds: 0,
+				MilliSeconds: 0});
 		}
-		function roundF( date, base ) {
-			this.setter.call(date, Math.floor(this.getter.call(date) / base) * base, 0,0,0);
+		function roundH( date, base ) {
+			date.set({
+				Hours: Math.floor(date.get('Hours') / base) * base,
+				Minutes: 0,
+				Seconds: 0,
+				MilliSeconds: 0});
 		}
-		function add( date, value ){
-			this.setter.call(date, this.getter.call(date) + value);
+		function roundMin( date, base ) {
+			date.set({
+				Minutes: Math.floor(date.get('Minutes') / base) * base,
+				Seconds: 0,
+				MilliSeconds: 0});
+		}
+		function roundS( date, base ) {
+			date.set({
+				Seconds: Math.floor(date.get('Seconds') / base) * base,
+				MilliSeconds: 0});
+		}
+		function roundMs( date, base ) {
+			date.set({MilliSeconds: Math.floor(date.get('Milliseconds') / base) * base});
 		}
 
 		// define using logical schema...
@@ -1113,10 +1147,10 @@ function(namespace) {
 				{ field: 'Month', span: /*31 days*/26784e5, round: roundM, steps: [ 3, 1 ] },
 				{ field: 'Date', span: 864e5, round: roundW, steps: [ 7 ] },
 				{ field: 'Date', span: 864e5, round: roundD, steps: [ 1 ] },
-				{ field: 'Hours', span:36e5, round: roundF, steps: [ 12, 6, 3, 1 ] },
-				{ field: 'Minutes', span: 6e4, round: roundF, steps: [ 30, 15, 5, 1 ] },
-				{ field: 'Seconds', span: 1e3, round: roundF, steps: [ 30, 15, 5, 1 ] },
-				{ field: 'Milliseconds', span: 1, round: roundF, steps: [ 500, 250, 100, 50, 25, 10, 5, 1 ] }
+				{ field: 'Hours', span:36e5, round: roundH, steps: [ 12, 6, 3, 1 ] },
+				{ field: 'Minutes', span: 6e4, round: roundMin, steps: [ 30, 15, 5, 1 ] },
+				{ field: 'Seconds', span: 1e3, round: roundS, steps: [ 30, 15, 5, 1 ] },
+				{ field: 'Milliseconds', span: 1, round: roundMs, steps: [ 500, 250, 100, 50, 25, 10, 5, 1 ] }
 				// below seconds, normal scalar band rules apply
 		], timeOrders = [], last, dateProto = Date.prototype;
 
@@ -1128,13 +1162,7 @@ function(namespace) {
 					span   : order.span * step,
 					next   : last,
 					base   : step,
-					field  : {
-						round  : order.round,
-						add    : add,
-						getter : dateProto['get' + order.field],
-						setter : dateProto['set' + order.field]
-					},
-					format : new namespace.TimeFormat( order.field )
+					round  : order.round
 				});
 			});
 		});
@@ -1153,6 +1181,9 @@ function(namespace) {
 
 		/** @lends aperture.TimeScalar.prototype */
 		{
+			/** @private */
+			_utc: true,
+
 			/**
 			 * @class Extends a scalar model property range with
 			 * modest specialization of formatting and banding for
@@ -1269,17 +1300,17 @@ function(namespace) {
 
 				// only auto update format if we haven't had it overridden.
 				if (this.autoFormat) {
-					this.formatter_ = order.format;
+					this.formatter_ = new namespace.TimeFormat( {precision: order.name, local: !this._utc} )
 				}
 
 				// round the start date
-				var date = new Date(start), field = order.field, band, bands = [];
-				field.round(date, base);
+				var date = new aperture.Date(start, {local: !this._utc}), band, bands = [];
+				order.round(date, base);
 
 				// stepping function for bands, in milliseconds
 				// (this arbitrary threshold limit kills any chance of an infinite loop, jic.)
 				while (i++ < 1000) {
-					var next = date.getTime();
+					var next = date.valueOf();
 
 					// last limit is this
 					if (band) {
@@ -1294,13 +1325,47 @@ function(namespace) {
 					// create band (set limit next round)
 					bands.push(band = {min: next});
 
-					field.add(date, base);
+					date.add(base, order.name);
 				}
 
 				return bands;
 			}
 		}
 	);
+
+	/**
+	 * Returns a new time scalar view which operates in the local timezone. This
+	 * applies to banding and time display.
+	 *
+	 * @returns {aperture.TimeScalar}
+	 *      a new view of this Range.
+	 *
+	 * @name aperture.TimeScalar.prototype.local
+	 * @function
+	 */
+	namespace.TimeScalar.addView( 'local', {
+		init : function () {
+			this._utc = false;
+			this.formatter_._utc = false;
+		}
+	});
+
+	/**
+	 * Returns a new time scalar view which operates in the UTC timezone. This
+	 * applies to banding and time display.
+	 *
+	 * @returns {aperture.TimeScalar}
+	 *      a new view of this Range.
+	 *
+	 * @name aperture.TimeScalar.prototype.utc
+	 * @function
+	 */
+	namespace.TimeScalar.addView( 'utc', {
+		init : function () {
+			this._utc = true;
+			this.formatter_._utc = true;
+		}
+	});
 
 	namespace.Ordinal = namespace.Range.extend( 'aperture.Ordinal',
 

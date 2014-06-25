@@ -27,17 +27,14 @@ package oculus.aperture.capture.phantom.impl;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import oculus.aperture.capture.phantom.RenderExecutor;
 import oculus.aperture.capture.phantom.impl.PhantomCommandLineCapture.ShutdownEvent;
 import oculus.aperture.capture.phantom.impl.PhantomCommandLineCapture.ShutdownListener;
-import oculus.aperture.common.EmptyProperties;
 import oculus.aperture.spi.common.Properties;
 import oculus.aperture.spi.store.ContentService;
 import oculus.aperture.spi.store.ContentService.DocumentDescriptor;
@@ -45,21 +42,14 @@ import oculus.aperture.spi.store.ContentService.DocumentDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.google.inject.name.Named;
-
 /**
  * Manages a pool of renderers
  * 
  * @author djonker
  */
-@Singleton
 public class PhantomRendererPool implements RenderExecutor {
 
 	final Logger logger = LoggerFactory.getLogger(getClass());
-
-	static List<PhantomRendererPool> POOLS = new CopyOnWriteArrayList<PhantomRendererPool>();
 
 	// A queue of actors ready to service our requests
 	private BlockingQueue<PhantomRenderer> available;
@@ -69,12 +59,7 @@ public class PhantomRendererPool implements RenderExecutor {
 	private String requestEndpoint;
 	
 	// default config is empty.
-	private Properties config= EmptyProperties.EMPTY_PROPERTIES;
-	
-	@Inject(optional=true)
-	public void setConfig(@Named("aperture.server.config") Properties config) {
-		this.config = config;
-	}
+	private Properties config;
 	
 	
 	/**
@@ -83,16 +68,16 @@ public class PhantomRendererPool implements RenderExecutor {
 	 * @param poolSize
 	 * 		The count of render executors.
 	 */
-	@Inject
 	public PhantomRendererPool(
 			ContentService contentService,
-			@Named("aperture.imagecapture.phantomjs.requestendpoint") String requestEndpoint
+			String requestEndpoint,
+			Properties config
 			) {
 		this.contentService = contentService;
 		this.requestEndpoint = requestEndpoint;
+		this.config = config;
 		
 		lookup = Collections.synchronizedMap(new HashMap<String, PhantomRenderer>());
-		POOLS.add(this);
 	}
 
 	
@@ -109,7 +94,9 @@ public class PhantomRendererPool implements RenderExecutor {
 			final int poolSize = config.getInteger("aperture.imagecapture.phantomjs.poolsize", 3);
 			final String exePath = config.getString("aperture.imagecapture.phantomjs.exepath", platformDefault);
 			final String sslCertificatePath = config.getString("aperture.imagecapture.phantomjs.ssl-certificates-path", null);
-			
+			final String sslIgnoreErrors = config.getString("aperture.imagecapture.phantomjs.ssl-ignore-errors", null);
+			String baseUrlOverride = config.getString("aperture.imagecapture.phantomjs.base-url", null);
+
 			logger.debug("Creating " + poolSize + " phantom renderers");
 			
 			available = new ArrayBlockingQueue<PhantomRenderer>(poolSize);
@@ -118,8 +105,18 @@ public class PhantomRendererPool implements RenderExecutor {
 				logger.warn("Specified a non-existent SSL certificate path: {}", sslCertificatePath);
 			}
 
+			if(sslIgnoreErrors != null && !sslIgnoreErrors.toLowerCase().matches("true|false|yes|no")) {
+				logger.warn("Specified an invalid value for ssl-ignore-errors, must be true, false, yes or no: {}", sslIgnoreErrors);
+			}
+			
+			if (baseUrlOverride != null) {
+				
+				rootRef = rootRef.replaceFirst("^.+?[^\\/:](?=[?\\/]|$)", baseUrlOverride);
+				logger.info("Replacing url with " + rootRef);
+			}			
+			
 			// fill the pool for the kiddies
-			for( int i=0; i<poolSize; i++ ){
+			for( int i=0; i<poolSize; i++ ) {
 				final String uid = UUID.randomUUID().toString();
 
 				final String taskPageUrl = 
@@ -130,7 +127,8 @@ public class PhantomRendererPool implements RenderExecutor {
 					exePath,
 					taskPageUrl,
 					uid,
-					sslCertificatePath
+					sslCertificatePath,
+					sslIgnoreErrors
 				);
 				
 				renderer.addListener(new ShutdownListener() {
@@ -223,10 +221,12 @@ public class PhantomRendererPool implements RenderExecutor {
 		return lookup.get(workerId);
 	}
 
-	void kill() {
-		for(Map.Entry<String, PhantomRenderer> renderer : lookup.entrySet()) {
-			renderer.getValue().kill();
+	/**
+	 * Shutdown
+	 */
+	public void kill() {
+		for(PhantomRenderer renderer : lookup.values()) {
+			renderer.kill();
 		}
-		POOLS.remove(this);
 	}
 }

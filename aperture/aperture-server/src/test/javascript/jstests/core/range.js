@@ -351,23 +351,23 @@ test('time scalars band as expected', function() {
 	expect(8);
 
 	var range = new aperture.TimeScalar( 'my range',
-			[new Date('October 6, 2000 7:20:00'), new Date('October 9, 2000 18:15:15')] );
+			[new Date('October 6, 2000 7:20:00 UTC'), new Date('October 9, 2000 18:15:15 UTC')] );
 
 	var view = range.banded(4);
-	var date = new Date('October 7, 2000');
+	var date = new Date('October 7, 2000 UTC');
 
-	equal( view.get()[0].min, new Date('October 6, 2000').getTime(), 'time scalars round left side nicely for days');
-	equal( view.get()[view.get().length-1].limit, new Date('October 10, 2000').getTime(), 'time scalars round right side nicely for days');
+	equal( view.get()[0].min, new Date('October 6, 2000 UTC').getTime(), 'time scalars round left side nicely for days');
+	equal( view.get()[view.get().length-1].limit, new Date('October 10, 2000 UTC').getTime(), 'time scalars round right side nicely for days');
 	equal( view.map(date), 0.25, 'time scalars band and map to days as expected');
 
-	range.reset([new Date('Jan 1, 2006 7:20:00'), new Date('Jan 1, 2010')]);
-	equal( view.get()[0].min, new Date('Jan 1, 2006').getTime(), 'time scalars round left side nicely for years');
+	range.reset([new Date('Jan 1, 2006 7:20:00 UTC'), new Date('Jan 1, 2010 UTC')]);
+	equal( view.get()[0].min, new Date('Jan 1, 2006 UTC').getTime(), 'time scalars round left side nicely for years');
 
-	range.reset([new Date('Jan 1, 1971'), new Date('Jan 1, 2010')]);
-	equal( view.get()[0].min, new Date('Jan 1, 1970').getTime(), 'time scalars round left side nicely for decades');
+	range.reset([new Date('Jan 1, 1971 UTC'), new Date('Jan 1, 2010 UTC')]);
+	equal( view.get()[0].min, new Date('Jan 1, 1970 UTC').getTime(), 'time scalars round left side nicely for decades');
 
-	range.reset([new Date('Jan 1, 2006 7:22:00'), new Date('Jan 1, 2006 7:40:00')]);
-	equal( view.get()[0].min, new Date('Jan 1, 2006 7:20:00').getTime(), 'time scalars round left side nicely for minutes');
+	range.reset([new Date('Jan 1, 2006 7:22:00 UTC'), new Date('Jan 1, 2006 7:40:00 UTC')]);
+	equal( view.get()[0].min, new Date('Jan 1, 2006 7:20:00 UTC').getTime(), 'time scalars round left side nicely for minutes');
 
 	view = range.banded({units: 'Minutes', span: 5});
 	equal( view.get().length, (40-20)/5, 'when using specific span, the expected number of bands are created');
@@ -380,8 +380,8 @@ test('time scalars band as expected', function() {
 test('time scalars format dates and times correctly', function() {
 	expect(4);
 
-	var range = new aperture.TimeScalar( 'my range', [new Date('October 6, 2000'), new Date('October 10, 2000')] );
-	var date = new Date('October 7, 2000');
+	var range = new aperture.TimeScalar( 'my range', [new Date('October 6, 2000 UTC'), new Date('October 10, 2000 UTC')] );
+	var date = new Date('October 7, 2000 UTC');
 
 	equal( range.format(date).match(/Oct/).length, 1, 'Default formatter formats dates in default manner.');
 	equal( range.format(date.getTime()).match(/Oct/).length, 1, 'Default formatter formats times in default manner.');
@@ -390,7 +390,7 @@ test('time scalars format dates and times correctly', function() {
 
 	equal( view.format(view.get()[0].min), 'Oct 6', 'Band date labels are formatted as expected.');
 
-	range.reset([new Date('Jan 1, 2006 7:22:00'), new Date('Jan 1, 2006 7:40:00')]);
+	range.reset([new Date('Jan 1, 2006 7:22:00 UTC'), new Date('Jan 1, 2006 7:40:00 UTC')]);
 	equal( view.format(view.get()[0].min), '7:20am', 'Band time labels are formatted as expected.');
 
 });

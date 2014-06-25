@@ -141,6 +141,7 @@ public class PhantomCommandLineCapture {
 	private final PhantomRenderer resource;
 	private final String taskPageUrl;
 	private final String sslCertificatePath;
+	private final String sslIgnoreErrors;
 	private final List<ShutdownListener> listeners = new ArrayList<ShutdownListener>();
 	StreamGobbler errorGobbler;
 	StreamGobbler outputGobbler;
@@ -160,13 +161,15 @@ public class PhantomCommandLineCapture {
 		String location,
 		PhantomRenderer resource,
 		String taskPageUrl,
-		String sslCertificatePath
+		String sslCertificatePath,
+		String sslIgnoreErrors
 	) throws IOException {
 		this.cmdLocation = location;
 		this.resource = resource;
 		
 		this.taskPageUrl = taskPageUrl;
 		this.sslCertificatePath = sslCertificatePath;
+		this.sslIgnoreErrors = sslIgnoreErrors;
 		
 		initialize();
 	}
@@ -248,6 +251,11 @@ public class PhantomCommandLineCapture {
 		if(sslCertificatePath != null && !sslCertificatePath.isEmpty()) {
 			cmd.add("--ssl-certificates-path=" + sslCertificatePath);
 		}
+		
+		if(sslIgnoreErrors != null && !sslIgnoreErrors.isEmpty()) {
+			cmd.add("--ignore-ssl-errors=" + sslIgnoreErrors);
+		}
+		
 		cmd.add(jsFile.getAbsolutePath());
 		cmd.add(taskPageUrl);
 		

@@ -1027,6 +1027,8 @@ function openLayersMaps() {
 			this._layer = new DivOpenLayer(spec.name || ('NodeLayer_' + this.uid), {});
 			mapCanvas.olMap_.addLayer(this._layer);
 			this._layer.setZIndex(999); // Change z as set by OpenLayers to be just under controls
+			// Turn off pointer events on the divs/svg to allow click through to map layers below
+			this._layer.div.style.pointerEvents = 'none';
 
 			// because we parent vector graphics but render into a specialized open layers
 			// canvas we need to help bridge the two by pre-creating this canvas with the

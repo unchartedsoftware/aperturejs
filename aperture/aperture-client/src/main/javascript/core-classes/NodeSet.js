@@ -273,8 +273,9 @@ function(namespace) {
 			// PROCESS TEST
 			// string test arg? a field name.
 			if (isString(test)) {
-				test = test === 'id'? getId : function() {
-					return this[test];
+				var propName = test;
+				test = propName === 'id'? getId : function() {
+					return this[propName];
 				};
 						
 			// no test arg? shift args.
@@ -466,10 +467,16 @@ function(namespace) {
 		},
 		
 		/**
-		 * TODO
+		 * Removes the data within this set from the host layer. This provides a 
+		 * mechanism to remove data from a layer without needing to reset all of the
+		 * layer's data via a call to {@link aperture.Layer#all}.
+		 *
+		 * @returns {this}
+		 *    this set after removing it from the host layer
 		 */
 		remove : function( ) {
-			
+			this._layer.removeNodeSet(this);
+			return this;
 		},
 		
 		/**
@@ -696,6 +703,20 @@ function(namespace) {
 		 * override
 		 */
 		where : NEVER,
+
+		/**
+		 * @private
+		 * override
+		 */
+		remove : function () {
+			var i, sets = this._sets, n = sets.length;
+			
+			for (i=0; i<n; i++) {
+				sets[i].remove();
+			}
+			
+			return this;
+		},
 		
 		/**
 		 * @private

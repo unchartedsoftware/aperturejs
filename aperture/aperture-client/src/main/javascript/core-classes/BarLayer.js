@@ -239,11 +239,11 @@ function(namespace) {
 								stroke:lineStroke,
 								x : xPoint,
 								y : yPoint,
-								opacity : localOpacity,
-								"stroke-width":lineStroke==null?0:barSpec.strokeWidth,
-								"stroke-linejoin": "round",
-								"width" : renderBarDim.width,
-								"height" : renderBarDim.height
+								'fill-opacity' : localOpacity,
+								'stroke-width':lineStroke==null?0:barSpec.strokeWidth,
+								'stroke-linejoin': 'round',
+								'width' : renderBarDim.width,
+								'height' : renderBarDim.height
 							}, transition);
 						}
 						else {

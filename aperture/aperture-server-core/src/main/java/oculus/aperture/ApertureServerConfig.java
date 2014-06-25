@@ -29,6 +29,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 import oculus.aperture.config.DefaultServerConfigModule;
 import oculus.aperture.rest.RestModule;
@@ -109,6 +110,15 @@ public class ApertureServerConfig extends GuiceServletContextListener {
 						if( module != null ) {
 							logger.info("Adding Guice Module: "+moduleClass.getName());
 							modules.add( module );
+							
+							if (module instanceof ServletContextListener) {
+								try {
+									((ServletContextListener)module).contextInitialized(servletContextEvent);
+								} catch (Exception e) {
+									logger.error("Exception caught while notifying module of servlet context destruction", e);
+								}
+							}
+							
 						} else {
 							// Cannot load specified module, 
 							throw new RuntimeException("No valid constructor found for module class: " + moduleClass.getName());
@@ -126,6 +136,26 @@ public class ApertureServerConfig extends GuiceServletContextListener {
 
 		super.contextInitialized(servletContextEvent);
 	}
+
+	
+	/* (non-Javadoc)
+	 * @see com.google.inject.servlet.GuiceServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
+	 */
+	@Override
+	public void contextDestroyed(ServletContextEvent servletContextEvent) {
+		for (Module module : modules) {
+			if (module instanceof ServletContextListener) {
+				try {
+					((ServletContextListener)module).contextDestroyed(servletContextEvent);
+				} catch (Exception e) {
+					logger.error("Exception caught while notifying module of servlet context destruction", e);
+				}
+			}
+		}
+		
+		super.contextDestroyed(servletContextEvent);
+	}
+
 
 	@Override
 	protected Injector getInjector() {

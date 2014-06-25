@@ -45,6 +45,8 @@ function(namespace) {
 		// Initialize unique properties.
 		node.uid      = (nextUid++).toString();
 		node.parent   = parent;
+		node.next     = null;
+		node.prev     = null;
 		node.layer    = layer;
 		node.kids     = {};
 		node.userData = {};
@@ -119,14 +121,19 @@ function(namespace) {
 	 * store references their adjacent nodes rather than externalizing that in a list structure.
 	 */
 	function linkNode( node, prev ) {
-		
-		// assume next is handled. this is a private and optimized process.
 		if (prev == null) {
+			// Insert node at head of layer's node list
+			node.next = node.layer.nodes_;
 			node.layer.nodes_ = node;
 			node.prev = null;
 		} else {
+			// Insert node elsewhere
+			node.next = prev.next;
 			prev.next = node;
 			node.prev = prev;
+		}
+		if (node.next) {
+			node.next.prev = node;
 		}
 	}
 
@@ -174,9 +181,10 @@ function(namespace) {
 		
 		// DATA CHANGED? SORT *ALL* CHANGES OUT AND RETURN
 		// if our data changes, we have to execute a full pass through everything
-		// to sort into add/changed/removed. EVERYTHING is touched. this could be made more
+		// to sort into add/changed/removed. Adds and removes are always processed, and changes
+		// are only marked if the hints dictate a data changed happened. this could be made more
 		// efficient if data models exposed chg fns to the user - i.e. w/ adds, joins etc.
-		if (myChangeSet.dataChanged) {
+		if (this.dataChangeHints) {
 			var allParents  = (this.parentLayer_ && this.parentLayer_.nodes_) || this.rootNode_,
 				adds = myChangeSet.added,
 				rmvs = myChangeSet.removed,
@@ -191,7 +199,7 @@ function(namespace) {
 			for (dad = allParents; dad != null; dad = dad.next) {
 				var existing = indexNodes(dad.kids[myUid]),
 					newkids = dad.kids[myUid] = [];
-				
+
 				// for all my new items, look for matches in existing.
 				forEach( this.dataItems( dad.data ), function( dataItem ) {
 					c = null;
@@ -231,25 +239,20 @@ function(namespace) {
 						c.data = dataItem;
 						c.idFn = idFunction;
 
-						// only process further if showing.
-						if (updateVisibility(c)) {
+						// only process further if showing and hints say data actually changed
+						if (updateVisibility(c) && this.dataChangeHints.changed) {
 							chgs.push(c);
 						}
 						
 					// else make new
 					} else {
 						adds.push( c = addNode( this, dad, prev, dataItem ) );
-						
 					}
 					
 					prev = c;
 					
 				}, this);
 
-				if (prev) {
-					prev.next = null;
-				}
-				
 				// whatever is left is trash. these are already removed from our locally linked list.
 				for (i = existing.next; i != null; i = i.next) {
 					rmvs.push(i.node);
@@ -708,15 +711,19 @@ function(namespace) {
 						this.idFunction = data && data.length && data[0].id? getId : null;
 					}
 					
-					// mark changed for next render loop.
-					this.dataChanged = true;
+					// mark everything changed for next render loop.
+					this.dataChangeHints = {
+						delta: true,
+						changed: true
+					};
 				}
 				
 				return new aperture.Layer.LogicalNodeSet(this);
 			},
 			
 			/**
-			 * TODO: implement. Adds to the logical set of all layer nodes, returning the set of added items.
+			 * Adds to the logical set of all layer nodes, returning the set of added items. The idFunction, 
+			 * if given via join or all, remains unchanged.
 			 * 
 			 * @param {Array|Object} data
 			 *      the array of data objects, from which each node will be mapped.  May be an array 
@@ -728,7 +735,70 @@ function(namespace) {
 			 *      the set of added layer nodes.
 			 */
 			add : function( data ) {
-				
+				if (this.hasLocalData && this.dataItems.values) {
+					// Existing dataset to add to
+					var newData = this.dataItems.values.concat(data);
+					this.dataItems = function() {
+						return newData;
+					};
+					this.dataItems.values = newData;
+
+					this.dataChangeHints = this.dataChangeHints || {};
+					this.dataChangeHints.delta = true;
+
+					// return a nodeset filtered to the new data
+					return new aperture.Layer.LogicalNodeSet(this).where(data);
+				} else if (this.hasLocalData) {
+					// Local data is a function operator on the parent, illegal call to add
+					throw new Error('Can only add data to a layer with a dataset already specified');
+				} else {
+					// No local data, this add is the same as calling all
+					return this.all(data);
+				}
+			},
+
+			/**
+			 * ${protected}
+			 * Removes the contents of a nodeset from this layer's data. This is used internally
+			 * by the framework, {@link aperture.Layer.NodeSet#remove} should be used instead of
+			 * this method.
+			 * 
+			 * @param {aperture.Layer.NodeSet} nodeset
+			 *      The set of data nodes to remove from this layer.
+			 *
+			 * @returns {aperture.Layer.NodeSet} the removed nodeset
+			 */
+			removeNodeSet : function ( nodeset ) {
+				if (this.hasLocalData && this.dataItems.values) {
+					var removeIter = nodeset.data(),
+						removedArray = [],
+						node;
+
+					// Create searchable array of values to remove from iter
+					while (node = removeIter.next()) {
+						removedArray.push(node);
+					}
+
+					// filter out values to remove
+					var newData = util.filter(this.dataItems.values, function(value) {
+						return !util.has(removedArray, value);
+					});
+
+					this.dataItems = function() {
+						return newData;
+					};
+					this.dataItems.values = newData;
+
+					// Mark delta changes, no changes to existing data
+					this.dataChangeHints = this.dataChangeHints || {};
+					this.dataChangeHints.delta = true;
+
+					// return a nodeset filtered to the new data
+					return nodeset;
+				} else {
+					// Local data is a function operator on the parent, illegal call to add
+					throw new Error('Can only remove data from a layer with a dataset already specified');
+				}
 			},
 			
 			/**
@@ -758,15 +828,20 @@ function(namespace) {
 				var chgs = myChangeSet.changed = [],
 					adds = myChangeSet.added = [],
 					rmvs = myChangeSet.removed = [];
-				
-				// is data changed locally or in a parent that we subselect from?
-				myChangeSet.dataChanged = this.dataChanged || (parentChangeSet.dataChanged && hasLocalData && !this.dataItems.values);
 
-				
-				// reset now that we're going to process.
-				this.dataChanged = false;
+				// If "changes" in parent changeset represent actual *data* changes, mark our change hints to
+				// reflect this. Will result in full reprocess of data
+				if (parentChangeSet.dataChanged && hasLocalData && !this.dataItems.values) {
+					this.dataChangeHints = this.dataChangeHints || {};
+					this.dataChangeHints.changed = true;
+				}
 
+				// Mark set of "changes" in this changeset as actual *data* changes not just requests to redraw
+				// if data in this layer was actually changed or flag is cascading down from parent and this layer's
+				// data is computed via data subselect
+				myChangeSet.dataChanged = this.dataChangeHints && this.dataChangeHints.changed;
 				
+
 				// SHORTCUT REMOVAL
 				// if we rendered local data last time and not this, or vice versa,
 				// we need to destroy everything and rebuild to respect new orders of data.
@@ -880,7 +955,7 @@ function(namespace) {
 				// adds always propagate down, but not changes if they are not visible.
 				// form the list here of everything that need drawing/redrawing.
 				if (adds.length !== 0) {
-					var draw = myChangeSet.updates = myChangeSet.changed.splice();
+					var draw = myChangeSet.updates = myChangeSet.changed.slice();
 					
 					// on construction we did not create graphics unless it was visible
 					forEach(adds, function(c) {
@@ -914,6 +989,9 @@ function(namespace) {
 					log.debug(clist);
 					log.debug(rlist);
 				}
+
+				// Done processing changes, reset hints
+				this.dataChangeHints = null;
 				
 				return myChangeSet;
 			},

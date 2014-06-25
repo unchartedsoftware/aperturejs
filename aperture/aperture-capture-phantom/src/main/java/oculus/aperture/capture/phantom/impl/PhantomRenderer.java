@@ -99,7 +99,8 @@ public class PhantomRenderer implements CaptureService {
 		String exePath,
 		String taskPageUrl,
 		String workerId,
-		String sslCertificatePath
+		String sslCertificatePath,
+		String sslIgnoreErrors
 	) {
 		this.contentService = contentService;
 		taskQueue = new SynchronousQueue<Map<String, Object>>();
@@ -109,7 +110,8 @@ public class PhantomRenderer implements CaptureService {
 				exePath, 
 				this, 
 				taskPageUrl,
-				sslCertificatePath
+				sslCertificatePath,
+				sslIgnoreErrors
 			);
 			
 		} catch (IOException e) {

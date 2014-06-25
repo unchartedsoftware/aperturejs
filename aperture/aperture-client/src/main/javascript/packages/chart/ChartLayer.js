@@ -538,6 +538,8 @@ function(namespace) {
 			var bandCount = this.width / 100;
 			// update bands
 			if (this.axisArray.x[0]){
+				// XXX: This re-creation of banding creating an additional view.proto
+				// depth on every call. After some time, proto depth >> 1000
 				var mapKeyX = this.mappings().x.transformation;
 				var rangeX = mapKeyX.from();
 				// Reband the range to reflect the desired zoom level.
@@ -555,6 +557,8 @@ function(namespace) {
 			}
 
 			// TODO: Does secondary axis logic belong here?
+			// XXX: No, this code has the effect of clobbering the banding/views
+			// applied to the secondary axis on creation
 			if (this.axisArray.x[1]){
 				var nextOrder = bandedX.formatter().nextOrder();
 				if (nextOrder){

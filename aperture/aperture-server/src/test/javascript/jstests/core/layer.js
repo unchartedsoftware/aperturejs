@@ -413,4 +413,306 @@ test('partial update: call to update one data item only updates that one', funct
 	equal(child.render.getCall(0).args[0].changed.length, 3, 'child should have three changed items (the two that are derived from "a" and one specific child of "b")');
 });
 
+module('Layer#add');
 
+testSkip('adding data to existing set returns NodeSet with additions', function() {
+	expect(2);
+
+	var a = {value:'a'},
+		b = {value:'b'},
+		c = {value:'c'},
+		data = [a,b];
+
+	// Setup test layer
+	var layer = new aperture.Plot('body');
+	layer.all(data).redraw();
+	// --- end setup
+
+	// Add c, no change to a,b
+	var result = layer.add(c);
+	var dataArray = [];
+	var iter = result.data();
+	while(node = iter.next()) {
+		dataArray.push(node);
+	}
+
+	equal(dataArray.length, 1, 'result nodeset should have single entry');
+	equal(dataArray[0].data, c, 'single nodeset item should be newly added data');
+});
+
+
+
+test('adding data to existing set only adds, no updates', function() {
+	expect(4);
+
+	var a = {value:'a'},
+		b = {value:'b'},
+		c = {value:'c'},
+		data = [a,b];
+
+	// Setup test layer
+	var layer = new aperture.Plot('body');
+	layer.all(data).redraw();
+	// --- end setup
+
+	// Now make some partial updates
+	sinon.spy(layer, "render");
+
+	// Add c, no change to a,b
+	layer.add(c).redraw();
+
+	ok(layer.render.calledOnce, 'parent render called once');
+
+	equal(layer.render.getCall(0).args[0].changed.length, 0, 'layer should have no changed');
+
+	equal(layer.render.getCall(0).args[0].added.length, 1, 'layer should have one add');
+	equal(layer.render.getCall(0).args[0].added[0].data, c, 'layer \'s add should be our data item');
+});
+
+test('adding data to changed set should add and update', function() {
+	expect(4);
+
+	var a = {value:'a'},
+		b = {value:'b'},
+		c = {value:'c'},
+		data = [a,b];
+
+	// Setup test layer
+	var layer = new aperture.Plot('body');
+	layer.all(data).redraw();
+	// --- end setup
+
+	// Now make some partial updates
+	sinon.spy(layer, "render");
+	
+	// Trigger pending update
+	layer.all(data);
+	layer.add(c).redraw();
+
+	ok(layer.render.calledOnce, 'parent render called once');
+
+	equal(layer.render.getCall(0).args[0].changed.length, 2, 'layer should have two changes');
+
+	equal(layer.render.getCall(0).args[0].added.length, 1, 'layer should have one add');
+	equal(layer.render.getCall(0).args[0].added[0].data, c, 'layer \'s add should be our data item');
+});
+
+test('adding data to set with removals should add and remove', function() {
+	expect(5);
+
+	var a = {value:'a'},
+		b = {value:'b'},
+		c = {value:'c'},
+		data = [a,b];
+
+	// Setup test layer
+	var layer = new aperture.Plot('body');
+	layer.all(data).redraw();
+
+	// Trigger pending removal (of 'a')
+	layer.all([b]);
+	// --- end setup
+
+	// Now make some partial updates
+	sinon.spy(layer, "render");
+
+	layer.add(c).redraw();
+
+	ok(layer.render.calledOnce, 'parent render called once');
+
+	equal(layer.render.getCall(0).args[0].changed.length, 1, 'layer should have one change');
+	equal(layer.render.getCall(0).args[0].removed.length, 1, 'layer should have one remove');
+
+	equal(layer.render.getCall(0).args[0].added.length, 1, 'layer should have one add');
+	equal(layer.render.getCall(0).args[0].added[0].data, c, 'layer \'s add should be our data item');
+});
+
+test('child with derived data adds if data added to parent', function() {
+
+	expect(5);
+
+	var a = {values:[{value:'a'},{value:'b'}]},
+		b = {values:[{value:'c'},{value:'d'}]},
+		c = {values:[{value:'e'},{value:'f'}]},
+		data = [a,b];
+
+	// Setup parent
+	var parent = new aperture.Plot('body');
+	parent.all(data);
+
+	// Child under test
+	var child = parent.addLayer( aperture.Layer );
+	// Subselect data
+	child.all(function(parent) { return parent.values; });
+
+	// Get the first update out of the way
+	parent.all().redraw();
+
+	// --- end setup
+
+	// Now make some partial updates
+	sinon.spy(child, "render");
+
+	// Update a, and a part of b
+	parent.add(c).redraw();
+
+	ok(child.render.calledOnce, 'child render called once');
+
+	equal(child.render.getCall(0).args[0].added.length, 2, 'child should have two new data items');
+	equal(child.render.getCall(0).args[0].added[0].data.value, 'e', 'new child data items should be correctly derived from parent');
+	equal(child.render.getCall(0).args[0].changed.length, 0, 'child should no changes');
+	equal(child.render.getCall(0).args[0].removed.length, 0, 'child should no removes');
+});
+
+
+module('NodeSet#remove');
+
+test('removing data to existing set only triggers removes, no updates', function() {
+	expect(5);
+
+	var a = {value:'a'},
+		b = {value:'b'},
+		c = {value:'c'},
+		data = [a,b,c];
+
+	// Setup test layer
+	var layer = new aperture.Plot('body');
+	layer.all(data).redraw();
+	// --- end setup
+
+	// Now make some partial updates
+	sinon.spy(layer, "render");
+
+	// Remove c
+	layer.all().where(b).remove().redraw();
+
+	ok(layer.render.calledOnce, 'parent render called once');
+
+	equal(layer.render.getCall(0).args[0].changed.length, 0, 'layer should have no changed');
+	equal(layer.render.getCall(0).args[0].added.length, 0, 'layer should have no added');
+
+	equal(layer.render.getCall(0).args[0].removed.length, 1, 'layer should have one remove');
+	equal(layer.render.getCall(0).args[0].removed[0].data, b, 'layer \'s remove should be our data item');
+});
+
+test('removing data in conjunction with changes to existing set merges removes and updates', function() {
+	expect(5);
+
+	var a = {value:'a'},
+		b = {value:'b'},
+		c = {value:'c'},
+		data = [a,b,c];
+
+	// Setup test layer
+	var layer = new aperture.Plot('body');
+	layer.all(data).redraw();
+	// --- end setup
+
+	// Now make some partial updates
+	sinon.spy(layer, "render");
+
+	// Remove c
+	layer.all(data).where(b).remove().redraw();
+
+	ok(layer.render.calledOnce, 'parent render called once');
+
+	equal(layer.render.getCall(0).args[0].changed.length, 2, 'layer should have two changes');
+	equal(layer.render.getCall(0).args[0].added.length, 0, 'layer should have no added');
+
+	equal(layer.render.getCall(0).args[0].removed.length, 1, 'layer should have one remove');
+	equal(layer.render.getCall(0).args[0].removed[0].data, b, 'layer \'s remove should be our data item');
+});
+
+test('removes cascade cleanly to child with derived data', function() {
+
+	expect(5);
+
+	var a = {values:[{value:'a'},{value:'b'}]},
+		b = {values:[{value:'c'},{value:'d'}]},
+		c = {values:[{value:'e'},{value:'f'}]},
+		data = [a,b,c];
+
+	// Setup parent
+	var parent = new aperture.Plot('body');
+	parent.all(data);
+
+	// Child under test
+	var child = parent.addLayer( aperture.Layer );
+	// Subselect data
+	child.all(function(parent) { return parent.values; });
+
+	// Get the first update out of the way
+	parent.all().redraw();
+
+	// --- end setup
+
+	// Now make some partial updates
+	sinon.spy(child, "render");
+
+	// Update a, and a part of b
+	parent.all().where(b).remove().redraw();
+
+	ok(child.render.calledOnce, 'child render called once');
+
+	equal(child.render.getCall(0).args[0].removed.length, 2, 'child should have two removed data items');
+	equal(child.render.getCall(0).args[0].removed[0].data.value, 'c', 'removed child data items should be correctly derived from parent');
+	equal(child.render.getCall(0).args[0].changed.length, 0, 'child should no changes');
+	equal(child.render.getCall(0).args[0].added.length, 0, 'child should no adds');
+});
+
+test('adding and removing data in a single update merges changes', function() {
+	expect(6);
+
+	var a = {value:'a'},
+		b = {value:'b'},
+		c = {value:'c'},
+		data = [a,b];
+
+	// Setup test layer
+	var layer = new aperture.Plot('body');
+	layer.all(data).redraw();
+	// --- end setup
+
+	// Now make some partial updates
+	sinon.spy(layer, "render");
+
+	// Remove c
+	layer.add(c);
+	layer.all().where(b).remove().redraw();
+
+	ok(layer.render.calledOnce, 'layer render called once');
+
+	equal(layer.render.getCall(0).args[0].changed.length, 0, 'layer should have no changes');
+
+	equal(layer.render.getCall(0).args[0].added.length, 1, 'layer should have one addition');
+	equal(layer.render.getCall(0).args[0].added[0].data, c, 'layer \'s remove should be our data item');
+	
+	equal(layer.render.getCall(0).args[0].removed.length, 1, 'layer should have one remove');
+	equal(layer.render.getCall(0).args[0].removed[0].data, b, 'layer \'s remove should be our data item');
+});
+
+testSkip('adding and removing the same data in a single has no changes', function() {
+	expect(4);
+
+	var a = {value:'a'},
+		b = {value:'b'},
+		c = {value:'c'},
+		data = [a,b];
+
+	// Setup test layer
+	var layer = new aperture.Plot('body');
+	layer.all(data).redraw();
+	// --- end setup
+
+	// Now make some partial updates
+	sinon.spy(layer, "render");
+
+	// Remove c
+	layer.add(c).remove().redraw();
+
+	ok(layer.render.calledOnce, 'layer render called once');
+
+	equal(layer.render.getCall(0).args[0].changed.length, 0, 'layer should have no changes');
+	equal(layer.render.getCall(0).args[0].added.length, 0, 'layer should have no additions');	
+	equal(layer.render.getCall(0).args[0].removed.length, 0, 'layer should have no removes');
+});

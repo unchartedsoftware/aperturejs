@@ -732,6 +732,10 @@ function(namespace) {
 	R.fn.container = function() {
 
 		var node = elem( 'g' );
+
+		// Ensure vector containers are clickable
+		// Some vizlets disable pointer events on top-level SVG to allow click-through
+		node.style.pointerEvents = 'auto';
 		
 		// The container MUST have a UNIQUE ID, otherwise the
 		// mouse events will not be triggered properly.

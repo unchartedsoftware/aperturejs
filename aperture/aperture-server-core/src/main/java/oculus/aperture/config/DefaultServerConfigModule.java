@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.CharStreams;
-import com.google.common.io.Closeables;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
@@ -72,7 +71,11 @@ public class DefaultServerConfigModule extends AbstractModule {
 			Properties properties = new Properties();
 			properties.load(inp);
 
-			Closeables.closeQuietly(inp);
+			try {
+				inp.close();
+			} catch (IOException ioe) {
+				logger.warn("Failed to close properties input stream.", ioe);
+			}
 
 			
 			String build = properties.getProperty("aperture.buildnumber");
@@ -117,7 +120,11 @@ public class DefaultServerConfigModule extends AbstractModule {
 					properties.putAll(defaults); // can't use the built in defaults if merging more than two.
 					properties.load(inp);
 					
-					Closeables.closeQuietly(inp);
+					try {
+						inp.close();
+					} catch (IOException ioe) {
+						logger.warn("Failed to close properties input stream.", ioe);
+					}
 					inp = null;
 				}
 			}
@@ -168,7 +175,11 @@ public class DefaultServerConfigModule extends AbstractModule {
 					json = CharStreams.toString(new BufferedReader(
 							new InputStreamReader(inp, Charset.forName("UTF-8"))));
 				} finally {
-					Closeables.closeQuietly(inp);
+					try {
+						inp.close();
+					} catch (IOException ioe) {
+						logger.warn("Failed to close properties input stream.", ioe);
+					}
 				}
 			}
 			
@@ -180,7 +191,11 @@ public class DefaultServerConfigModule extends AbstractModule {
 			addError(e);
 			
 			if (inp != null) {
-				Closeables.closeQuietly(inp);
+				try {
+					inp.close();
+				} catch (IOException ioe) {
+					logger.warn("Failed to close properties input stream.", ioe);
+				}
 			}
 		}
 

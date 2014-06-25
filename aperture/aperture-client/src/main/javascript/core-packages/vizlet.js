@@ -53,7 +53,7 @@ function(namespace) {
 						anchorPoint: [0,0],
 						userData: {},
 						graphics : aperture.canvas.NO_GRAPHICS,
-						kids: []
+						kids: {}
 					};
 
 			// an actual element?

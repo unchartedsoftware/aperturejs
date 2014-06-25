@@ -36,7 +36,7 @@ public interface RenderExecutor extends CaptureService {
 	 * Initialize in preparation for rendering responsively on demand.
 	 * 
 	 * @param rootRef
-	 * 		The root reference of the reslet application.
+	 * 		The root reference of the restlet application.
 	 */
 	public void init(String rootRef);
 }
