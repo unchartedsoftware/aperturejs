@@ -3,12 +3,12 @@
   <parent>
     <artifactId>aperture</artifactId>
     <groupId>oculus.aperture</groupId>
-    <version>1.0.7</version>
+    <version>1.0.8-SNAPSHOT</version>
   </parent>
   <artifactId>aperture-dist</artifactId>
   <packaging>pom</packaging>
   <name>Distribution Builder</name>
-  <description>This project simply builds distributions of the system</description>
+  <description>This project simply builds distributions of the system</description>	<url>http://aperturejs.com</url>	<licenses>		<license>			<name>The MIT License (MIT)</name>			<url>http://opensource.org/licenses/MIT</url>			<distribution>repo</distribution>		</license>	</licenses>	<scm>		<url>https://github.com/oculusinfo/aperturejs</url>		<connection>scm:git:https://github.com/oculusinfo/aperturejs.git</connection>	</scm>
 
 	<dependencies>
 		<dependency>

@@ -4,14 +4,28 @@
 	<parent>
 		<artifactId>aperture</artifactId>
 		<groupId>oculus.aperture</groupId>
-		<version>1.0.7</version>
+		<version>1.0.8-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>aperture-client</artifactId>
 	<packaging>jar</packaging>
 
 	<name>Aperture Client</name>
-	<description>Client-side javascript libraries for Aperture</description>
+	<description>Client-side javascript libraries for Aperture</description>	<url>http://aperturejs.com</url>	<licenses>		<license>			<name>The MIT License (MIT)</name>			<url>http://opensource.org/licenses/MIT</url>			<distribution>repo</distribution>		</license>	</licenses>	<scm>		<url>https://github.com/oculusinfo/aperturejs</url>		<connection>scm:git:https://github.com/oculusinfo/aperturejs.git</connection>	</scm>
+
+	<profiles>
+		<profile>
+			<id>unsigned install</id>
+			<activation>
+				<property>
+					<name>!aperture.deployment.signed</name>
+				</property>
+			</activation>
+			<properties>
+				<jarsigner.skip>true</jarsigner.skip>
+			</properties>
+		</profile>
+	</profiles>
 
 	<build>
 		<resources>
@@ -247,6 +261,27 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+			<!--sign if -Daperture.deployment.signed=true-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.3.2</version>
+				<executions>
+					<execution>
+						<id>sign</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>			
 		</plugins>
 
 		<pluginManagement>
@@ -285,56 +320,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
-	<!-- TODO: Compress -->
-
-	<reporting>
-		<plugins>
-
-		</plugins>
-	</reporting>
-
-
-	<profiles>
-		<!-- Profile that allows local testing using a local web server
-			Handy for testing javascript on its own but since the Aperture
-			server is not running this is useful only for manual development
-			testing -->
-		<profile>
-			<id>Development</id>
-
-			<properties>
-				<jetty.version>7.2.0.v20101020</jetty.version>
-			</properties>
-
-			<build>
-				<plugins>
-					<!-- Webserver with source and build javascript as well as test folder -->
-					<plugin>
-						<groupId>org.mortbay.jetty</groupId>
-						<artifactId>jetty-maven-plugin</artifactId>
-						<version>${jetty.version}</version>
-						<configuration>
-							<reload>manual</reload>
-							<webAppConfig>
-								<contextPath>/aperture</contextPath>
-								<!-- Include all source(main,text,webapp) -->
-								<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-									<resourcesAsCSV>src/main/javascript,src/test,${project.build.outputDirectory},../aperture-examples/src/main/javascript</resourcesAsCSV>
-								</baseResource>
-							</webAppConfig>
-						</configuration>
-						<dependencies>
-							<dependency>
-								<groupId>org.eclipse.jetty</groupId>
-								<artifactId>jetty-server</artifactId>
-								<version>${jetty.version}</version>
-							</dependency>
-						</dependencies>
-					</plugin>
-				</plugins>
-			</build>
-			</profile>
-	</profiles>
 
 </project>

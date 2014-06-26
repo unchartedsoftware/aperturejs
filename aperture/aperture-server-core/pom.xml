@@ -4,14 +4,14 @@
 	<parent>
 		<artifactId>aperture</artifactId>
 		<groupId>oculus.aperture</groupId>
-		<version>1.0.7</version>
+		<version>1.0.8-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>aperture-server-core</artifactId>
 	<packaging>jar</packaging>
 
 	<name>Aperture Server Core Components</name>
-	<description>Server component code of Aperture.</description>
+	<description>Server component code of Aperture.</description>	<url>http://aperturejs.com</url>	<licenses>		<license>			<name>The MIT License (MIT)</name>			<url>http://opensource.org/licenses/MIT</url>			<distribution>repo</distribution>		</license>	</licenses>	<scm>		<url>https://github.com/oculusinfo/aperturejs</url>		<connection>scm:git:https://github.com/oculusinfo/aperturejs.git</connection>	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -116,9 +116,22 @@
 			<scope>test</scope>
 		</dependency>
 
-
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>unsigned install</id>
+			<activation>
+				<property>
+					<name>!aperture.deployment.signed</name>
+				</property>
+			</activation>
+			<properties>
+				<jarsigner.skip>true</jarsigner.skip>
+			</properties>
+		</profile>
+	</profiles>
+	
 	<build>
 		<resources>
 			<!-- Resources to filter -->
@@ -164,6 +177,27 @@
 					</items>
 				</configuration>
 			</plugin>
+			
+			<!--sign if -Daperture.deployment.signed=true-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.3.2</version>
+				<executions>
+					<execution>
+						<id>sign</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>			
 		</plugins>
 
 	</build>
