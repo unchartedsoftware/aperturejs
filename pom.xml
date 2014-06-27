@@ -89,9 +89,6 @@
 		<!-- Service Provider Interface definitions -->
 		<module>aperture-spi</module>
 
-		<!-- Docs for same -->
-		<module>aperture-spi-docs</module>
-
 		<!-- Core server components -->
 		<module>aperture-server-core</module>
 

@@ -47,7 +47,29 @@
 				    </execution>
 				  </executions>
 			</plugin>
-			
+
+			<!-- Generate Javadoc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<javadocVersion>1.7</javadocVersion>
+					<doctitle>Aperture Service Provider Interfaces</doctitle>
+					<windowtitle>Aperture Java SPIs</windowtitle>
+					<stylesheetfile>aperture.css</stylesheetfile>
+					<includeDependencySources>true</includeDependencySources>				
+				</configuration>
+				<executions>
+					<execution>
+						<id>package-javadoc</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!--sign if -Daperture.deployment.signed=true-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

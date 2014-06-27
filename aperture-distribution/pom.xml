@@ -46,13 +46,6 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-spi-docs</artifactId>
-			<version>${project.parent.version}</version>
-			<classifier>javadoc</classifier>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>aperture-common</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>

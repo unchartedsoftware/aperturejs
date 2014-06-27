@@ -54,7 +54,6 @@ The project is structured as follows:
 
  * [`/aperture-examples`](./aperture-examples) - Example code and content, essentially the source for [aperturejs.com](http://aperturejs.com)
  * [`/aperture-client-docs`](./aperture-client-docs) - JSDoc generation code for the `aperture-client` JS library
- * [`/aperture-spi-docs`](./aperture-spi-docs) - JavaDoc generation code for the `aperture-spi` project
  * [`/aperture-distribution`](./aperture-distribution) - Project for generating distributables of aperturejs including a client-only `.zip` of `.js` files and a full server distribution.
  * [`/aperture-server`](./aperture-server) - An example combining the reference SPI implementations above, the `server-core`, the client JS, and the examples into an application. This generates a WAR that can be served in any Java Servlet container and contains all docs and examples.
 

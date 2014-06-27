@@ -57,7 +57,7 @@
 
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-spi-docs</artifactId>
+			<artifactId>aperture-spi</artifactId>
 			<version>${project.parent.version}</version>
 			<classifier>javadoc</classifier>
 			<type>jar</type>
@@ -185,7 +185,7 @@
 						<!-- Overlay client JavaDoc files -->
 						<overlay>
 							<groupId>${project.parent.groupId}</groupId>
-							<artifactId>aperture-spi-docs</artifactId>
+							<artifactId>aperture-spi</artifactId>
 							<classifier>javadoc</classifier>
 							<type>jar</type>
 							<targetPath>api/spi/javadoc</targetPath>
