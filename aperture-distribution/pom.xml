@@ -33,13 +33,6 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-client-docs</artifactId>
-			<version>${project.parent.version}</version>
-			<classifier>jsdoc</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>aperture-spi</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>

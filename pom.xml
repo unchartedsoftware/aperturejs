@@ -83,9 +83,6 @@
 		<!-- Client-side libraries (JS) -->
 		<module>aperture-client</module>
 
-		<!-- Documentatoin for client-side libraries (JS) -->
-		<module>aperture-client-docs</module>
-
 		<!-- Service Provider Interface definitions -->
 		<module>aperture-spi</module>
 

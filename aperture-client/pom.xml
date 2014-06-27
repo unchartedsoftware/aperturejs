@@ -11,7 +11,21 @@
 	<packaging>jar</packaging>
 
 	<name>Aperture Client</name>
-	<description>Client-side javascript libraries for Aperture</description>	<url>http://aperturejs.com</url>	<licenses>		<license>			<name>The MIT License (MIT)</name>			<url>http://opensource.org/licenses/MIT</url>			<distribution>repo</distribution>		</license>	</licenses>	<scm>		<url>https://github.com/oculusinfo/aperturejs</url>		<connection>scm:git:https://github.com/oculusinfo/aperturejs.git</connection>	</scm>
+	<description>Client-side javascript libraries for Aperture</description>
+	<url>http://aperturejs.com</url>
+
+	<licenses>
+		<license>
+			<name>The MIT License (MIT)</name>
+			<url>http://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/oculusinfo/aperturejs</url>
+		<connection>scm:git:https://github.com/oculusinfo/aperturejs.git</connection>
+	</scm>
 
 	<profiles>
 		<profile>
@@ -91,6 +105,7 @@
 						<goals>
 							<goal>run</goal>
 						</goals>
+						
 						<configuration>
 							<target>
 								<concat	destfile="${project.build.directory}/processed-packages/aperture-core.js">
@@ -259,8 +274,125 @@
 							</target>
 						</configuration>
 					</execution>
+
+					<!-- Combine into single file -->
+					<execution>
+						<id>compile-jsdoc</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<java jar="lib/jsdoc-toolkit/jsrun.jar" fork="true" failonerror="true" maxmemory="256m">
+									<arg value="lib/jsdoc-toolkit/app/run.js" />
+									<arg value="-d=target/api/js/" />
+									<arg value="-t=lib/jsdoc-toolkit/templates/aperture" />
+									<arg value="-v" />
+									<arg value="-m" />
+									<arg value="-r=3" />
+									<arg value="-E=&quot;(pre|pre-package|post)\.js&quot;" />
+									<arg value="-E=raphael-group.js" />
+									<arg value="-E=tooltip.js" />
+									<arg value="-E=esri.js" />
+									<arg value="-E=TableLayer.js" />
+									<arg value="-E=header.js" />
+									<arg value="-E=aperture-exampleconfig.js" />
+									<arg value="${project.build.directory}/processed-scripts" />
+									<arg value="-D=noGlobal:true" />
+									<arg value="-D=title:Aperture JS API" />
+								</java>
+							</target>
+						</configuration>
+					</execution>
+					<execution>
+						<id>compile-jsdoc-dev</id>
+						<!-- >phase>compile</phase -->
+						<phase>none</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<java jar="lib/jsdoc-toolkit/jsrun.jar" fork="true" failonerror="true" maxmemory="256m">
+									<arg value="lib/jsdoc-toolkit/app/run.js" />
+									<arg value="-d=target/api/jsext/" />
+									<arg value="-t=lib/jsdoc-toolkit/templates/aperture" />
+									<arg value="-v" />
+									<arg value="-m" />
+									<arg value="-r=3" />
+									<arg value="-E=&quot;(pre|pre-package|post)\.js&quot;" />
+									<arg value="-E=raphael-group.js" />
+									<arg value="-E=tooltip.js" />
+									<arg value="-E=esri.js" />
+									<arg value="-E=TableLayer.js" />
+									<arg value="-E=header.js" />
+									<arg value="-E=aperture-exampleconfig.js" />
+									<arg value="${project.build.directory}/processed-dev-scripts" />
+									<arg value="-D=noGlobal:true" />
+									<arg value="-D=title:Aperture JS API" />
+								</java>
+							</target>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<executions>
+					<execution>
+						<id>compile-jsdoc</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+						<configuration>
+							<filters>
+								<filter>${project.build.scriptSourceDirectory}/user.properties</filter>
+							</filters>
+							<outputDirectory>${project.build.directory}/processed-scripts/</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>compile-jsdoc-dev</id>
+						<!-- >phase>compile</phase -->
+						<phase>none</phase>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+						<configuration>
+							<filters>
+								<filter>${project.build.scriptSourceDirectory}/dev.properties</filter>
+							</filters>
+							<outputDirectory>${project.build.directory}/processed-dev-scripts/</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!-- Generate jsdoc .zip artifact -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2.2</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/jsdoc.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>package-jsdoc</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			
 			<!--sign if -Daperture.deployment.signed=true-->
 			<plugin>

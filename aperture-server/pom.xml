@@ -42,7 +42,7 @@
 
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-client-docs</artifactId>
+			<artifactId>aperture-client</artifactId>
 			<version>${project.parent.version}</version>
 			<classifier>jsdoc</classifier>
 			<type>zip</type>
@@ -177,7 +177,7 @@
 						<!-- Overlay client JSDoc files -->
 						<overlay>
 							<groupId>${project.parent.groupId}</groupId>
-							<artifactId>aperture-client-docs</artifactId>
+							<artifactId>aperture-client</artifactId>
 							<classifier>jsdoc</classifier>
 							<type>zip</type>
 							<targetPath>api</targetPath>
