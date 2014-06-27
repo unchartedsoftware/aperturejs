@@ -48,13 +48,6 @@
 #header-menu .tagline {
 	color: #8A8984;
 }
-#header-menu a.overview {
-	padding-left: 20px;
-	padding-right: 20px;
-	background-image: url("home.png");
-	background-repeat: no-repeat;
-	background-position: 50% 1px;
-}
 
 
 #submenu {
