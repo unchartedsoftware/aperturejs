@@ -11,7 +11,21 @@
 	<packaging>war</packaging>
 
 	<name>Aperture Server</name>
-	<description>Server component of Aperture (WAR).  This module combines elements from other modules and packages a WAR.</description>	<url>http://aperturejs.com</url>	<licenses>		<license>			<name>The MIT License (MIT)</name>			<url>http://opensource.org/licenses/MIT</url>			<distribution>repo</distribution>		</license>	</licenses>	<scm>		<url>https://github.com/oculusinfo/aperturejs</url>		<connection>scm:git:https://github.com/oculusinfo/aperturejs.git</connection>	</scm>
+	<description>Server component of Aperture (WAR).  This module combines elements from other modules and packages a WAR.</description>
+	<url>http://aperturejs.com</url>
+
+	<licenses>
+		<license>
+			<name>The MIT License (MIT)</name>
+			<url>http://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/oculusinfo/aperturejs</url>
+		<connection>scm:git:https://github.com/oculusinfo/aperturejs.git</connection>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
