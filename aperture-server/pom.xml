@@ -319,7 +319,7 @@
 							<webAppConfig>
 								<contextPath>/aperture</contextPath>
 								<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-									<resourcesAsCSV>../aperture-client/src/main/javascript,../aperture-examples/src/main/javascript,src/test/webapp,src/test/javascript,${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
+									<resourcesAsCSV>../aperture-client/src/main/javascript,../aperture-examples/src/main/javascript,src/test/webapp,${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
 								</baseResource>
 
 								<!-- A bit of nasty to include the class files of other modules (avoids rebuild + install) -->
@@ -369,7 +369,7 @@
 							<webAppConfig>
 								<contextPath>/aperture</contextPath>
 								<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-									<resourcesAsCSV>../aperture-client/src/main/javascript,../aperture-examples/src/main/javascript,src/test/webapp,src/test/javascript,${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
+									<resourcesAsCSV>../aperture-client/src/main/javascript,../aperture-examples/src/main/javascript,${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
 								</baseResource>
 							</webAppConfig>
 
