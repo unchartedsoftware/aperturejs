@@ -108,13 +108,6 @@ pre code {
 #header-menu a.selected {
 	border-bottom: 3px solid #4E443C;
 }
-#header-menu a.overview {
-	padding-left: 20px;
-	padding-right: 20px;
-	background-image: url("img/home.png");
-	background-repeat: no-repeat;
-	background-position: 50% 1px;
-}
 #header-menu a:hover {
 	color: #C40;
 }
