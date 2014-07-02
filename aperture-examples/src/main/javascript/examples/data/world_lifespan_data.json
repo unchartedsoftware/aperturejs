@@ -1,0 +1,109 @@
+{
+    "data": [
+        {
+            "age": 48,
+            "gdp": 374,
+            "country": "Congo",
+            "population": 66,
+            "color": "#0C4C4F"
+        },
+        {
+            "age": 55,
+            "gdp": 1038,
+            "country": "Rwanda",
+            "population": 11,
+            "color": "#0C4C4F"
+        },
+        {
+            "age": 64,
+            "gdp": 1426,
+            "country": "Ghana",
+            "population": 24,
+            "color": "#0C4C4F"
+        },
+        {
+            "age": 69,
+            "gdp": 1560,
+            "country": "Bangladesh",
+            "population": 149,
+            "color": "#A8172D"
+        },
+        {
+            "age": 73,
+            "gdp": 7931,
+            "country": "China",
+            "population": 1340,
+            "color": "#A8172D"
+        },
+        {
+            "age": 65,
+            "gdp": 2972,
+            "country": "India",
+            "population": 1220,
+            "color": "#A8172D"
+        },
+        {
+            "age": 83,
+            "gdp": 30866,
+            "country": "Japan",
+            "population": 127,
+            "color": "#A8172D"
+        },
+        {
+            "age": 69,
+            "gdp": 3999,
+            "country": "Indonesia",
+            "population": 240,
+            "color": "#A8172D"
+        },
+        {
+            "age": 80,
+            "gdp": 72156,
+            "country": "Luxembourg",
+            "population": 1,
+            "color": "#FE8124"
+        },
+        {
+            "age": 69,
+            "gdp": 14318,
+            "country": "Russia",
+            "population": 143,
+            "color": "#FE8124"
+        },
+        {
+            "age": 74,
+            "gdp": 21436,
+            "country": "Saudi Arabia",
+            "population": 27,
+            "color": "#A8172D"
+        },
+        {
+            "age": 81,
+            "gdp": 35222,
+            "country": "Canada",
+            "population": 34,
+            "color": "#47132F"
+        },
+		{
+            "age": 77,
+            "gdp": 11754,
+            "country": "Mexico",
+            "population": 113,
+            "color": "#47132F"
+        },
+		{
+            "age": 78,
+            "gdp": 42066,
+            "country": "USA",
+            "population": 310,
+            "color": "#47132F"
+        },
+        {
+            "age": 81,
+            "gdp": 30062,
+            "country": "France",
+            "population": 63,
+            "color": "#FE8124"
+        }
+    ]
+}

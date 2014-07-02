@@ -1,126 +1,0 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>aperture</artifactId>
-    <groupId>oculus.aperture</groupId>
-    <version>1.0.8-SNAPSHOT</version>
-  </parent>
-  <artifactId>aperture-dist</artifactId>
-  <packaging>pom</packaging>
-  <name>Distribution Builder</name>
-  <description>This project simply builds distributions of the system</description>	<url>http://aperturejs.com</url>	<licenses>		<license>			<name>The MIT License (MIT)</name>			<url>http://opensource.org/licenses/MIT</url>			<distribution>repo</distribution>		</license>	</licenses>	<scm>		<url>https://github.com/oculusinfo/aperturejs</url>		<connection>scm:git:https://github.com/oculusinfo/aperturejs.git</connection>	</scm>
-
-	<dependencies>
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-client</artifactId>
-			<version>${project.parent.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-client-docs</artifactId>
-			<version>${project.parent.version}</version>
-			<classifier>jsdoc</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-spi</artifactId>
-			<version>${project.parent.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-spi-docs</artifactId>
-			<version>${project.parent.version}</version>
-			<classifier>javadoc</classifier>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-common</artifactId>
-			<version>${project.parent.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-server-core</artifactId>
-			<version>${project.parent.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-server</artifactId>
-			<version>${project.parent.version}</version>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>oculus.aperture.service</groupId>
-			<artifactId>aperture-icons</artifactId>
-			<version>${project.parent.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>oculus.aperture.service</groupId>
-			<artifactId>aperture-capture-phantom</artifactId>
-			<version>${project.parent.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>oculus.aperture.service</groupId>
-			<artifactId>aperture-cms</artifactId>
-			<version>${project.parent.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>oculus.aperture.service</groupId>
-			<artifactId>aperture-layout</artifactId>
-			<version>${project.parent.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>aperture-examples</artifactId>
-			<version>${project.parent.version}</version>
-			<type>jar</type>
-		</dependency>
-	</dependencies>
-
-  <build>
-  	<plugins>
-  		<plugin>
-			<artifactId>maven-assembly-plugin</artifactId>
-			<version>2.2.2</version>
-			<executions>
-				<!-- Combine into single file -->
-				<execution>
-					<id>compile-dist</id>
-					<phase>package</phase>
-					<goals>
-						<goal>single</goal>
-					</goals>
-					<configuration>
-						<descriptors>
-							<descriptor>src/main/assembly/distribution.xml</descriptor>
-						</descriptors>
-					</configuration>
-				</execution>
-				<!-- Combine into single file -->
-				<execution>
-					<id>compile-dist-js</id>
-					<phase>package</phase>
-					<goals>
-						<goal>single</goal>
-					</goals>
-					<configuration>
-						<descriptors>
-							<descriptor>src/main/assembly/distribution-js.xml</descriptor>
-						</descriptors>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin>
-  	</plugins>
-  </build>
-</project>

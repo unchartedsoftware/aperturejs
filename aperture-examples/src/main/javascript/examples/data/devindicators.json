@@ -1,0 +1,1002 @@
+[
+	{
+		"country": "Libya",
+		"lat": 26.3351,
+		"long": 17.228331000000026,
+		"indicators": [
+			{
+				"name": "Life Expectancy (Yrs)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 73.1895609756098
+					},
+					{
+						"year": 2012,
+						"value": 74.5455609756098
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Male)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 99.4
+					},
+					{
+						"year": 2012,
+						"value": 99.921
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Female)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 96.3
+					},
+					{
+						"year": 2012,
+						"value": 99.77904
+					}
+				]
+			},
+			{
+				"name": "Adult Employment (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 47.9
+					},
+					{
+						"year": 2012,
+						"value": 48.2
+					}
+				]
+			},
+			{
+				"name": "Vehicles (per 1000 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 291
+					},
+					{
+						"year": 2012,
+						"value": 291
+					}
+				]
+			},
+			{
+				"name": "Urban Population (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 76.76
+					},
+					{
+						"year": 2012,
+						"value": 77.9
+					}
+				]
+			},
+			{
+				"name": "Cell Phones (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 2.29197940755761
+					},
+					{
+						"year": 2012,
+						"value": 171.515466603893
+					}
+				]
+			},
+			{
+				"name": "Internet Users (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 291
+					},
+					{
+						"year": 2012,
+						"value": 291
+					}
+				]
+			}
+		]
+	},
+	{
+		"country": "Angola",
+		"lat": -11.202692,
+		"long": 17.873886999999968,
+		"indicators": [
+			{
+				"name": "Life Expectancy (Yrs)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 47.3933658536585
+					},
+					{
+						"year": 2012,
+						"value": 50.2510243902439
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Male)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 83.7495032277
+					},
+					{
+						"year": 2012,
+						"value": 80.83323
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Female)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 63.1767380805
+					},
+					{
+						"year": 2012,
+						"value": 65.52809
+					}
+				]
+			},
+			{
+				"name": "Adult Employment (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 76.4
+					},
+					{
+						"year": 2012,
+						"value": 75.3
+					}
+				]
+			},
+			{
+				"name": "Vehicles (per 1000 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 40
+					},
+					{
+						"year": 2012,
+						"value": 40
+					}
+				]
+			},
+			{
+				"name": "Urban Population (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 52
+					},
+					{
+						"year": 2012,
+						"value": 58.5
+					}
+				]
+			},
+			{
+				"name": "Cell Phones (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 2.26978789740014
+					},
+					{
+						"year": 2012,
+						"value": 46.6892416231665
+					}
+				]
+			},
+			{
+				"name": "Internet Users (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 40
+					},
+					{
+						"year": 2012,
+						"value": 40
+					}
+				]
+			}
+		]
+	},
+	{
+		"country": "Egypt",
+		"lat": 26.820553,
+		"long": 30.802498000000014,
+		"indicators": [
+			{
+				"name": "Life Expectancy (Yrs)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 70.6915609756098
+					},
+					{
+						"year": 2012,
+						"value": 72.7341219512195
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Male)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 78.9908726585809
+					},
+					{
+						"year": 2012,
+						"value": 87.8567963099
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Female)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 66.931538162473
+					},
+					{
+						"year": 2012,
+						"value": 81.7514513128
+					}
+				]
+			},
+			{
+				"name": "Adult Employment (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 43.3
+					},
+					{
+						"year": 2012,
+						"value": 44.1
+					}
+				]
+			},
+			{
+				"name": "Vehicles (per 1000 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 43
+					},
+					{
+						"year": 2012,
+						"value": 43
+					}
+				]
+			},
+			{
+				"name": "Urban Population (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 42.6
+					},
+					{
+						"year": 2012,
+						"value": 42.8
+					}
+				]
+			},
+			{
+				"name": "Cell Phones (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 8.10861127543872
+					},
+					{
+						"year": 2012,
+						"value": 87.1056051191234
+					}
+				]
+			},
+			{
+				"name": "Internet Users (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 43
+					},
+					{
+						"year": 2012,
+						"value": 43
+					}
+				]
+			}
+		]
+	},
+	{
+		"country": "Ethiopia",
+		"lat": 9.145000000000001,
+		"long": 40.48967300000004,
+		"indicators": [
+			{
+				"name": "Life Expectancy (Yrs)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 53.618
+					},
+					{
+						"year": 2012,
+						"value": 58.1181707317073
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Male)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 39.2886737494988
+					},
+					{
+						"year": 2012,
+						"value": 55.8847369893
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Female)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 28.0801666292683
+					},
+					{
+						"year": 2012,
+						"value": 33.2997543348
+					}
+				]
+			},
+			{
+				"name": "Adult Employment (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 78.1
+					},
+					{
+						"year": 2012,
+						"value": 80.7
+					}
+				]
+			},
+			{
+				"name": "Vehicles (per 1000 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 2
+					},
+					{
+						"year": 2012,
+						"value": 3
+					}
+				]
+			},
+			{
+				"name": "Urban Population (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 15.62
+					},
+					{
+						"year": 2012,
+						"value": 17.6
+					}
+				]
+			},
+			{
+				"name": "Cell Phones (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 0.0725078991001527
+					},
+					{
+						"year": 2012,
+						"value": 7.85693557966764
+					}
+				]
+			},
+			{
+				"name": "Internet Users (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 2
+					},
+					{
+						"year": 2012,
+						"value": 3
+					}
+				]
+			}
+		]
+	},
+	{
+		"country": "Mali",
+		"lat": 17.570692,
+		"long": -3.9961660000000165,
+		"indicators": [
+			{
+				"name": "Life Expectancy (Yrs)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 48.2075853658537
+					},
+					{
+						"year": 2012,
+						"value": 50.5360487804878
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Male)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 32.7
+					},
+					{
+						"year": 2012,
+						"value": 47.379966318
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Female)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 15.9
+					},
+					{
+						"year": 2012,
+						"value": 30.7984551073
+					}
+				]
+			},
+			{
+				"name": "Adult Employment (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 47.1
+					},
+					{
+						"year": 2012,
+						"value": 47.4
+					}
+				]
+			},
+			{
+				"name": "Vehicles (per 1000 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 9
+					},
+					{
+						"year": 2012,
+						"value": 9
+					}
+				]
+			},
+			{
+				"name": "Urban Population (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 29.46
+					},
+					{
+						"year": 2012,
+						"value": 33.3
+					}
+				]
+			},
+			{
+				"name": "Cell Phones (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 1.99693799018167
+					},
+					{
+						"year": 2012,
+						"value": 47.6638128684618
+					}
+				]
+			},
+			{
+				"name": "Internet Users (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 9
+					},
+					{
+						"year": 2012,
+						"value": 9
+					}
+				]
+			}
+		]
+	},
+	{
+		"country": "Nigeria",
+		"lat": 9.081999,
+		"long": 8.675277000000051,
+		"indicators": [
+			{
+				"name": "Life Expectancy (Yrs)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 47.9163658536585
+					},
+					{
+						"year": 2012,
+						"value": 50.9494146341464
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Male)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 78.1279546171
+					},
+					{
+						"year": 2012,
+						"value": 78.14609
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Female)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 60.5093676815
+					},
+					{
+						"year": 2012,
+						"value": 65.32704
+					}
+				]
+			},
+			{
+				"name": "Adult Employment (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 52.7
+					},
+					{
+						"year": 2012,
+						"value": 52.8
+					}
+				]
+			},
+			{
+				"name": "Vehicles (per 1000 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 31
+					},
+					{
+						"year": 2012,
+						"value": 31
+					}
+				]
+			},
+			{
+				"name": "Urban Population (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 44.72
+					},
+					{
+						"year": 2012,
+						"value": 49.8
+					}
+				]
+			},
+			{
+				"name": "Cell Phones (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 2.36683077259888
+					},
+					{
+						"year": 2012,
+						"value": 55.1041759784878
+					}
+				]
+			},
+			{
+				"name": "Internet Users (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 31
+					},
+					{
+						"year": 2012,
+						"value": 31
+					}
+				]
+			}
+		]
+	},
+	{
+		"country": "Sudan",
+		"lat": 12.862807,
+		"long": 30.21763599999997,
+		"indicators": [
+			{
+				"name": "Life Expectancy (Yrs)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 58.7119268292683
+					},
+					{
+						"year": 2012,
+						"value": 60.7854634146342
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Male)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 84.6175762864
+					},
+					{
+						"year": 2012,
+						"value": 89.06325
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Female)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 71.4294126202
+					},
+					{
+						"year": 2012,
+						"value": 82.67974
+					}
+				]
+			},
+			{
+				"name": "Adult Employment (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 47.5
+					},
+					{
+						"year": 2012,
+						"value": 47.7
+					}
+				]
+			},
+			{
+				"name": "Vehicles (per 1000 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 28
+					},
+					{
+						"year": 2012,
+						"value": 28
+					}
+				]
+			},
+			{
+				"name": "Urban Population (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 38.92
+					},
+					{
+						"year": 2012,
+						"value": 45.2
+					}
+				]
+			},
+			{
+				"name": "Cell Phones (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 1.43881988349727
+					},
+					{
+						"year": 2012,
+						"value": 40.5360348922221
+					}
+				]
+			},
+			{
+				"name": "Internet Users (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 28
+					},
+					{
+						"year": 2012,
+						"value": 28
+					}
+				]
+			}
+		]
+	},
+	{
+		"country": "Tanzania",
+		"lat": -6.369028,
+		"long": 34.888822000000005,
+		"indicators": [
+			{
+				"name": "Life Expectancy (Yrs)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 51.9353902439024
+					},
+					{
+						"year": 2012,
+						"value": 56.5897317073171
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Male)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 80.9171801804
+					},
+					{
+						"year": 2012,
+						"value": 78.47111
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Female)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 76.202015004
+					},
+					{
+						"year": 2012,
+						"value": 76.37378
+					}
+				]
+			},
+			{
+				"name": "Adult Employment (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 74.8
+					},
+					{
+						"year": 2012,
+						"value": 78.1
+					}
+				]
+			},
+			{
+				"name": "Vehicles (per 1000 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 73
+					},
+					{
+						"year": 2012,
+						"value": 73
+					}
+				]
+			},
+			{
+				"name": "Urban Population (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 23.44
+					},
+					{
+						"year": 2012,
+						"value": 26.4
+					}
+				]
+			},
+			{
+				"name": "Cell Phones (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 3.52829750321848
+					},
+					{
+						"year": 2012,
+						"value": 46.7958949204466
+					}
+				]
+			},
+			{
+				"name": "Internet Users (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 73
+					},
+					{
+						"year": 2012,
+						"value": 73
+					}
+				]
+			}
+		]
+	},
+	{
+		"country": "South Africa",
+		"lat": -25.77613,
+		"long": 28.17581999999993,
+		"indicators": [
+			{
+				"name": "Life Expectancy (Yrs)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 52.0134390243903
+					},
+					{
+						"year": 2012,
+						"value": 51.6113170731707
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Male)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 93.4984100702802
+					},
+					{
+						"year": 2012,
+						"value": 97.0451798211
+					}
+				]
+			},
+			{
+				"name": "Youth Literacy (Female)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 94.2885437837616
+					},
+					{
+						"year": 2012,
+						"value": 98.0921140315
+					}
+				]
+			},
+			{
+				"name": "Adult Employment (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 36.7
+					},
+					{
+						"year": 2012,
+						"value": 41.8
+					}
+				]
+			},
+			{
+				"name": "Vehicles (per 1000 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 159
+					},
+					{
+						"year": 2012,
+						"value": 159
+					}
+				]
+			},
+			{
+				"name": "Urban Population (%)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 58.34
+					},
+					{
+						"year": 2012,
+						"value": 61.7
+					}
+				]
+			},
+			{
+				"name": "Cell Phones (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 36.5595875523408
+					},
+					{
+						"year": 2012,
+						"value": 100.761532506656
+					}
+				]
+			},
+			{
+				"name": "Internet Users (per 100 people)",
+				"values": [
+					{
+						"year": 2003,
+						"value": 159
+					},
+					{
+						"year": 2012,
+						"value": 159
+					}
+				]
+			}
+		]
+	}
+]
+

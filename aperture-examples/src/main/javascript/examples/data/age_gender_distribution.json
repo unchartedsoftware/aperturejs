@@ -1,0 +1,196 @@
+{
+    "height": 200,
+    "width": 600,
+    "series": [
+        {
+            "gender": "female",
+            "data": [
+                {
+                    "agegroup": "0-4",
+                    "value": 3.33,
+                    "all": 6.81
+                },
+                {
+                    "agegroup": "5-9",
+                    "value": 3.56,
+                    "all": 7.3
+                },
+                {
+                    "agegroup": "10-14",
+                    "value": 3.56,
+                    "all": 7.3
+                },
+                {
+                    "agegroup": "15-19",
+                    "value": 3.49,
+                    "all": 7.18
+                },
+                {
+                    "agegroup": "20-24",
+                    "value": 3.3,
+                    "all": 6.74
+                },
+                {
+                    "agegroup": "25-29",
+                    "value": 3.41,
+                    "all": 6.89
+                },
+                {
+                    "agegroup": "30-34",
+                    "value": 3.62,
+                    "all": 7.29
+                },
+                {
+                    "agegroup": "35-39",
+                    "value": 4.05,
+                    "all": 8.07
+                },
+                {
+                    "agegroup": "40-44",
+                    "value": 4.02,
+                    "all": 7.97
+                },
+                {
+                    "agegroup": "45-49",
+                    "value": 3.63,
+                    "all": 7.14
+                },
+                {
+                    "agegroup": "50-54",
+                    "value": 3.19,
+                    "all": 6.19
+                },
+                {
+                    "agegroup": "55-59",
+                    "value": 2.47,
+                    "all": 4.78
+                },
+                {
+                    "agegroup": "60-64",
+                    "value": 2.01,
+                    "all": 3.84
+                },
+                {
+                    "agegroup": "65-69",
+                    "value": 1.82,
+                    "all": 2.38
+                },
+                {
+                    "agegroup": "70-74",
+                    "value": 1.76,
+                    "all": 3.15
+                },
+                {
+                    "agegroup": "75-79",
+                    "value": 1.55,
+                    "all": 2.63
+                },
+                {
+                    "agegroup": "80-84",
+                    "value": 1.11,
+                    "all": 1.76
+                },
+                {
+                    "agegroup": "85+",
+                    "value": 1.07,
+                    "all": 1.51
+                }
+            ]
+        },
+        {
+            "gender": "male",
+            "data": [
+                {
+                    "agegroup": "0-4",
+                    "value": 3.49,
+                    "all": 6.81
+                },
+                {
+                    "agegroup": "5-9",
+                    "value": 3.74,
+                    "all": 7.3
+                },
+                {
+                    "agegroup": "10-14",
+                    "value": 3.74,
+                    "all": 7.3
+                },
+                {
+                    "agegroup": "15-19",
+                    "value": 3.69,
+                    "all": 7.18
+                },
+                {
+                    "agegroup": "20-24",
+                    "value": 3.44,
+                    "all": 6.74
+                },
+                {
+                    "agegroup": "25-29",
+                    "value": 3.48,
+                    "all": 6.89
+                },
+                {
+                    "agegroup": "30-34",
+                    "value": 3.67,
+                    "all": 7.29
+                },
+                {
+                    "agegroup": "35-39",
+                    "value": 4.02,
+                    "all": 8.07
+                },
+                {
+                    "agegroup": "40-44",
+                    "value": 3.95,
+                    "all": 7.97
+                },
+                {
+                    "agegroup": "45-49",
+                    "value": 3.51,
+                    "all": 7.14
+                },
+                {
+                    "agegroup": "50-54",
+                    "value": 3.06,
+                    "all": 6.19
+                },
+                {
+                    "agegroup": "55-59",
+                    "value": 2.31,
+                    "all": 4.78
+                },
+                {
+                    "agegroup": "60-64",
+                    "value": 1.83,
+                    "all": 3.84
+                },
+                {
+                    "agegroup": "65-69",
+                    "value": 1.56,
+                    "all": 2.38
+                },
+                {
+                    "agegroup": "70-74",
+                    "value": 1.39,
+                    "all": 3.15
+                },
+                {
+                    "agegroup": "75-79",
+                    "value": 1.08,
+                    "all": 2.63
+                },
+                {
+                    "agegroup": "80-84",
+                    "value": 0.65,
+                    "all": 1.76
+                },
+                {
+                    "agegroup": "85+",
+                    "value": 0.44,
+                    "all": 1.51
+                }
+            ]
+        }
+    ]
+}

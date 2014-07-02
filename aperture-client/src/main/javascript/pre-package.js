@@ -1,0 +1,5 @@
+/*
+ * Aperture
+ */
+aperture = (function(aperture){
+

@@ -1,0 +1,622 @@
+{
+    "icons": [
+        {
+            "id": "default",
+            "label": "",
+            "type": "default",
+            "attributes": null
+        },
+        {
+            "id": "artifact",
+            "label": "Artifact",
+            "type": "artifact",
+            "attributes": null
+        },
+        {
+            "id": "artifact_annotation",
+            "label": "Annotation",
+            "type": "annotation",
+            "attributes": null
+        },
+        {
+            "id": "artifact_document",
+            "label": "Document",
+            "type": "document",
+            "attributes": null
+        },
+        {
+            "id": "document_excel",
+            "label": "Excel",
+            "type": "document",
+            "attributes": {
+                "mimetype": "application/excel"
+            }
+        },
+        {
+            "id": "document_msword",
+            "label": "MSWord",
+            "type": "document",
+            "attributes": {
+                "mimetype": "application/msword"
+            }
+        },
+        {
+            "id": "document_pdf",
+            "label": "PDF",
+            "type": "document",
+            "attributes": {
+                "mimetype": "application/pdf"
+            }
+        },
+        {
+            "id": "document_postscript",
+            "label": "PostScript",
+            "type": "document",
+            "attributes": {
+                "mimetype": "application/postscript"
+            }
+        },
+        {
+            "id": "document_powerpoint",
+            "label": "Powerpoint",
+            "type": "document",
+            "attributes": {
+                "mimetype": "application/powerpoint"
+            }
+        },
+        {
+            "id": "document_html",
+            "label": "HTML",
+            "type": "document",
+            "attributes": {
+                "mimetype": "text/html"
+            }
+        },
+        {
+            "id": "document_plain",
+            "label": "Plain",
+            "type": "document",
+            "attributes": {
+                "mimetype": "text/plain"
+            }
+        },
+        {
+            "id": "document_map",
+            "label": "Map",
+            "type": "map",
+            "attributes": null
+        },
+        {
+            "id": "document_snippet",
+            "label": "Snippet",
+            "type": "snippet",
+            "attributes": null
+        },
+        {
+            "id": "document_snippet_html",
+            "label": "HTML",
+            "type": "snippet",
+            "attributes": {
+                "mimetype": "text/html"
+            }
+        },
+        {
+            "id": "document_snippet_plain",
+            "label": "Plain",
+            "type": "snippet",
+            "attributes": {
+                "mimetype": "text/plain"
+            }
+        },
+        {
+            "id": "artifact_image",
+            "label": "Image",
+            "type": "image",
+            "attributes": null
+        },
+        {
+            "id": "artifact_video",
+            "label": "Video",
+            "type": "video",
+            "attributes": null
+        },
+        {
+            "id": "concept",
+            "label": "Concept",
+            "type": "concept",
+            "attributes": null
+        },
+        {
+            "id": "concept_belief",
+            "label": "Belief",
+            "type": "belief",
+            "attributes": null
+        },
+        {
+            "id": "entity",
+            "label": "Entity",
+            "type" : "entity",
+            "attributes": null
+        },
+        {
+            "id": "entity_actor",
+            "label": "Actor",
+            "type" : "actor",
+            "attributes": null
+        },
+        {
+            "id": "entity_place",
+            "label": "Place",
+            "type" : "place",
+            "attributes": null
+        },
+        {
+            "id": "entity_place_na",
+            "label": "NA",
+            "type" : "place",
+            "attributes": {
+                "continent": "na"
+            }
+        },
+        {
+            "id": "entity_place_eu",
+            "label": "EU",
+            "type" : "place",
+            "attributes": {
+                "continent": "eu"
+            }
+        },
+        {
+            "id": "entity_place_sa",
+            "label": "SA",
+            "type" : "place",
+            "attributes": {
+                "continent": "sa"
+            }
+        },
+        {
+            "id": "entity_place_af",
+            "label": "AF",
+            "type" : "place",
+            "attributes": {
+                "continent": "af"
+            }
+        },
+        {
+            "id": "entity_place_as",
+            "label": "AS",
+            "type" : "place",
+            "attributes": {
+                "continent": "as"
+            }
+        },
+        {
+            "id": "entity_place_oc",
+            "label": "OC",
+            "type" : "place",
+            "attributes": {
+                "continent": "oc"
+            }
+        },
+        {
+            "id": "entity_place_an",
+            "label": "AN",
+            "type" : "place",
+            "attributes": {
+                "continent": "an"
+            }
+        },
+        {
+            "id": "entity_facility",
+            "label": "facility",
+            "type" : "facility",
+            "attributes": null
+        },
+        {
+            "id": "entity_facility_factory",
+            "label": "factory",
+            "type" : "factory",
+            "attributes": null
+        },
+        {
+            "id": "entity_facility_store",
+            "label": "store",
+            "type" : "store",
+            "attributes": null
+        },
+        {
+            "id": "entity_facility_warehouse",
+            "label": "warehouse",
+            "type" : "warehouse",
+            "attributes": null
+        },
+        {
+            "id": "entity_facility_materials",
+            "label": "materials",
+            "type" : "materials",
+            "attributes": null
+        },
+        {
+            "id": "entity_organization",
+            "label": "Organization",
+            "type": "organization",
+            "attributes": null
+        },
+        {
+            "id": "entity_org_academic",
+            "label": "Academic",
+            "type": "organization",
+            "attributes": {
+                "role": "academic"
+            }
+        },
+        {
+            "id": "entity_org_business",
+            "label": "Business",
+            "type": "organization",
+            "attributes": {
+                "role": "business"
+            }
+        },
+        {
+            "id": "entity_org_criminal",
+            "label": "Criminal",
+            "type": "organization",
+            "attributes": {
+                "role": "criminal"
+            }
+        },
+        {
+            "id": "entity_org_military",
+            "label": "Military",
+            "type": "organization",
+            "attributes": {
+                "role": "military"
+            }
+        },
+        {
+            "id": "entity_org_political",
+            "label": "Political",
+            "type": "organization",
+            "attributes": {
+                "role": "political"
+            }
+        },
+        {
+            "id": "entity_org_religious",
+            "label": "Religious",
+            "type": "organization",
+            "attributes": {
+                "role": "religious"
+            }
+        },
+        {
+            "id": "entity_org_terrorist",
+            "label": "Terrorist",
+            "type": "organization",
+            "attributes": {
+                "role": "terrorist"
+            }
+        },
+        {
+            "id": "entity_person",
+            "label": "Person",
+            "type": "person",
+            "attributes": null
+        },
+        {
+            "id": "entity_person_academic",
+            "label": "Academic",
+            "type": "person",
+            "attributes": {
+                "role": "academic"
+            }
+        },
+        {
+            "id": "entity_person_business",
+            "label": "Business",
+            "type": "person",
+            "attributes": {
+                "role": "business"
+            }
+        },
+        {
+            "id": "entity_person_criminal",
+            "label": "Criminal",
+            "type": "person",
+            "attributes": {
+                "role": "criminal"
+            }
+        },
+        {
+            "id": "entity_person_military",
+            "label": "Military",
+            "type": "person",
+            "attributes": {
+                "role": "military"
+            }
+        },
+        {
+            "id": "entity_person_political",
+            "label": "Political",
+            "type": "person",
+            "attributes": {
+                "role": "political"
+            }
+        },
+        {
+            "id": "entity_person_religious",
+            "label": "Religious",
+            "type": "person",
+            "attributes": {
+                "role": "religious"
+            }
+        },
+        {
+            "id": "entity_person_terrorist",
+            "label": "Terrorist",
+            "type": "person",
+            "attributes": {
+                "role": "terrorist"
+            }
+        },
+        {
+            "id": "event",
+            "label": "Event",
+            "type": "event",
+            "attributes": null
+        }
+    ],
+    "relationships": [
+        {
+            "id": "5",
+            "sourceId": "artifact",
+            "targetId": "artifact_annotation"
+        },
+        {
+            "id": "6",
+            "sourceId": "artifact",
+            "targetId": "artifact_document"
+        },
+        {
+            "id": "7",
+            "sourceId": "artifact",
+            "targetId": "artifact_image"
+        },
+        {
+            "id": "8",
+            "sourceId": "artifact",
+            "targetId": "artifact_video"
+        },
+        {
+            "id": "9",
+            "sourceId": "artifact_document",
+            "targetId": "document_excel"
+        },
+        {
+            "id": "10",
+            "sourceId": "artifact_document",
+            "targetId": "document_msword"
+        },
+        {
+            "id": "11",
+            "sourceId": "artifact_document",
+            "targetId": "document_pdf"
+        },
+        {
+            "id": "12",
+            "sourceId": "artifact_document",
+            "targetId": "document_postscript"
+        },
+        {
+            "id": "13",
+            "sourceId": "artifact_document",
+            "targetId": "document_powerpoint"
+        },
+        {
+            "id": "14",
+            "sourceId": "artifact_document",
+            "targetId": "document_html"
+        },
+        {
+            "id": "15",
+            "sourceId": "artifact_document",
+            "targetId": "document_plain"
+        },
+        {
+            "id": "16",
+            "sourceId": "artifact_document",
+            "targetId": "document_map"
+        },
+        {
+            "id": "17",
+            "sourceId": "artifact_document",
+            "targetId": "document_snippet"
+        },
+        {
+            "id": "18",
+            "sourceId": "document_snippet",
+            "targetId": "document_snippet_html"
+        },
+        {
+            "id": "19",
+            "sourceId": "document_snippet",
+            "targetId": "document_snippet_plain"
+        },
+        {
+            "id": "20",
+            "sourceId": "concept",
+            "targetId": "concept_belief"
+        },
+        {
+            "id": "21",
+            "sourceId": "entity_organization",
+            "targetId": "entity_org_academic"
+        },
+        {
+            "id": "22",
+            "sourceId": "entity_organization",
+            "targetId": "entity_org_business"
+        },
+        {
+            "id": "23",
+            "sourceId": "entity_organization",
+            "targetId": "entity_org_criminal"
+        },
+        {
+            "id": "24",
+            "sourceId": "entity_organization",
+            "targetId": "entity_org_military"
+        },
+        {
+            "id": "25",
+            "sourceId": "entity_organization",
+            "targetId": "entity_org_political"
+        },
+        {
+            "id": "26",
+            "sourceId": "entity_organization",
+            "targetId": "entity_org_religious"
+        },
+        {
+            "id": "27",
+            "sourceId": "entity_organization",
+            "targetId": "entity_org_terrorist"
+        },
+        {
+            "id": "28",
+            "sourceId": "entity_person",
+            "targetId": "entity_person_academic"
+        },
+        {
+            "id": "29",
+            "sourceId": "entity_person",
+            "targetId": "entity_person_business"
+        },
+        {
+            "id": "30",
+            "sourceId": "entity_person",
+            "targetId": "entity_person_criminal"
+        },
+        {
+            "id": "31",
+            "sourceId": "entity_person",
+            "targetId": "entity_person_military"
+        },
+        {
+            "id": "32",
+            "sourceId": "entity_person",
+            "targetId": "entity_person_political"
+        },
+        {
+            "id": "33",
+            "sourceId": "entity_person",
+            "targetId": "entity_person_religious"
+        },
+        {
+            "id": "34",
+            "sourceId": "entity_person",
+            "targetId": "entity_person_terrorist"
+        },
+        {
+            "id": "36",
+            "sourceId": "entity",
+            "targetId": "entity_actor"
+        },
+        {
+            "id": "37",
+            "sourceId": "entity_actor",
+            "targetId": "entity_organization"
+        },
+        {
+            "id": "38",
+            "sourceId": "entity_actor",
+            "targetId": "entity_person"
+        },
+        {
+            "id": "39",
+            "sourceId": "entity",
+            "targetId": "entity_place"
+        },
+        {
+            "id": "40",
+            "sourceId": "default",
+            "targetId": "entity"
+        },
+        {
+            "id": "41",
+            "sourceId": "default",
+            "targetId": "artifact"
+        },
+        {
+            "id": "42",
+            "sourceId": "default",
+            "targetId": "concept"
+        },
+        {
+            "id": "43",
+            "sourceId": "default",
+            "targetId": "event"
+        },
+        {
+            "id": "44",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_na"
+        },
+        {
+            "id": "45",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_eu"
+        },
+        {
+            "id": "46",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_sa"
+        },
+        {
+            "id": "47",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_af"
+        },
+        {
+            "id": "48",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_as"
+        },
+        {
+            "id": "49",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_oc"
+        },
+        {
+            "id": "50",
+            "sourceId": "entity_place",
+            "targetId": "entity_place_an"
+        },        
+        {
+            "id": "51",
+            "sourceId": "entity",
+            "targetId": "entity_facility"
+        },
+        {
+            "id": "52",
+            "sourceId": "entity_facility",
+            "targetId": "entity_facility_factory"
+        },
+        {
+            "id": "52",
+            "sourceId": "entity_facility",
+            "targetId": "entity_facility_store"
+        },
+        {
+            "id": "52",
+            "sourceId": "entity_facility",
+            "targetId": "entity_facility_warehouse"
+        },
+        {
+            "id": "52",
+            "sourceId": "entity_facility",
+            "targetId": "entity_facility_materials"
+        }
+    ]
+}
