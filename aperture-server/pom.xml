@@ -319,7 +319,7 @@
 							<webAppConfig>
 								<contextPath>/aperture</contextPath>
 								<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-									<resourcesAsCSV>../aperture-client/src/main/javascript,../aperture-examples/src/main/javascript,src/test/webapp,${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
+									<resourcesAsCSV>../aperture-client/src/main/javascript,../aperture-examples/src/main/javascript,${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
 								</baseResource>
 
 								<!-- A bit of nasty to include the class files of other modules (avoids rebuild + install) -->
@@ -363,16 +363,13 @@
 						<artifactId>jetty-maven-plugin</artifactId>
 						<version>7.2.0.v20101020</version>
 						<configuration>
-
 							<reload>manual</reload>
-
 							<webAppConfig>
 								<contextPath>/aperture</contextPath>
 								<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-									<resourcesAsCSV>../aperture-client/src/main/javascript,../aperture-examples/src/main/javascript,${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
+									<resourcesAsCSV>${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
 								</baseResource>
 							</webAppConfig>
-
 						</configuration>
 
 						<dependencies>
