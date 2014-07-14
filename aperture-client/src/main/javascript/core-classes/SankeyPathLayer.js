@@ -319,6 +319,8 @@ function(namespace) {
 						targetPt = flowSpec.targetPt;
 						var updateSourceOffset = true;
 
+						flowWidth = Math.max(minWidth, flowSpec.width);
+
 						var sourceY;
 						if (targetEndpointMap.hasOwnProperty(flowSpec.target.duplicateId)) {
 							sourceY = targetEndpointMap[flowSpec.target.duplicateId];
@@ -331,7 +333,6 @@ function(namespace) {
 						}
 
 						if (targetPt) {
-							flowWidth = Math.max(minWidth, flowSpec.width);
 							sourcePt = {
 								x : flowSpec.source.x + flowSpec.source.r,
 								y : sourceY
