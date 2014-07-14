@@ -94,16 +94,16 @@ function(namespace) {
 				'width' : width
 			};
 
-			var src = sourceMap[sourceData.uid];
+			var src = sourceMap[flowSpec.source.uid];
 			if (src == null) {
-				src = sourceMap[sourceData.uid] = {'outflows':[]};
+				src = sourceMap[flowSpec.source.uid] = {'outflows':[]};
 			}
 			src.outflows.push(flowSpec);
 			src.anchor = this.valueFor('sankey-anchor', sourceData, 'top');
 
-			var trg = targetMap[targetData.uid];
+			var trg = targetMap[flowSpec.target.uid];
 			if (trg == null) {
-				trg = targetMap[targetData.uid] = {'inflows':[]};
+				trg = targetMap[flowSpec.target.uid] = {'inflows':[]};
 			}
 			trg.inflows.push(flowSpec);
 			trg.anchor = this.valueFor('sankey-anchor', targetData, 'top');
