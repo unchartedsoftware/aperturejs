@@ -904,39 +904,28 @@ function openLayersMaps() {
 
 			OpenLayers.Layer.prototype.moveTo.apply(this, arguments);
 
-			// Panning operation simply moves the layer's DIVs around and shouldn't
-			// need any adjustment
+			// Adjust content DIV to cover visible area + 1 equivalent area in each direction
+			topLeft = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
+			bottomRight = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
 
-			if (zoomChanged) {
-				// Zoom has changed so by definition has the required size of the content
-				// div since it represents the entire world in pixel coordinates
-				
-				var maxB = this.map.getMaxExtent();
-				
-				// Calculate pixel bounds (in layer DIV coord system) of the world
-				topLeft = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(maxB.left, maxB.top));
-				bottomRight = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(maxB.right, maxB.bottom));
+			var width = bottomRight.x - topLeft.x;
+			var height = bottomRight.y - topLeft.y;
 
-				// Move the content frame relative to the static DIV to correctly place the
-				// content w.r.t. the viewport
-				OpenLayers.Util.modifyDOMElement(this.contentFrame, null, topLeft,
-								new OpenLayers.Size(bottomRight.x - topLeft.x,
-												bottomRight.y - topLeft.y), 'absolute');
+			// Layer origin is offset that must be subtracted from a pixel location to transform
+			// from OpenLayer's layer pixel coordinates to the contentFrame's coordinates
+			this.olLayerOrigin = {
+				x: topLeft.x - width,
+				y: topLeft.y - height,
+			};
 
-				// Store the pixel location of -180,90 lat/lon.  We need this because when
-				// a feature wants to render at (lon,lat), open layers will return a pixel
-				// position in the coordinate space of the viewport.  We need to convert from
-				// the viewport-relative pixel position to the content DIV's pixel position.
-				this.topLeftPixelLocation = topLeft;
+			this.contentFrame.style.top = this.olLayerOrigin.y + 'px';
+			this.contentFrame.style.left = this.olLayerOrigin.x + 'px';
+			this.contentFrame.style.width = (3*width) + 'px';
+			this.contentFrame.style.height = (3*height) + 'px';
 
-				// Callback into the aperture-style layer to tell it that the content glasspanes
-				// will have to redraw with a new scale/offset
-				if (this.renderCallback) {
-					this.renderCallback();
+			if (this.onFrameChange) {
+				this.onFrameChange(bounds);
 				}
-			}
-
-			// Generally, do nothing
 		},
 
 		getContentPixelForLonLat : function( lon, lat ) {
@@ -949,8 +938,8 @@ function openLayersMaps() {
 			// Get layer pixel
 			var px = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(pt.x, pt.y));
 			// Transform pixel to contentFrame space
-			px.x -= this.topLeftPixelLocation.x;
-			px.y -= this.topLeftPixelLocation.y;
+			px.x -= this.olLayerOrigin.x;
+			px.y -= this.olLayerOrigin.y;
 
 			return px;
 		},
@@ -1041,7 +1030,7 @@ function openLayersMaps() {
 			var that = this;
 			this._canvasWidth = this.canvas_.root_.offsetWidth;
 			this._canvasHeight = this.canvas_.root_.offsetHeight;
-			this._layer.renderCallback = function(x,y) {
+			this._layer.onFrameChange = function(newBounds) {
 				// The OpenLayers layer has changed the canvas, must redraw all contents
 				that._canvasWidth = that.canvas_.root_.offsetWidth;
 				that._canvasHeight = that.canvas_.root_.offsetHeight;
