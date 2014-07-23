@@ -33,7 +33,7 @@ function(namespace) {
 				chartHeight);
 			node.userData.plotVisual = chart;
 		}
-		chart.attr({'stroke':borderWidth?borderStroke:null,
+		node.graphics.attr(chart, {'stroke':borderWidth?borderStroke:null,
 				'stroke-width':borderWidth,
 				'opacity':opacity,
 				'x': borderXPos,
@@ -41,7 +41,6 @@ function(namespace) {
 				'fill':fill, //Fill can't be a null value otherwise the chart will not be pannable.
 				'width':chartWidth,
 				'height':chartHeight});
-		chart.data('width', chartWidth);
 	},
 
 	calculateChartSpecs = function(node){

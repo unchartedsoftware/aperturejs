@@ -426,11 +426,17 @@ function(namespace) {
 
 					// fade in
 					element.attr('opacity', 0);
-					this.update(element, {'opacity': op}, transition);
+					this.attr(element, {'opacity': op}, transition);
 				}
 			},
 
-			update : function(element, attrs, transition) {
+			attr : function(element, attrs, transition) {
+				// Getter
+				if (util.isString(attrs)) {
+					return element.attr(attrs);
+				}
+
+				// Setter
 				if (!transition) {
 					element.attr(attrs);
 

@@ -229,10 +229,10 @@ function(namespace) {
 					if (!label.back) {
 						label.back = g.text(xPoint, yPoint, str);
 						g.data(label.back, node.data, index);
-						g.update(label.back, attr);
+						g.attr(label.back, attr);
 						g.apparate(label.back, changeSet.transition);
 					} else {
-						g.update(label.back, attr, changeSet.transition);
+						g.attr(label.back, attr, changeSet.transition);
 					}
 					
 					if (connect) {
@@ -243,7 +243,7 @@ function(namespace) {
 							label.path = g.path(pathStr);
 						} else {
 							var pathattr = {path:pathStr};
-							g.update(label.path, pathattr, changeSet.transition);
+							g.attr(label.path, pathattr, changeSet.transition);
 						}
 					} else {
 						if (label.path) {
@@ -257,10 +257,10 @@ function(namespace) {
 							label.front = g.text(xPoint, yPoint, str);
 							
 							g.data(label.front, node.data, index);
-							g.update(label.front, fattr);
+							g.attr(label.front, fattr);
 							g.apparate(label.front, changeSet.transition);
 						} else {
-							g.update(label.front, fattr, changeSet.transition);
+							g.attr(label.front, fattr, changeSet.transition);
 						}
 					}
 				}

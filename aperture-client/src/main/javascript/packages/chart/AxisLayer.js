@@ -334,12 +334,14 @@ function(namespace) {
 				yPos = bottom + offset;
 				rulePath = 'M'+left + ',' + yPos + 'L' + right + ',' + yPos;
 			}
-			var axisRule = node.graphics.path(rulePath).attr({fill:null, stroke:axisColor, 'stroke-width':ruleWidth});
+			var axisRule = node.graphics.path(rulePath);
+			node.graphics.attr(axisRule, {fill:null, stroke:axisColor, 'stroke-width':ruleWidth});
 			axisSet.push(axisRule);
 		}
 
 		// Take the path of the ticks and create a Raphael visual for it.
-		var axisTicks = node.graphics.path(path).attr({fill:null, stroke:axisColor, 'stroke-width':tickWidth});
+		var axisTicks = node.graphics.path(path);
+		node.graphics.attr(axisTicks, {fill:null, stroke:axisColor, 'stroke-width':tickWidth});
 		axisSet.push(axisTicks);
 		node.userData[type].axis = axisSet;
 

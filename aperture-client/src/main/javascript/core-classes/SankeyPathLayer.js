@@ -370,9 +370,10 @@ function(namespace) {
 					if (_sankeyCache[linkData.id]){
 						attrs.path = path.path;
 						var updateLink = _sankeyCache[linkData.id];
-						link.graphics.update(updateLink, attrs, transition);
+						link.graphics.attr(updateLink, attrs, transition);
 					} else {
-						_sankeyCache[linkData.id] = link.graphics.path(path.path).attr( attrs );
+						_sankeyCache[linkData.id] = link.graphics.path(path.path);
+						link.graphics.attr(_sankeyCache[linkData.id], attrs);
 					}
 				}
 			}

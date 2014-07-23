@@ -192,10 +192,11 @@ function(namespace) {
 					// now render it.
 					if (link.cache) {
 						attrs.path = path;
-						link.graphics.update(link.cache, attrs, transition);
+						link.graphics.attr(link.cache, attrs, transition);
 						
 					} else {
-						link.cache = link.graphics.path(path).attr( attrs );
+						link.cache = link.graphics.path(path);
+						link.graphics.attr(link.cache, attrs);
 					}
 				}
 					
