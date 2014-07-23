@@ -1094,13 +1094,17 @@ function openLayersMaps() {
 		},
 
 		/**
-		 * Given a location returns its pixel coordinates in container space.
+		 * Given a location returns its pixel coordinates in the viewPort space
 		 */
 		getXY: function(lon,lat) {
-			var px = this._layer.getContentPixelForLonLat(lon,lat);
-			px.x = px.x/this._canvasWidth;
-			px.y = px.y/this._canvasHeight;
-			return px;
+
+			var pt = new OpenLayers.LonLat(lon, lat);
+			
+			// Reproject to map's projection
+			if( this._layer.map.projection != apiProjection ) {
+				pt.transform(apiProjection, this._layer.map.projection);
+			}
+			return this._layer.map.getViewPortPxFromLonLat(pt);
 		},
 
 		getExtent: function() {
