@@ -109,7 +109,7 @@ function(namespace) {
 
 						// PROCESS GRAPHICS.
 						if (visual) {
-							gfx.update(visual, rattrs, changeSet.transition);
+							gfx.attr(visual, rattrs, changeSet.transition);
 						} else {
 							visual = gfx.image(
 									rattrs.src,
@@ -118,7 +118,7 @@ function(namespace) {
 									rattrs.width,
 									rattrs.height);
 
-							gfx.update(visual, rattrs);
+							gfx.attr(visual, rattrs);
 							gfx.apparate(visual, changeSet.transition);
 							icons.push(visual);
 						}

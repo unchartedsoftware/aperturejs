@@ -80,7 +80,8 @@ function(namespace) {
 		}
 
 		//TODO: Add logic for caching rule lines for reuse.
-		var line = node.graphics.path(path).attr({
+		var line = node.graphics.path(path);
+		node.graphics.attr(line, {
 				'fill':null, 
 				'stroke':lineColor, 
 				'stroke-width':lineWidth,

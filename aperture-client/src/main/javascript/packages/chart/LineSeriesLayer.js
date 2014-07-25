@@ -223,19 +223,19 @@ function(namespace) {
 					// have changed.
 					var hasDataChange = true;
 					if (segment){
-						var prevPath = segment.attr('path').toString();
+						var prevPath = node.graphics.attr(segment,'path').toString();
 						if (path === prevPath){
 							// No data change, update attributes and continue
-							if (segment.attr('stroke') != segmentInfo.stroke){
+							if (node.graphics.attr(segment, 'stroke') != segmentInfo.stroke){
 								attrSet.stroke = segmentInfo.stroke;
 							}
-							if (segment.attr('stroke-width') != strokeWidth){
+							if (node.graphics.attr(segment, 'stroke-width') != strokeWidth){
 								attrSet['stroke-width'] = strokeWidth;
 							}
-							if (segment.attr('stroke-dasharray') != strokeStyle){
+							if (node.graphics.attr(segment, 'stroke-dasharray') != strokeStyle){
 								attrSet['stroke-dasharray'] = strokeStyle;
 							}
-							if (segment.attr('stroke-opacity') != strokeOpacity){
+							if (node.graphics.attr(segment, 'stroke-opacity') != strokeOpacity){
 								attrSet['stroke-opacity'] = strokeOpacity;
 							}
 							hasDataChange = false;
@@ -250,7 +250,7 @@ function(namespace) {
 						segment = node.graphics.path(path);
 					}
 					// Apply attributes to the segment.
-					node.graphics.update(segment, 
+					node.graphics.attr(segment, 
 							attrSet, 
 							changeSet.transition);
 					// If the data has changed, update the

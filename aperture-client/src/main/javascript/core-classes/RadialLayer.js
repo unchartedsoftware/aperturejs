@@ -564,13 +564,13 @@ function(namespace) {
 						
 						if (path) {
 							attrs.path = outlinePath;
-							graphics.update(path, attrs, transition);
+							graphics.attr(path, attrs, transition);
 						} else {
 //								console.log(outlinePath);
 							
 							path = ud.outline = graphics.path(outlinePath);
 							graphics.toBack(path);
-							graphics.update(path, attrs);
+							graphics.attr(path, attrs);
 						}
 					} else if (ud.outline) {
 						graphics.remove(ud.outline);
@@ -599,7 +599,7 @@ function(namespace) {
 						shapes[j].graphic.transform = transform;
 
 						// apply all attributes.
-						graphics.update(visuals[j], shapes[j].graphic, transition);
+						graphics.attr(visuals[j], shapes[j].graphic, transition);
 
 						// Set the data associated with this visual element
 						graphics.data( visuals[j], data, [shapes[j].segment, shapes[j].series] );

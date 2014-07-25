@@ -508,23 +508,27 @@ function(namespace) {
 	 * @function
 	 */
 
+
 	/**
-	 * Updates an element previously returned by one of the element
-	 * constructors, optionally animating in the changes.
+	 * Retrieves or updates attributes of an element previously returned by 
+	 * one of the element constructors, optionally animating in the changes.
 	 *
 	 * ${protected}
 	 * 
 	 * @param {Object} element
-	 *  The element to update, previously returned by an element
+	 *  The element to read or update, previously returned by an element
 	 *  constructor.
 	 *
-	 * @param {Object} attributes
-	 *  Property values to update in the element.
+	 * @param {Object|String} attributes|key
+	 *  If an object is given, sets property values to update in the element. If
+	 *  a string is given, returns the attribute value for the given key.
 	 *
 	 * @param {aperture.animate.Transition} [transition]
-	 *  The optional animated transition to use.
+	 *  The optional animated transition to use. Only applicable when setting attribues.
 	 *
-	 * @name aperture.canvas.VectorGraphics.prototype.update
+	 * @returns the attribute value if reading attribute value, otherwise this.
+	 *
+	 * @name aperture.canvas.VectorGraphics.prototype.attr
 	 * @function
 	 */
 
