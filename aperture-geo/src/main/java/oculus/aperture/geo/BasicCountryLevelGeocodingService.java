@@ -48,7 +48,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.CharStreams;
-import com.google.common.io.Closeables;
 import com.google.inject.Singleton;
 
 /**
@@ -132,8 +131,11 @@ public class BasicCountryLevelGeocodingService implements GeocodingService {
 				s_logger.error("Failed to loan countries.json", e);
 			} catch (JSONException e) {
 				s_logger.error("Failed to parse countries.json", e);
-			}finally {
-				Closeables.closeQuietly(inp);
+			} finally {
+				try {
+					inp.close();
+				} catch (IOException e) {
+				}
 			}
 			
 		}
@@ -141,7 +143,7 @@ public class BasicCountryLevelGeocodingService implements GeocodingService {
 	
 	private static String getString(JSONObject record, String fieldName) {
 		try {
-			return record.getString(fieldName);
+			return record.isNull(fieldName)? null: record.getString(fieldName);
 		} catch (Exception e) {
 			return null;
 		}

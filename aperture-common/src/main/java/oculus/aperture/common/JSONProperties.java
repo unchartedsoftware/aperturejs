@@ -43,6 +43,14 @@ public class JSONProperties extends EmptyProperties {
 	
 	/**
 	 * Wraps a JSON object as the source of properties.
+	 * @throws JSONException 
+	 */
+	public JSONProperties(String json) throws JSONException {
+		this.obj = new JSONObject(json);
+	}
+
+	/**
+	 * Wraps a JSON object as the source of properties.
 	 */
 	public JSONProperties(JSONObject obj) {
 		this.obj = obj;
@@ -126,7 +134,7 @@ public class JSONProperties extends EmptyProperties {
 	@Override
 	public String getString(String key, String defaultValue) {
 		try {
-			return obj.getString(key);
+			return obj.isNull(key)? defaultValue: obj.getString(key);
 		} catch (JSONException e) {
 			return defaultValue;
 		}
