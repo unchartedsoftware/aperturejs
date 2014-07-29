@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>aperture</artifactId>
 		<groupId>oculus.aperture</groupId>
-		<version>1.0.8</version>
+		<version>1.0.9-SNAPSHOT</version>
 	</parent>
 	<groupId>oculus.aperture.service</groupId>
 	<artifactId>aperture-parchment</artifactId>
