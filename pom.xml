@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>oculus.aperture</groupId>
+	<artifactId>aperture</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0.8</version>
+
+	<name>Aperture JS</name>
+	<description>Parent module for building the Aperture JS project modules</description>
+	<url>http://aperturejs.com</url>
+	<scm>
+		<url>https://github.com/oculusinfo/influent</url>
+		<connection>scm:git:https://github.com/oculusinfo/influent.git</connection>
+	</scm>
+	<licenses>
+		<license>
+			<name>The MIT License (MIT)</name>
+			<url>http://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>djonker</id>
+			<name>David Jonker</name>
+			<email>support@oculusinfo.com</email>
+		</developer>
+	</developers>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.4</version>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<repositories>
+		<repository>
+			<id>maven-restlet</id>
+			<name>Public online Restlet repository</name>
+			<url>http://maven.restlet.org</url>
+		</repository>
+	</repositories>
+
+	<profiles>
+		<!-- Development Profile -->
+		<profile>
+			<id>Development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+
+		<!-- Deployment Profile -->
+		<profile>
+			<id>Deployment</id>
+		</profile>
+	</profiles>
+
+
+	<modules>
+		<!-- Aperture Common Java Classes -->
+		<module>aperture-common</module>
+
+		<!-- Client-side libraries (JS) -->
+		<module>aperture-client</module>
+
+		<!-- Service Provider Interface definitions -->
+		<module>aperture-spi</module>
+
+		<!-- Core server components -->
+		<module>aperture-server-core</module>
+
+		<!-- Basic Geocoding Service Implementation -->
+    	<module>aperture-geo</module>
+
+		<!-- HSCB Icon Service Implementation -->
+    	<module>aperture-icons</module>
+
+		<!-- Parchment service Implementation for source confidence -->
+    	<module>aperture-parchment</module>
+
+    	<!-- Image Capture Service Implementation -->
+    	<module>aperture-capture-phantom</module>
+
+		<!-- Reference Content Management Service Implementations -->
+		<module>aperture-cms</module>
+
+		<!-- Reference Layout Service Implementation -->
+		<module>aperture-layout</module>
+		
+		<!-- Module that handles making a distribution ZIP -->
+		<module>aperture-distribution</module>
+		
+		<!-- Graph Utilities -->
+		<module>aperture-graph</module>
+
+		
+		<!-- Client-side examples (JS) -->
+		<module>aperture-examples</module>
+
+		<!-- Sample server -->
+		<module>aperture-server</module>
+
+	</modules>
+
+
+	<!-- Specify dependency versions here to apply across Aperture -->
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- RESTLET -->
+			<dependency>
+				<groupId>org.restlet.jee</groupId>
+				<artifactId>org.restlet</artifactId>
+				<version>2.1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jee</groupId>
+				<artifactId>org.restlet.ext.servlet</artifactId>
+				<version>2.1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jee</groupId>
+				<artifactId>org.restlet.ext.jackson</artifactId>
+				<version>2.1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jee</groupId>
+				<artifactId>org.restlet.ext.json</artifactId>
+				<version>2.1.2</version>
+			</dependency>
+
+			<!-- Guava -->
+			<dependency>
+			    <groupId>com.google.guava</groupId>
+			    <artifactId>guava</artifactId>
+			    <version>15.0</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+			<!-- Guice -->
+			<dependency>
+				<groupId>com.google.inject</groupId>
+				<artifactId>guice</artifactId>
+				<version>3.0</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.inject.extensions</groupId>
+				<artifactId>guice-assistedinject</artifactId>
+				<version>3.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.inject.extensions</groupId>
+				<artifactId>guice-multibindings</artifactId>
+				<version>3.0</version>
+			</dependency>
+
+
+			<!-- Logging -->
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.17</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.7.5</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.7.5</version>
+			</dependency>
+
+			<!-- Testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.11</version>
+				<scope>test</scope>
+			</dependency>
+			
+			<!-- Caching -->
+			<dependency>
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache-core</artifactId>
+				<version>2.6.5</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache-web</artifactId>
+				<version>2.0.4</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+</project>

@@ -1,0 +1,66 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+
+  <id>full</id>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>lib</outputDirectory>
+      <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
+      <includes>
+        <include>oculus.aperture:aperture-common</include>
+        <include>oculus.aperture:aperture-spi</include>
+        <include>oculus.aperture:aperture-server-core</include>
+        <include>oculus.aperture.service:aperture-layout</include>
+        <include>oculus.aperture.service:aperture-icons</include>
+        <include>oculus.aperture.service:aperture-cms</include>
+        <include>oculus.aperture.service:aperture-capture-phantom</include>
+      </includes>
+    </dependencySet>
+
+    <dependencySet>
+      <outputDirectory>js</outputDirectory>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
+      <includes>
+        <include>oculus.aperture:aperture-client:jar</include>
+      </includes>
+      <unpackOptions>
+      <excludes>
+      	<exclude>**/META-INF/**</exclude>
+      </excludes>
+      </unpackOptions>
+      <unpack>true</unpack>
+    </dependencySet>
+
+    <dependencySet>
+      <outputDirectory>sample</outputDirectory>
+      <outputFileNameMapping>aperture.war</outputFileNameMapping>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
+      <includes>
+        <include>oculus.aperture:aperture-server</include>
+      </includes>
+    </dependencySet>
+
+  </dependencySets>
+  
+  <files>
+  	<file>
+      <outputDirectory>js-dependencies</outputDirectory>
+      <source>../aperture-examples/src/main/javascript/lib/proj4js.js</source>
+	</file>      
+  	<file>
+      <outputDirectory>js-dependencies</outputDirectory>
+      <source>../aperture-examples/src/main/javascript/lib/OpenLayers-textures.js</source>
+	</file>      
+  	<file>
+      <outputDirectory>js-dependencies</outputDirectory>
+      <source>../aperture-examples/src/main/javascript/lib/raphael.js</source>
+	</file>      	  
+  </files>
+  
+</assembly>

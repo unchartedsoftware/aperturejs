@@ -1,0 +1,412 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>aperture</artifactId>
+		<groupId>oculus.aperture</groupId>
+		<version>1.0.8</version>
+	</parent>
+
+	<artifactId>aperture-server</artifactId>
+	<packaging>war</packaging>
+
+	<name>Aperture Server</name>
+	<description>Server component of Aperture (WAR).  This module combines elements from other modules and packages a WAR.</description>
+	<url>http://aperturejs.com</url>
+
+	<licenses>
+		<license>
+			<name>The MIT License (MIT)</name>
+			<url>http://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/oculusinfo/aperturejs</url>
+		<connection>scm:git:https://github.com/oculusinfo/aperturejs.git</connection>
+	</scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Implied environment=development if environment property not set -->
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>aperture-client</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>aperture-client</artifactId>
+			<version>${project.parent.version}</version>
+			<classifier>jsdoc</classifier>
+			<type>zip</type>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>aperture-spi</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>aperture-spi</artifactId>
+			<version>${project.parent.version}</version>
+			<classifier>javadoc</classifier>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>aperture-server-core</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>oculus.aperture.service</groupId>
+			<artifactId>aperture-icons</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>oculus.aperture.service</groupId>
+			<artifactId>aperture-capture-phantom</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>oculus.aperture.service</groupId>
+			<artifactId>aperture-cms</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>oculus.aperture.service</groupId>
+			<artifactId>aperture-layout</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>aperture-examples</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+			<version>1.2.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-web</artifactId>
+			<version>1.2.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-guice</artifactId>
+			<version>1.2.0</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>dependency-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>oculus.aperture.service</groupId>
+									<artifactId>aperture-capture-phantom</artifactId>
+									<version>${project.parent.version}</version>
+									<outputDirectory>${basedir}/bin</outputDirectory>
+									<type>${aperture.examples.phantomjs.type}</type>
+									<destFileName>${aperture.examples.phantomjs.binary}</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<overlays>
+						<!-- Overlay client JS files -->
+						<overlay>
+							<groupId>${project.parent.groupId}</groupId>
+							<artifactId>aperture-client</artifactId>
+							<type>jar</type>
+						</overlay>
+						<!-- Overlay client JSDoc files -->
+						<overlay>
+							<groupId>${project.parent.groupId}</groupId>
+							<artifactId>aperture-client</artifactId>
+							<classifier>jsdoc</classifier>
+							<type>zip</type>
+							<targetPath>api</targetPath>
+						</overlay>
+						<!-- Overlay client JavaDoc files -->
+						<overlay>
+							<groupId>${project.parent.groupId}</groupId>
+							<artifactId>aperture-spi</artifactId>
+							<classifier>javadoc</classifier>
+							<type>jar</type>
+							<targetPath>api/spi/javadoc</targetPath>
+						</overlay>
+						<!-- Overlay examples -->
+						<overlay>
+							<groupId>${project.parent.groupId}</groupId>
+							<artifactId>aperture-examples</artifactId>
+							<type>jar</type>
+						</overlay>
+					</overlays>
+					<webResources>
+						<resource>
+			                <directory>src/main/webapp</directory>
+			                <filtering>true</filtering>
+			                <includes>
+			                    <include>WEB-INF/web.xml</include>
+			                </includes>
+		                </resource>
+		            </webResources>
+				</configuration>
+			</plugin>
+			
+			<!--sign if -Daperture.deployment.signed=true-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.3.2</version>
+				<executions>
+					<execution>
+						<id>sign</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>			
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>windows</id>
+			<activation>
+				<os>
+					<family>windows</family>
+				</os>
+			</activation>
+			<properties>
+				<aperture.examples.phantomjs.type>exe</aperture.examples.phantomjs.type>
+				<aperture.examples.phantomjs.binary>phantomjs.exe</aperture.examples.phantomjs.binary>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux</id>
+			<activation>
+				<os>
+					<family>unix</family>
+				</os>
+			</activation>
+			<properties>
+				<aperture.examples.phantomjs.type>linux-x86-64</aperture.examples.phantomjs.type>
+				<aperture.examples.phantomjs.binary>phantomjs</aperture.examples.phantomjs.binary>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux-i686</id>
+			<activation>
+				<os>
+					<family>unix</family>
+					<arch>i686</arch>
+				</os>
+			</activation>
+			<properties>
+				<aperture.examples.phantomjs.type>linux-i686</aperture.examples.phantomjs.type>
+				<aperture.examples.phantomjs.binary>phantomjs</aperture.examples.phantomjs.binary>
+			</properties>
+		</profile>
+		<profile>
+			<id>macosx</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<aperture.examples.phantomjs.type>macosx</aperture.examples.phantomjs.type>
+				<aperture.examples.phantomjs.binary>phantomjs</aperture.examples.phantomjs.binary>
+			</properties>
+		</profile>
+		<profile>
+			<id>unsigned install</id>
+			<activation>
+				<property>
+					<name>!aperture.deployment.signed</name>
+				</property>
+			</activation>
+			<properties>
+				<jarsigner.skip>true</jarsigner.skip>
+			</properties>
+		</profile>
+
+		<!-- Development profile provides access to test files -->
+		<profile>
+		   <id>development</id>
+			<activation>
+				<property>
+					<name>!environment</name>
+				</property>
+			</activation>
+		    <properties>
+				<guiceModules>oculus.aperture.capture.PhantomCaptureModule:oculus.aperture.cms.EhCacheCmsModule:oculus.aperture.icons.BaseIconModule:oculus.aperture.layout.BaseLayoutModule:</guiceModules>
+		    </properties>
+		    <build>
+				<plugins>
+					<!-- Jetty Run on content right out of the source folders -->
+					<plugin>
+						<groupId>org.mortbay.jetty</groupId>
+						<artifactId>jetty-maven-plugin</artifactId>
+						<version>7.2.0.v20101020</version>
+						<configuration>
+
+							<reload>manual</reload>
+
+							<webAppConfig>
+								<contextPath>/aperture</contextPath>
+								<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
+									<resourcesAsCSV>../aperture-client/src/main/javascript,../aperture-examples/src/main/javascript,${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
+								</baseResource>
+
+								<!-- A bit of nasty to include the class files of other modules (avoids rebuild + install) -->
+								<!-- Remove following line unless you need to quickly rebuild/debug Aperture -->
+								<!-- See http://stackoverflow.com/questions/3636493/multi-module-maven-project-and-jettyrun -->
+								<extraClasspath>target/classes;../aperture-server-core/target/classes</extraClasspath>
+
+								<!-- Specify an override web XML to use alternate configuration with no caching -->
+								<overrideDescriptor>src/main/resources/dev-override-web.xml</overrideDescriptor>
+							</webAppConfig>
+
+						</configuration>
+
+						<dependencies>
+							<dependency>
+								<groupId>org.eclipse.jetty</groupId>
+								<artifactId>jetty-server</artifactId>
+								<version>7.2.0.v20101020</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+		    </build>
+		</profile>
+		<profile>
+		   <id>deployment</id>
+			<activation>
+				<property>
+					<name>environment</name>
+					<value>deployment</value>
+				</property>
+			</activation>
+		    <properties>
+				<guiceModules>oculus.aperture.capture.PhantomCaptureModule:oculus.aperture.cms.EhCacheCmsModule:oculus.aperture.icons.BaseIconModule:oculus.aperture.layout.BaseLayoutModule:</guiceModules>
+		    </properties>
+		    <build>
+				<plugins>
+					<!-- Jetty Run on content right out of the source folders -->
+					<plugin>
+						<groupId>org.mortbay.jetty</groupId>
+						<artifactId>jetty-maven-plugin</artifactId>
+						<version>7.2.0.v20101020</version>
+						<configuration>
+							<reload>manual</reload>
+							<webAppConfig>
+								<contextPath>/aperture</contextPath>
+								<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
+									<resourcesAsCSV>${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
+								</baseResource>
+							</webAppConfig>
+						</configuration>
+
+						<dependencies>
+							<dependency>
+								<groupId>org.eclipse.jetty</groupId>
+								<artifactId>jetty-server</artifactId>
+								<version>7.2.0.v20101020</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+		    </build>
+		</profile>
+
+		<!-- Optionally include yworks module (commercial product). Profile is combined with one of the two above. -->
+		<profile>
+		   <id>yworks</id>
+			<activation>
+				<property>
+					<name>layout</name>
+					<value>yworks</value>
+				</property>
+			</activation>
+		    <properties>
+				<guiceModules>oculus.aperture.capture.PhantomCaptureModule:oculus.aperture.cms.EhCacheCmsModule:oculus.aperture.icons.BaseIconModule:oculus.aperture.layout.BaseLayoutModule:oculus.aperture.layout.YWorksLayoutModule:</guiceModules>
+		    </properties>
+			<dependencies>
+				<dependency>
+					<groupId>oculus.aperture.service</groupId>
+					<artifactId>aperture-layout-yworks</artifactId>
+					<version>${project.parent.version}</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</profile>
+
+	</profiles>
+
+
+</project>

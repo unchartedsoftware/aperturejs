@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Demos | Aperture JS</title>
+	<link rel="stylesheet" type="text/css" href="../all.css">
+	<link rel="stylesheet" href="../prettify/default.css">
+	<link rel="SHORTCUT ICON" href="../img/aperture-16x16.ico"/>
+	<script src="../lib/jquery.js"></script>
+	<script src="../lib/ga.js"></script>
+</head>
+
+<body>
+	<div id="header"></div>
+	<div id="content-strip">
+		<div id="header-logo">
+			<a href="../"><img src="../img/aperture-big.png"></a>
+		</div>
+		<div id="header-menu">
+			<a href="../" class="overview">&nbsp;</a>
+			<a href="../tour/">Tour</a>
+			<a href="../api/js/">API</a>
+			<a href="../demos/" class="selected">Demos</a>
+			<a href="../downloads/">Download</a>
+		</div>
+	
+		<div id="all">
+			<div id="submenu">
+				<div class="submenu-item" onclick="window.location.assign('../demos/');">
+					<div class="submenu-item-background selected">
+						<div class="submenu-item-number">1</div>
+					</div>
+					<div class="submenu-item-label">Demos</div>
+				</div>
+				<div class="submenu-item" onclick="window.location.assign('../examples/');">
+					<div class="submenu-item-background">
+						<div class="submenu-item-number">2</div>
+					</div>
+					<div class="submenu-item-label">API Examples</div>
+				</div>
+			</div>
+			
+			<div id="content">
+				<h1>Aperture Demonstrations</h1>
+				The following apps were developed as part of a series of exercises in 
+				agile development of visual analytics for big data. The exercises, each two to four weeks, 
+				were designed to test rapid development of tailored solutions for complex analytic problems
+				using Aperture, and to use the results to inform further development of the library.
+				<div class="content-context">
+					<a href="http://aperture.oculusinfo.com/charitynet/" target="_blank"><img src="../img/charity-net.png" class="home-image"></img>
+					<br>CharityNet</a>
+					<div class="oculus-footer"></div>
+				</div>
+				<div class="content-body">
+				<div class="case">				
+					<h2>Money Flow: CharityNet</h2>
+					CharityNet looks at the problem of large node-link data sets (graphs). In big data
+					typical of many real world problems, a brute force approach of showing every 
+					node in the data set does not scale (<a href="http://www.cs.umd.edu/~ben/papers/Shneiderman2006Network.pdf" target="_blank">Schneiderman, 2006</a>, et al). 
+					Issues include inability to support user questions and task functions,
+					limited visual expression of node and link semantics,
+					and undue effort required to explore and understand.
+					<p>
+					Our research objectives in this phase were to investigate and develop aggregated 
+					graph visualization techniques that:
+					</p>
+					<ul>
+					<li>Effectively summarize communities of nodes and their relationships.
+					<li>Do not sacrifice key member node characteristics in the aggregation.
+					<li>Are immediately readable, not <i>requiring</i> interaction for basic sense-making.
+					</ul>
+					Pillars of the technical approach include the following:
+					<ul>
+					<li>Graph Clustering, using Flow, Community, and Multi-Attribute techniques.
+					<li>Aggregation Markers, using "Community Rings" to summarize member nodes.
+					<li>Adaptive Labeling, by applying an optimized "Trellis Strategy" (<a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.163.2733&rep=rep1&type=pdf" target="_blank">Mote, 2007</a>).
+					</ul>
+					
+					<h3>The Analytic Question</h3>
+					CharityNet consists of a data set of 5,730 charities, 1.8M donors, and 3.3M donations over 2 years. 
+					The decision-oriented, analytic question posed for design of this exercise's solution was:
+					<a href="http://aperture.oculusinfo.com/charitynet/" target="_blank"><i>Reveal a charity's donor characteristics, 
+					and find strategies for increasing support.</i></a>
+				</div>
+				</div>
+				
+				<div class="content-context">
+					<a href="http://aperture.oculusinfo.com/econmodel/" target="_blank"><img src="../img/econmodel.png" class="home-image"></img>
+					<br>Linked Visible Behaviors</a>
+					<p><a href="http://www.oculusinfo.com">&#169;2013 Oculus Info Inc.</a></p>
+				</div>
+				<div class="content-body">
+					<h2>Behavioral Trends and Projections, with Transparency</h2>
+		
+					This monitoring application displays the past and projected behavior of key indicators, starting with a geospatial summary across 
+					all tracked countries. Clicking on a country of interest shows its indicators in detailed time series form. 
+					Further drill-down into any one indicator reveals influence of contributing factors.
+					
+					<p>Transparency of the underlying model is 
+					provided by a visualization technique of <i>linked visible behaviors</i>, coupled with narrative explanation. Provenance of source data 
+					(not available in the model shown) is provided by <i>reference annotations</i>. 
+					
+					<p>This app was developed over a period
+					of several months with a very early version of Aperture. The hybrid computational model and source data consisted of up to twelve years
+					of weekly and annual values for hundreds of variables, feeding key indicators for each of five countries.
+					Reference annotations provided a visualization of volume and provenance of data, with links to 
+					source data that included key-word markup of articles mined for sentiment analysis.
+					<p>The model and data set shown here is 
+					a more limited example, built on a model of the steel industry. Not all features are supported by this model.</p>
+
+					<h3>The Analytic Question</h3>
+					Design focused on answers to the following key questions:
+					<a href="http://aperture.oculusinfo.com/econmodel/" target="_blank"><i>what are current and projected global 
+					trends for key countries, what are the root causal factors, and what is the nature of their influence?</i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+
+
+</html>

@@ -1,0 +1,37 @@
+@CHARSET "ISO-8859-1";
+#header {
+	position: fixed;
+	background-color: #223;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	line-height: 18px;
+	font-size: 11px;
+	padding: 5px;
+	color: white;
+	z-index: 100000;
+}
+#header a {
+	padding: 6px;
+	padding-top: 5px;
+	text-decoration: none;
+	text-decoration: none;
+}
+#header a.selected {
+	color: white;
+	border-bottom: 2px solid #d52;
+}
+#header a:link, a:visited, a:active, a:hover {
+	color: #7f7f7f;
+}
+#header a:hover {
+	background-color: #3a3a43;
+}
+#all {
+	position: absolute;
+	width: 1000px;
+	top: 30px;
+	bottom: 0px;
+	padding: 10px;
+}

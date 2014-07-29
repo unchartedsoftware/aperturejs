@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="0.280724in" height="0.438016in" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 0.594787 0.92805"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str1 {stroke:#4C4C4C;stroke-width:0.0515009}
+    .str0 {stroke:#4C4C4C;stroke-width:0.0515009;stroke-linejoin:round}
+    .fil1 {fill:#656565;fill-rule:nonzero}
+    .fil0 {fill:black;fill-rule:nonzero;fill-opacity:0.200000}
+    .fil2 {fill:url(#id0);fill-rule:nonzero}
+   ]]>
+  </style>
+  <radialGradient id="id0" gradientUnits="userSpaceOnUse" cx="0.180845" cy="0.194133" r="0.221569" fx="0.180845" fy="0.194133">
+   <stop offset="0" style="stop-color:white"/>
+   <stop offset="1" style="stop-color:#D8D8D8"/>
+  </radialGradient>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <path class="fil0" d="M0.158523 0.662312c0.045887,-0.0198446 0.108899,-0.0321234 0.178109,-0.0321234 0.0692184,0 0.132239,0.0122788 0.178134,0.0321234 0.0494322,0.0213711 0.0800207,0.0522766 0.0800207,0.0876282 0,0.0353516 -0.0305885,0.0662488 -0.0800207,0.0876199 -0.0458953,0.0198446 -0.108916,0.0321234 -0.178134,0.0321234 -0.0229477,0 -0.045253,-0.00135968 -0.0664656,-0.00388717 -0.0200948,-0.00238569 -0.0393806,-0.00589749 -0.0574734,-0.0103602l-0.133682 0.0533777c-0.00595588,0.00277774 -0.0132798,0.00110109 -0.0173755,-0.00437098 -0.0046963,-0.00627286 -0.00342839,-0.0151817 0.00284448,-0.019878l0.0748239 -0.0563223c-0.015165,-0.00820811 -0.0279192,-0.0174339 -0.0376705,-0.0274271 -0.0149231,-0.0152651 -0.0231812,-0.0324571 -0.0231812,-0.0508752l5.8391e-005 0c0,-0.0353432 0.0305885,-0.0662488 0.0800124,-0.0876282z"/>
+  <polygon class="fil1 str0" points="0.206254,0.225389 0.0500327,0.902358 0.303733,0.251398 "/>
+  <path class="fil2 str1" d="M0.46888 0.247344c0,0.122304 -0.0992313,0.22151 -0.221594,0.22151 -0.122363,0 -0.221535,-0.0992063 -0.221535,-0.22151 0,-0.122388 0.0991729,-0.221594 0.221535,-0.221594 0.122363,0 0.221594,0.0992063 0.221594,0.221594z"/>
+ </g>
+</svg>

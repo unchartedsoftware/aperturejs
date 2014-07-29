@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="{+IO.encoding+}" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		<title>{+data.subtitle+} | <if test="JSDOC.opt.D.title">{+JSDOC.opt.D.title+}<else />JsDoc Reference</if></title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<meta name="mobileoptimized" content="0" />
+
+		<link rel="stylesheet" href="{+Link.base+}css/all.css" media="all" />
+		<link rel="stylesheet" href="{+Link.base+}../../jstests/test.css" media="all" >
+
+		<link rel="stylesheet" href="{+Link.base+}css/handheld.css" media="only screen and (max-width: 660px)" />
+		<link rel="stylesheet" href="{+Link.base+}css/handheld.css" media="handheld" />
+		<link rel="stylesheet" href="{+Link.base+}css/screen.css" media="screen and (min-width: 661px)" />
+		<link rel="SHORTCUT ICON" href="{+Link.base+}css/aperture-16x16.ico"/>
+
+		<script>
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-37476989-1']);
+			_gaq.push(['_trackPageview']);
+			 
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+		
+		<script src="{+Link.base+}javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="{+Link.base+}javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+	<div id="header"></div>
+	<div id="content-strip">
+	<div id="header-logo">
+		<a href="{+Link.base+}../../"><img src="{+Link.base+}css/aperture-big.png"/></a>
+	</div>
+	<div id="header-menu">
+		<a href="{+Link.base+}../../tour/">Tour</a>
+		<a href="{+Link.base+}" class="selected">API</a>
+		<a href="{+Link.base+}../../demos/">Demos</a>
+		<a href="{+Link.base+}../../downloads/">Download</a>
+
+		<span id="testlinks">
+			<a href="{+Link.base+}../../examples/tests.html">Tests</a>
+		</span>
+	</div>
+
+	<div id="submenu">
+		<div class="submenu-item" onclick="window.location.assign('{+Link.base+}');">
+			<div class="submenu-item-background selected">
+				<div class="submenu-item-number">1</div>
+			</div>
+			<div class="submenu-item-label">JavaScript</div>				
+		</div>
+		<div class="submenu-item" onclick="window.location.assign('{+Link.base+}../../api/rest/');">
+			<div class="submenu-item-background">
+				<div class="submenu-item-number">2</div>
+			</div>
+			<div class="submenu-item-label">REST</div>
+		</div>
+		<div class="submenu-item" onclick="window.location.assign('{+Link.base+}../../api/spi/');">
+			<div class="submenu-item-background">
+				<div class="submenu-item-number">3</div>
+			</div>
+			<div class="submenu-item-label">Java</div>
+		</div>
+	</div>
+	

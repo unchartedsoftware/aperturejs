@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Tour | Aperture JS</title>
+	<link rel="stylesheet" type="text/css" href="../all.css">
+	<link rel="stylesheet" href="../prettify/default.css">
+	<link rel="SHORTCUT ICON" href="../img/aperture-16x16.ico"/>
+	<script src="../lib/jquery.js"></script>
+	<script src="../lib/ga.js"></script>
+</head>
+
+<body>
+	<div id="header"></div>
+	<div id="content-strip">
+		<div id="header-logo">
+			<a href="../"><img src="../img/aperture-big.png"></a>
+		</div>
+		<div id="header-menu">
+			<a href="../" class="overview">&nbsp;</a>
+			<a href="" class="selected">Tour</a>
+			<a href="../api/js/">API</a>
+			<a href="../demos/">Demos</a>
+			<a href="../downloads/">Download</a>
+		</div>
+	
+		<div id="all">
+			<div id="submenu">
+				<div class="submenu-item" onclick="window.location.assign('');">
+					<div class="submenu-item-background selected">
+						<div class="submenu-item-number">1</div>
+					</div>
+					<div class="submenu-item-label">Layers</div>
+				</div>
+				<div class="submenu-item" onclick="window.location.assign('interaction/');">
+					<div class="submenu-item-background">
+						<div class="submenu-item-number">2</div>
+					</div>
+					<div class="submenu-item-label">Interaction</div>
+				</div>
+			</div>
+			
+			<div id="content">
+				<div class="content-context">
+					<a href="http://aperture.oculusinfo.com/econmodel/" target="_blank"><img src="../img/econmodel.png" class="home-image"></img>
+					<br>NodeLink, Chart, LineSeries and Radial indicator layers are all involved in providing a view of 
+					influencing behavioral factors in this demo app.</a>
+				<div class="oculus-footer"></div>
+				</div>
+				<div class="content-body">
+					<h1>Layer Based Visualization Assembly</h1>
+		
+					Aperture enables richly layered, coordinated and expressive combinations of map, chart, network
+					and timeline forms and interactions appropriate for complex problems, in a service-oriented Web 2.0 environment.
+					Hierarchical layer assembly is designed to facilitate a merging or fusing of multiple information 
+					facets into a more unified, task centric display of information than a standard widget based approach 
+					with limited configuration options.
+					<p>
+					Aperture builds on principles and lessons learned from <a href="http://www.oculusinfo.com/technology/" target="_blank">previous generations</a> 
+					of cross-platform visualization libraries we have built for ourselves and for clients over the past twenty years, as well as current best of 
+					breed JavaScript libraries.
+					
+					<h3>A Common, Declarative Grammar</h3>
+					A conventional approach to open-ended interactive visualization APIs require that the programmer be responsible for
+					procedurally looping through visual items to set graphic attributes based on data and application state. Aperture 
+					instead uses a declarative approach to systematically describe how data should be visualized, and how 
+					to reflect state changes like focus, selection and filtering. 
+					
+					<p>The benefits of a declarative
+					approach have been well documented (<a href="http://vis.stanford.edu/files/2010-Protovis-InfoVis.pdf" target="_blank">Heer, 2010</a>). By describing only <i>what</i> the visualization should do, the
+					<i>how</i> can be taken care of by the library itself. This enables a developer to build apps more quickly,
+					and enables the library to handle platform specific implementation variances and efficiencies.
+					
+				</div>
+				
+				<div class="content-context">
+					<img src="../img/ecosystem.png" class="home-image"></img>
+					<br><br><br>
+					<a href="http://www.oculusinfo.com">&#169;2013 Oculus Info Inc.</a>
+				</div>
+				<div class="content-body">					
+					<h2>Aperture and other Libraries</h2>
+					All libraries play a role within a broader ecosystem. We are often asked how Aperture
+					differs from other relatively well recognized visualization libraries in that ecosystem, such as the now defunct
+					<a href="http://mbostock.github.com/protovis/" target="_blank">Protovis</a> and
+					its successor, <a href="http://d3js.org/" target="_blank">D3</a>.
+					
+					<h3>Broader Scope of Interoperability</h3>
+					Aperture leverages <a href="http://openlayers.org/" target="_blank">OpenLayers</a> under the hood to provide 
+					<i>extensive support for GIS data</i>, where standards are both important
+					and widespread. For rendering support on modern browsers <i>as well as IE7 and IE8</i> (at the time of writing 
+					still the most common browser out there), we also currently use <a href="http://raphaeljs.com/" target="_blank">Raphaël</a>
+					 for SVG and VML support. This is something
+					we may look to extend in the future to gain additional rendering performance. Aperture also includes
+					a strategic set of supporting services that fill useful capability gaps or abstract use of common web services.
+					<p>
+					While the scope of Aperture is broad, it is intended to be modular and open. It supports user inclusion of 
+					any subset of JS packages, with or without supporting services, and can easily be used with other JavaScript libraries
+					and frameworks.
+					
+					<h3>Natural, Layer Based Mapping Grammar</h3>
+					While much has been published in theory about appropriate grammars for visualization assembly, in practice
+					we find that implementations have not been sufficient for a non-expert to intuit what
+					building blocks might be required for an app and how to go about putting them together. 
+					Our ultimate goal is to be able to empower those outside of the expert visualization and HTML5 graphics communities 
+					to be able to build tailored, best practice visual analytics more effectively and in less time.
+					<p>
+					One of the most intuitive models for describing a visualization assembly, called a 
+					<a href="../api/js/symbols/aperture.vizlet.html">vizlet</a> in Aperture, is the one used to
+					explain it to an end user: a legend. With this in mind, we borrow a number of concepts and terms from the geospatial world.
+					<a href="../api/js/symbols/aperture.Layer.html">Layers</a> graphically represent particular facets of 
+					information within the same spatial context, <a href="../api/js/symbols/aperture.Mapping.html">Mappings</a> 
+					describe how properties of visual items are mapped from data and state and in doing so may use
+					<a href="../api/js/symbols/aperture.MapKey.html">Map Keys</a>, which each describe a visual encoding for 
+					a <a href="../api/js/symbols/aperture.Range.html">Range</a> of data values. 
+					<p>The vocabulary used to 
+					articulate these relationships is modeled after natural language. For instance,
+					<code>barSeries.map( 'fill' ).from( 'year' ).using( yearColorKey )</code> defines a mapping of bar fill color from
+					the year property of each data item, using a lookup of color from the yearColorKey map key. More extensive examples
+					are provided in the Demos, <a href="../examples/">API Examples</a> section.
+					<p>
+					With what we believe is a more structured, common and natural grammar for mapping data to visual form we 
+					provide what we hope is a more intuitive language for building visualization. Ultimately our goal is that the language
+					be sufficiently structured and descriptive to inform design guidance of a user towards visual solutions for difficult analytic 
+					problems - something we will be working on this year.
+					<p>
+					<a href="interaction/" class="next">Next: Interaction...</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+
+
+</html>

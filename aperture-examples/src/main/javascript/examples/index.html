@@ -1,0 +1,364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+    Copyright (c) 2013-2014 Oculus Info Inc. 
+    http://www.oculusinfo.com/
+    
+    Released under the MIT License.
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy of
+    this software and associated documentation files (the "Software"), to deal in
+    the Software without restriction, including without limitation the rights to
+    use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+    of the Software, and to permit persons to whom the Software is furnished to do
+    so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Examples | Aperture JS</title>
+	<link rel="stylesheet" href="../prettify/default.css">
+	<link rel="stylesheet" type="text/css" href="../all.css">
+	<link rel="SHORTCUT ICON" href="../img/aperture-16x16.ico"/>
+	<script src="../lib/jquery.js"></script>
+	<script src="../lib/ga.js"></script>
+	<!-- script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script -->
+</head>
+
+<body>
+	<div id="header"></div>
+	<div id="content-strip">
+		<div id="header-logo">
+			<a href="../"><img src="../img/aperture-big.png"></a>
+		</div>
+		<div id="header-menu">
+			<a href="../" class="overview">&nbsp;</a>
+			<a href="../tour/">Tour</a>
+			<a href="../api/js/">API</a>
+			<a href="../demos/" class="selected">Demos</a>
+			<a href="../downloads/">Download</a>
+		</div>
+		
+		<div id="all">
+			<div id="submenu">
+				<div class="submenu-item" onclick="window.location.assign('../demos/');">
+					<div class="submenu-item-background">
+						<div class="submenu-item-number">1</div>
+					</div>
+					<div class="submenu-item-label">Demos</div>
+				</div>
+				<div class="submenu-item" onclick="window.location.assign('../examples/');">
+					<div class="submenu-item-background selected">
+						<div class="submenu-item-number">2</div>
+					</div>
+					<div class="submenu-item-label">API Examples</div>
+				</div>
+			</div>
+			
+			<div id="index">
+				<div id="index-content"></div>
+			</div>
+			<div id="example" class="footer-padding">
+				<h1>Examples</h1>
+				<h3 id="title"></h3>
+				<div id="content"></div>
+		
+				Example Code:
+				<div id="sourceToggle"><pre class="code"><code class="html" id="source"></code></pre></div>
+		
+				<p>Source: <a id="sourceLink">None</a></p>
+				<div class="oculus-footer"></div>	
+			</div>
+		</div>
+	</div>
+</body>
+
+
+<!-- core Aperture dependencies -->
+<script src="../lib/raphael.js"></script>
+<script src="../lib/json2-min.js"></script>
+
+<!-- aperture.pubsub dependency (optional) -->
+<script src="../lib/OpenAjaxUnmanagedHub.js"></script>
+
+<!-- aperture services dependency: io, capture, layout, etc. (optional) -->
+<!-- script src="../lib/jquery.js"></script -->
+
+<!-- aperture.geo dependency; proj4js must be loaded b4 OpenLayers. (optional) -->
+<script src="../lib/proj4js.js"></script>
+<script src="../lib/OpenLayers-textures.js"></script>
+
+<!-- libraries we make use of in the examples framework -->
+<script src="../lib/jquery.address.js"></script>
+<script src="../lib/highlight.pack.js"></script>
+<script src="../lib/require.js"></script>
+
+<!-- Aperture -->
+<script src="../aperture.js"></script>
+<script src="../rest/config.js"></script>
+<!-- (alternate to above) script src="../aperture-exampleconfig.js"></script -->
+
+
+
+
+<!-- Dynamically load the specified example -->
+<script>
+(function() {
+	
+	// tell require to look in lib for its dependencies
+	require({
+		paths: {
+			'text': '../lib/text',
+			'order': '../lib/order'
+		}
+	});
+	
+	// Hash change
+	var examples= {},
+		loading = {},
+
+		// request load permission.
+		getLoadPermission = function ( contentSrc ) {
+			if ( !contentSrc ) return;
+
+			// don't load again if already loading
+			if ( loading[contentSrc] !== undefined ) {
+				loading[contentSrc] = true;
+				return false;
+			}
+
+			// cancel anything outstanding.
+			aperture.util.forEach(loading, function( value, name ) {
+				loading[name] = false;
+			});
+
+			return loading[contentSrc] = true;
+		},
+
+		// request execute permission, once loaded.
+		getExecutePermission = function ( contentSrc ) {
+			if ( loading[contentSrc] !== undefined ) {
+				var execute = loading[contentSrc];
+				delete loading[contentSrc];
+
+				return execute;
+			}
+
+			aperture.log.warn('Permission requested to execute an example that is not registered for loading.');
+			return false;
+		},
+
+		// handler for setting the current example.
+		setExample = function( source ) {
+
+			var example;
+
+			// lookup the example.
+			if ( source )
+				example = examples[source];
+
+			// default page
+			if (! example ) {
+
+				$('#title').text('Aperture Examples');
+				// Load snippet into content
+				$('#content').html(
+						'An assortment of simple examples are included here to show '+
+						'how one might assemble a vizlet using Aperture layers and mappings.'+
+						'Clicking on a thumbnail to the left will load the example and code.<br><br><br><br>'
+						);
+				$('#source').empty();
+
+				return;
+			}
+
+			// Set title
+			$('#title').text( example.title );
+			document.title = (example.label || '?') + ' | Examples | Aperture JS';
+			
+			// the source to execute
+			var contentSrc = example.dir+example.content;
+
+			// first ask whether we can load it, which depends on whether there is a load for it in progress.
+			if ( !getLoadPermission(contentSrc) ) return;
+
+			// log the event
+            _gaq.push(['_trackEvent', 'View', 'Click', contentSrc]);
+            
+			// Add content -  prepent path prefix if it exists
+			$('#content').load( contentSrc, function( response, status, xhr ) {
+
+					// first check if we can execute it, which depends on
+					// whether this is the active request. if not, we don't
+					// care if there is an error or not.
+					if ( !getExecutePermission(contentSrc) ) return;
+
+					// process errors.
+					if ( status == 'error' ) {
+
+						$('#title').text('Load Error');
+						// Load snippet into content
+						$('#content').text( 'Oops! Failed to load example. '
+								+ xhr.status + ': ' + xhr.statusText );
+						$('#source').text('');
+
+						return;
+					}
+
+					// Now the DOM content is there, add the scripts
+					var prefix = example.scripts.length > 1? 'order!' : '',
+						scripts = aperture.util.map(example.scripts, function(scriptName) {
+							return prefix + example.dir + scriptName;
+					});
+
+					// Load scripts in order
+					require(scripts, function() {
+						var result = arguments[scripts.length-1].call();
+
+						// seems to be a bug with the order! thing?
+						if (aperture.util.isFunction(result)) {
+							result.call();
+						}
+					});
+
+					// Add source link
+					if( example.source ) {
+						var src = example.dir+example.source;
+
+						// Add link to source
+						$('#sourceLink').text(src).attr("href", src);
+
+						// Add actual source
+						require( ['text!' + src], function(text) {
+							var st = '//START-EXAMPLE',
+								si = text.indexOf(st),
+								et = '//END-EXAMPLE',
+								ei = text.lastIndexOf(et);
+
+							if (si > 0) {
+								text = (ei > 0)?
+										text.substring(si + st.length, ei) :
+											text.substring(si + st.length);
+							}
+
+							$('#source').text( text );
+							$('#source').each(function(i, e) {
+								hljs.highlightBlock(e, '    ');
+							});
+						});
+					}
+				}
+			);
+		},
+
+		// load up the index.
+		loadExampleIndex = function() {
+			var createIndex = function( bundle ) {
+				var addExampleLink = function ( example ) {
+						if (!example.link) {
+							return;
+						}
+						var html = '<div class="index-link"><div class="index-thumbnail"><div class="index-thumbnail-mask"></div></div><a href="#'
+							+ example.content
+							+ '">'
+//							+ example.link
+							+ '</a></div>',
+
+							block = $(html).appendTo('#index-content'),
+							link = $('.index-thumbnail', block);
+
+						if ( example.thumb ) {
+							link.css( 'background-image', 'url(' + example.dir + example.thumb + ')' );
+						}
+						link.click(function() {
+							$.address.value( example.content );
+						});
+					},
+					addExampleGroup = function ( group ) {
+						var html = '<div class="index-group-title">'
+							+ group.group
+							+ '</div>';
+
+						$('#index-content').append(html);
+					};
+
+				// iterate over groups
+				for (var i=0; i< bundle.length; i++) {
+					var group = bundle[i];
+
+					// add a group to the exampe list
+					addExampleGroup(group);
+
+					var list = group.examples;
+
+					// iterate over examples within each group.
+					for (var j=0; j< list.length; j++) {
+						var example = list[j];
+
+						// groups supply the directory unless specified by the example.
+						if (!example.dir)
+							example.dir = group.dir;
+
+						if (example.dir.charAt(example.dir.length-1) !== '/')
+							example.dir += '/';
+
+						addExampleLink( example );
+
+						examples[example.content] = example;
+					}
+				}
+
+				// Extract the hash to get the example bundle name
+				setExample( window.location.hash.slice(1) );
+			},
+
+			// No example to load, display error
+			failedIndexLoad = function() {
+				$('#title').text('Error: No Example Index Found');
+				// Load snippet into content
+				$('#content').text( "Problem loading examples.json" );
+				$('#source').empty();
+			};
+
+			// Load the bundle def
+			$.ajax( {
+				url: 'examples.json',
+				dataType: 'json',
+				success: createIndex,
+				failure: failedIndexLoad
+			});
+		},
+
+		onHashChange = function( hash ) {
+			// Extract the hash to get the example bundle, which is keyed by the content string
+			setExample( hash.value );
+		};
+
+
+	// On page load:
+	$(function() {
+		// Initialize
+		loadExampleIndex();
+
+		// Disable the auto-formating the plugin
+		// is set to do by default.
+		$.address.strict(false);
+		// Set the hash change listener.
+		$.address.change(onHashChange);
+	});
+
+})();
+
+</script>
+
+</html>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="0.290949in" height="0.332295in" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 10.5932 12.0986"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str0 {stroke:#4B4B4B;stroke-width:0.50557}
+    .fil1 {fill:#7F7F7F;fill-rule:nonzero}
+    .fil0 {fill:url(#id0)}
+   ]]>
+  </style>
+  <linearGradient id="id0" gradientUnits="userSpaceOnUse" x1="0.252857" y1="6.04921" x2="10.3403" y2="6.04921">
+   <stop offset="0" style="stop-color:white"/>
+   <stop offset="0.709804" style="stop-color:#E9E9E9"/>
+   <stop offset="1" style="stop-color:lightgrey"/>
+  </linearGradient>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <rect class="fil0 str0" x="0.252857" y="0.252857" width="10.0875" height="11.5929" rx="0.756851" ry="0.756851"/>
+  <path class="fil1" d="M5.7674 6.27871c0,0.473032 -0.174735,0.876972 -0.525352,1.21583 -0.35162,0.332842 -0.776345,0.499693 -1.26629,0.499693 -0.492813,0 -0.913524,-0.166851 -1.25869,-0.499693 -0.352194,-0.338863 -0.525925,-0.742803 -0.525925,-1.21583 0,-0.476042 0.173732,-0.880985 0.525925,-1.21282 0.34216,-0.335852 0.75556,-0.503707 1.24594,-0.506717l0 1.67109 1.8044 0 0 0.0484499zm1.22974 -0.0484499l0 0 1.601 0 0 0.478049 -1.601 0 0 -0.478049zm-0.24999 0.479052l0 0 -0.478909 0 0 -0.479052 0.478909 0 0 0.479052zm-0.479912 -1.43744l0 0 0.479912 0 0 0.480342 -0.479912 0 0 -0.480342zm0.729902 0l0 0 1.601 0 0 0.480342 -1.601 0 0 -0.480342zm1.601 -0.479625l0 0 -1.601 0 0 -0.478479 1.601 0 0 0.478479zm0.318938 -1.27848l0 0 -7.03111 0 0 -1.11764 7.03111 0 0 1.11764zm-2.64984 0.799423l0 0 0.479912 0 0 0.478049 -0.479912 0 0 -0.478049zm3.12989 -2.39698l0 0 -8.14919 0 0 6.87014 8.14919 0 0 -6.87014z"/>
+ </g>
+</svg>

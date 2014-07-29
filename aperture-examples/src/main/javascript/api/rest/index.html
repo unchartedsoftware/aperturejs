@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>REST | Aperture JS</title>
+	<link rel="stylesheet" type="text/css" href="../../all.css">
+	<link rel="stylesheet" href="../../prettify/default.css">
+	<link rel="SHORTCUT ICON" href="../../img/aperture-16x16.ico"/>
+	<script src="../../lib/jquery.js"></script>
+	<script src="../../lib/ga.js"></script>
+</head>
+
+<body>
+	<div id="header"></div>
+	<div id="content-strip">
+		<div id="header-logo">
+			<a href="../../"><img src="../../img/aperture-big.png"></a>
+		</div>
+		<div id="header-menu">
+			<a href="../../" class="overview">&nbsp;</a>
+			<a href="../../tour/">Tour</a>
+			<a href="../../api/js/" class="selected">API</a>
+			<a href="../../demos/">Demos</a>
+			<a href="../../downloads/">Download</a>
+		</div>
+	
+		<div id="all">
+			<div id="submenu">
+				<div class="submenu-item" onclick="window.location.assign('../../api/js/');">
+					<div class="submenu-item-background">
+						<div class="submenu-item-number">1</div>
+					</div>
+					<div class="submenu-item-label">JavaScript</div>				
+				</div>
+				<div class="submenu-item" onclick="window.location.assign('../rest/');">
+					<div class="submenu-item-background selected">
+						<div class="submenu-item-number">2</div>
+					</div>
+					<div class="submenu-item-label">REST</div>
+				</div>
+				<div class="submenu-item" onclick="window.location.assign('../spi/');">
+					<div class="submenu-item-background">
+						<div class="submenu-item-number">3</div>
+					</div>
+					<div class="submenu-item-label">Java</div>
+				</div>
+			</div>
+			
+			<div id="content">
+				<div class="content-context footer-padding">
+					<div class="context-info">
+						<h3><a href="../../api/js/symbols/aperture.capture.html" class="context-info-title">aperture.capture</a></h3>
+						Captures a snapshot of any web content as an image, for reporting or embedding 
+						in other live content. High performance throughput is enabled by a live pool of 
+						<a href="http://phantomjs.org/" target="_blank">PhantomJS</a> renderers, equipped as service
+						providers.
+					</div>
+					<div class="context-info">
+						<h3><a href="../../api/js/symbols/aperture.layout.html" class="context-info-title">aperture.layout</a></h3>
+						A layout service that includes two custom high-performance layouts
+						for force-directed graphs and label / tag deconfliction, as well as common layouts
+						backed by open source libraries such as 
+						<a href="http://www.jgraph.com/" target="_blank">JGraph</a>, or 
+						<a href="http://www.yworks.com/" target="_blank">yFiles</a> for those with a commercial license.
+					</div>
+					
+					<div class="context-info">
+						<h3><a href="../../api/js/symbols/aperture.palette.html#.icon" class="context-info-title">aperture.palette.icon</a></h3>
+						The icon service is designed to serve ontological collections of symbols for 
+						semantic types. 
+						Vector source icons are dynamically served at any requested size in png, jpeg, or svg format. A base
+						ontology of common analytic types is provided.
+					</div>
+					
+					<div class="context-info">
+						<h3><a href="../../api/js/symbols/aperture.store.html" class="context-info-title">aperture.store</a></h3>
+						The Aperture store provides a simple, abstracted API to a Content Management Service (CMS),
+						for storing and retrieving synchronized, versioned resources in a Service-Oriented Architecture. Abstracting CMS
+						operations enables greater portability across deployment environments. A <a href="http://db.apache.org/derby/">Derby</a> based 
+						implementation is provided as well as a lightweight <a href="http://ehcache.org/">Ehcache</a> 
+						version.<p>
+					</div>
+					
+					<a href="http://www.oculusinfo.com">&#169;2013 Oculus Info Inc.</a>
+					<div class="oculus-footer"></div>
+				</div>
+				<div class="content-body">
+					<h1>REST Web Services</h1>
+		
+					Aperture services are implemented in REST. The JavaScript API wraps these service interfaces for JavaScript clients,
+					adding a minimal amount of message formatting and handling for convenience. Other clients may make use of Aperture 
+					services by calling their REST interfaces directly.
+					
+					<h3>Common MIME Types</h3>
+					Aperture REST services currently exchange all messages as application/json, except where services return
+					images. Support for XML and / or binary  
+					<a href="https://developers.google.com/protocol-buffers/" target="_blank">protocol buffers</a> are future considerations.
+					
+					<h3>Optional, Modular Deployment</h3>
+					The client JavaScript library exposes Aperture services for <i>optional</i> use. It is possible to write
+					Aperture visualizations that require no Aperture services at all. In these cases, deployment is simply a matter
+					of including aperture.js.
+					
+					<p>Similarly, Aperture services can be deployed and used without the client JavaScript library, as
+					independent modules. The easiest method of
+					deploying the full collection of services is to simply drop a copy of the compiled aperture.war and 
+					server config file into a web server. However, clients may alternatively choose to package and deploy
+					only those services required for a particular application.</p>
+					<p>
+					<a href="../spi/" class="next">Next: Java Interfaces...</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+
+
+</html>

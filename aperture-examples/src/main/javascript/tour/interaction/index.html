@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Interaction | Aperture JS</title>
+	<link rel="stylesheet" type="text/css" href="../../all.css">
+	<link rel="stylesheet" href="../../prettify/default.css">
+	<link rel="SHORTCUT ICON" href="../../img/aperture-16x16.ico"/>
+	<script src="../../lib/jquery.js"></script>
+	<script src="../../lib/ga.js"></script>
+</head>
+
+<body>
+	<div id="header"></div>
+	<div id="content-strip">
+		<div id="header-logo">
+			<a href="../../"><img src="../../img/aperture-big.png"></a>
+		</div>
+		<div id="header-menu">
+			<a href="../../" class="overview">&nbsp;</a>
+			<a href="../../tour/" class="selected">Tour</a>
+			<a href="../../api/js/">API</a>
+			<a href="../../demos/">Demos</a>
+			<a href="../../downloads/">Download</a>
+		</div>
+	
+		<div id="all">
+			<div id="submenu">
+				<div class="submenu-item" onclick="window.location.assign('../');">
+					<div class="submenu-item-background">
+						<div class="submenu-item-number">1</div>
+					</div>
+					<div class="submenu-item-label">Layers</div>
+				</div>
+				<div class="submenu-item" onclick="window.location.assign('');">
+					<div class="submenu-item-background selected">
+						<div class="submenu-item-number">2</div>
+					</div>
+					<div class="submenu-item-label">Interaction</div>
+				</div>
+			</div>
+			
+			<div id="content">
+				<div class="content-context">
+					<a href="../../examples/#map-pie.html"><img src="../../img/interaction.png" class="home-image"/>
+					<br>A simple example of filters, sets and interaction.</a>
+					<p>
+					<a href="http://www.oculusinfo.com">&#169;2013 Oculus Info Inc.</a>
+				</div>
+				<div class="content-body">
+					<h1>Interactive Updates, with Transitions</h1>
+		
+					Aperture is designed for efficient updates in response to user interaction or new data.
+					Batch updates are used to combine and apply the visual results of a set of changes. A  
+					<a href="../../api/js/symbols/aperture.Layer.NodeSet.html">scoping grammar</a> is used to 
+					selectively update layer items from mappings. This approach does not require monitoring changes of 
+					every single data item attribute, which would introduce a requirement for specialized data models and 
+					which in our experience does not tend to scale well to large sets of data and changes.
+					
+					<h3>State Driven Filters</h3>
+					Aperture's visual <a href="../../api/js/symbols/aperture.Mapping.html">mapping</a> grammar includes
+					provisions for reflecting application state, such as highlighting selections with outlines
+					or a darkening effect, or changing opacity based on dynamic queries.
+					Rather than temporarily replacing a mapping to achieve this, as might be more typical of other approaches, 
+					we provide a concept of <a href="../../api/js/symbols/aperture.Mapping.html#filter">filters</a>
+					to declare these as part of the mappings up front. Filters are often used in concert with 
+					<a href="../../api/js/symbols/aperture.Set.html">sets</a>, for conditional application.
+					
+					<h3>Merging or Appending New Data</h3>
+					Layer provides the declarative <a href="../../api/js/symbols/aperture.Layer.html#all">all</a>, 
+					<a href="../../api/js/symbols/aperture.Layer.html#join">join</a> and 
+					<a href="../../api/js/symbols/aperture.Layer.html#add">add</a> operators to update existing data.
+					Map keys are linked to live views of data <a href="../../api/js/symbols/aperture.Range.html">ranges</a>,
+					automatically adjusting if the range of values should change.
+					
+					<h3>Animated Transitions</h3>
+					Scoped, batch updates can be given a <a href="../../api/js/symbols/aperture.Transition.html">transition</a> 
+					for easing in changes, making them easier for a user to perceive. Transitioned updates are designed to be
+					no more programming work than instantaneous state changes, and will automatically handle the work of 
+					interpolating between states and fade in new items.
+			</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+
+
+</html>

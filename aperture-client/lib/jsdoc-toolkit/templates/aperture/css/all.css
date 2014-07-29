@@ -1,0 +1,441 @@
+/* TABLE OF CONTENTS:
+ * - Browser reset
+ * - HTML elements
+ * - JsDoc styling
+ */
+
+
+
+/*
+ * BEGIN BROWSER RESET
+ */
+
+
+#header {
+	position: absolute;
+	background: #ddddd1;
+	background-image: url(header.jpg);
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	height: 60px;
+	z-index: -1;
+}
+#header-logo {
+	position: absolute;
+}
+#header-menu {
+	position: absolute;
+	right: 0px;
+	font-family: Georgia, Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	margin-top: 5px;
+	margin-bottom: 20px;
+}
+#header-menu a {
+	line-height: 25px;
+	color: #4E443C;
+	padding: 5px 6px 14px 6px;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+#header-menu a.selected {
+	border-bottom: 3px solid #4E443C;
+}
+#header-menu a:hover {
+	color: #C40;
+}
+#header-menu .tagline {
+	color: #8A8984;
+}
+
+
+#submenu {
+	position: absolute;
+	top: 80px;
+	height: 60px;
+	margin-bottom: 40px;
+}
+#submenu .selected {
+	color: white;
+	background-color: #876;
+	background-color: #B17152;
+}
+.submenu-item {
+	float: left;
+	cursor: pointer;
+}
+.submenu-item:hover {
+	color: #C40;
+}
+.submenu-item-background {
+	color: #5E544A;
+	float: left;
+	padding: 16px;
+	border-radius: 50%;
+	webkit-border-radius: 50%;
+	background: #ddddd1;
+	margin-right: 15px;
+}
+.submenu-item-label {
+	float: left;
+	margin-top: 15px;
+	width: 110px; 
+	font-size: 20px;
+	line-height: 22px;
+}
+.submenu-item-number {
+	text-align: center;
+	width: 20px;
+	height: 20px;
+	font-family: Arial, sans-serif;
+	font-size: 16px;
+}
+
+
+/*
+ * BEGIN BROWSER RESET
+ */
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,p,pre,form,fieldset,input,textarea,p,blockquote,th,td {
+	margin:0;
+	padding:0
+}
+html {
+	height:100%;
+	overflow:-moz-scrollbars-vertical;
+	overflow-x:auto
+}
+table {
+	border:0;
+	border-collapse:collapse;
+	border-spacing:0
+}
+fieldset,img {
+	border:0
+}
+address,caption,cite,code,dfn,em,strong,th,var {
+	font-style:normal;
+	font-weight:normal
+}
+em,cite {
+	font-style:italic
+}
+strong {
+	font-weight:bold
+}
+ol,ul {
+	list-style:none
+}
+caption,th {
+	text-align:left
+}
+h1,h2,h3,h4,h5,h6 {
+	font-size:100%;
+	font-weight:normal;
+	margin:0;
+	padding:0
+}
+q:before,q:after {
+	content:''
+}
+abbr,acronym {
+	border:0
+}
+section,article,header,footer,nav,aside,hgroup {
+	display:block
+}
+
+/*
+ * END BROWSER RESET
+ */
+
+
+
+
+
+
+/*
+ * HTML ELEMENTS
+ */
+
+* {
+	line-height: 1.4em;
+}
+
+html {
+	font-size: 100%;
+}
+
+body {
+	font-size: 0.875em;
+	padding: 15px 0;
+	background: #F0EFE7;
+	background-image: url(body.jpg);
+}
+
+body,
+input,
+select,
+textarea {
+	color: #4E443C;
+	font-family: Georgia,"Times New Roman",serif;
+}
+
+a:link,
+a:hover,
+a:active,
+a:visited {
+	color: #07A;
+	text-decoration: none;
+}
+a:hover,
+a:focus {
+	color: #3AF;
+	text-decoration: none;
+}
+
+p {
+	margin: 0 0 1.5em 0;
+}
+
+footer {
+	padding-bottom: 60px;
+	background-image: url(footer-symbols.png);
+	background-repeat: no-repeat; 
+	background-position: left bottom; 
+}
+
+/*
+ * END HTML ELEMENTS
+ */
+
+
+
+/*
+ * BEGIN HACK
+ */
+
+div.containerMain:after,
+div.safeBox:after {
+	content:"";
+	display:block;
+	height:0;
+	clear:both;
+}
+
+/*
+ * END HACK
+ */
+
+
+
+/*
+ * BEGIN JSDOC
+ */
+#testlinks {
+	display: none;
+}
+/* Start menu */
+div.index *.heading1 {
+	margin-bottom: 0.5em;
+	margin-left: -5px;
+	font-family: Georgia,"Times New Roman",serif;
+	font-size: 1.6em;
+	line-height: 1.3em;
+	color: #5e544a;
+}
+
+div.index div.menu div {
+	text-align: left;
+}
+
+div.index div.menu a {
+	text-decoration: none;
+/*	color: #413932;*/
+}
+div.index div.menu a:hover {
+	text-decoration: none;
+	color: #C40;
+}
+
+div.index ul.classList {
+	padding-left: 0;
+}
+
+div.index ul.classList a {
+	display: block;
+	margin: 1px 0;
+	padding: 4px 0 2px 10px;
+	text-indent: -10px;
+}
+
+div.index div.fineprint {
+	color: #777;
+	font-size: 0.9em;
+}
+div.index div.fineprint a {
+	color: #777;
+}
+/* End menu */
+
+
+
+/* Start content */
+div.content ul {
+	padding-left: 0;
+}
+
+div.content *.classTitle {
+	font-size: 1.2em;
+	line-height: 1em;
+	color: #C40;
+}
+
+div.content *.classTitle span {
+	display: block;
+	font-size: 32px;
+	line-height: 1em;
+	padding-top: 5px;
+	word-wrap: break-word;
+}
+
+div.content p.summary {
+	font-size: 1.25em;
+}
+
+div.content ul *.classname a,
+div.content ul *.filename a {
+	font-family: Consolas, "Courier New", Courier, monospace;
+	text-decoration: none;
+	font-weight: bold;
+}
+div.content ul *.classname a:hover,
+div.content ul *.filename a:hover {
+	text-decoration: none;
+}
+
+div.content div.props {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background: #FCFCFA;
+	border: solid 1px #E2E0D8;
+}
+
+
+
+*.sectionTitle {
+	font-family: Georgia,"Times New Roman",serif;
+	font-size: 1.6em;
+	color: #5e544a;
+}
+
+table.summaryTable td,
+table.summaryTable th {
+	vertical-align: top;
+}
+table.summaryTable tr:last-child td {
+	padding-bottom: 0;
+}
+
+table.summaryTable th {
+	color: #6A1;
+}
+
+table.summaryTable td.attributes {
+	font-family: Consolas, "Courier New", Courier, monospace;
+	color: #666;
+}
+
+table.summaryTable td.nameDescription div.fixedFont {
+	font-weight: bold;
+	color: #4E443C;
+}
+table.summaryTable td.nameDescription div.mapping {
+	color: #C40;
+}
+table.summaryTable td.nameDescription div.fixedFont a {
+	color: #C40;
+}
+table.summaryTable td.nameDescription div.fixedFont a:hover {
+	color: #F60;
+}
+
+table.summaryTable div.description {
+	color: #333;
+}
+
+table.summaryTable span.mappingDefault {
+	color: black;
+}
+
+
+dl.detailList dt {
+	font-weight: bold;
+	font-family: Consolas, "Courier New", Courier, monospace;
+	color: #420;
+}
+
+dl.detailList dt.heading {
+	font-family: Georgia,"Times New Roman",serif;
+	color: #6A1;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
+dl.inheritsList dd + dt {
+	margin-top: 10px;
+}
+
+dl.inheritsList dd {
+	display: inline;
+}
+
+
+
+.fixedFont {
+	font-family: Consolas, "Courier New", Courier, monospace;
+}
+
+.fixedFont.heading {
+	font-size: 1.25em;
+	line-height: 1.1em;
+	color: #420;
+}
+
+.fixedFont.heading + .description {
+	font-size: 1.2em;
+}
+
+.fixedFont.heading .light,
+.fixedFont.heading .lighter {
+}
+
+pre.code {
+	overflow: auto;
+	font-family: Consolas, "Courier New", Courier, monospace;
+	background: #eee;
+}
+/* Start content */
+
+
+
+/* Start general styles */
+.light {
+	color: #666;
+}
+
+.lighter {
+	color: #999;
+}
+
+span.break {
+	font-size: 1px;
+	line-height:  1px;
+}
+/* End general styles */
+
+/*
+ * END JSDOC
+ */

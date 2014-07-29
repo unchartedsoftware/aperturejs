@@ -1,5 +1,0 @@
-/*
- * Aperture
- */
-aperture = (function(aperture){
-
