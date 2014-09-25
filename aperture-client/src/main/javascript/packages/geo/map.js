@@ -16,9 +16,9 @@ function openLayersMaps() {
 		aperture.log.info('OpenLayers js not present. Skipping default map api implementation.');
 		return;
 	}
-	
+
 	aperture.log.info('Loading OpenLayers map api implementation...');
-	
+
 	// util is always defined by this point
 	var util = aperture.util, ol = 'OPEN_LAYERS_CANVAS';
 
@@ -32,7 +32,7 @@ function openLayersMaps() {
 	        }
 	    }
 	};
-	
+
 	// if basic Canvas ever implements stuff for real we should override where it makes sense
 	var OpenLayersCanvas = aperture.canvas.Canvas.extend( 'aperture.geo.OpenLayersCanvas', {
 			init : function(root, map) {
@@ -89,7 +89,7 @@ function openLayersMaps() {
 		render : function(changeSet) {
 			// Must force no render logic so the layer doesn't try to monkey around with data
 		},
-        
+
 		/**
 		 * @private
 		 */
@@ -100,20 +100,20 @@ function openLayersMaps() {
 			this.canvas_.olMap_.removeLayer(this.olLayer_);
 		}
 	});
-    
-	
+
+
 	// deprecated
 	var tileTypeAliases = {
 			tms : 'TMS',
 			wms : 'WMS'
 		};
-    
-    
-	var MapTileLayer = OpenLayersMapLayer.extend( 'aperture.geo.MapTileLayer', 
+
+
+	var MapTileLayer = OpenLayersMapLayer.extend( 'aperture.geo.MapTileLayer',
 	/** @lends aperture.geo.MapTileLayer# */
 	{
 		/**
-		 * @class The base class for Aperture Map layers that displays one or more image tiles 
+		 * @class The base class for Aperture Map layers that displays one or more image tiles
 		 * from one of a variety of standards based sources.
 		 *
 		 * @augments aperture.Layer
@@ -124,16 +124,16 @@ function openLayersMaps() {
 			OpenLayersMapLayer.prototype.init.call(this, spec, mappings);
 
 			spec.options = spec.options || {};
-			
+
 			if (spec.options.isBaseLayer == null) {
 				spec.options.isBaseLayer = false;
 			}
-		}		
+		}
 	});
 
     ns.MapTileLayer = MapTileLayer;
 
-	ns.MapTileLayer.TMS = MapTileLayer.extend( 'aperture.geo.MapTileLayer.TMS', 
+	ns.MapTileLayer.TMS = MapTileLayer.extend( 'aperture.geo.MapTileLayer.TMS',
 	/** @lends aperture.geo.MapTileLayer.TMS# */
 	{
 		/**
@@ -144,12 +144,12 @@ function openLayersMaps() {
 		 * @augments aperture.geo.MapTileLayer
 		 * @constructs
 		 *
-		 * @description MapTileLayers may be configured as base layers in 
+		 * @description MapTileLayers may be configured as base layers in
 		 * {@link aperture.geo.Map Map} construction,
 		 * or later added as overlay layers by calling
 		 * {@link aperture.PlotLayer#addLayer addLayer} on a parent layer.
 		 * This layer constructor is never called directly.
-		 * 
+		 *
 		 * @example
 		 * var spec = {
 		 *     name : 'My TMS Layer',
@@ -159,7 +159,7 @@ function openLayersMaps() {
 		 *         type: 'png'
 		 *     }
 		 * };
-		 * 
+		 *
 		 * // EXAMPLE ONE: create a map and explicitly set the base tile layer
 		 * var map = new Map({
 		 *      options : {
@@ -178,25 +178,25 @@ function openLayersMaps() {
 		 *          TMS: spec
 		 *      }
 		 * });
-		 * 
+		 *
 		 * // EXAMPLE TWO: overlay a layer on a map with an existing base layer
 		 * map.addLayer( aperture.geo.MapTileLayer.TMS, {}, spec );
-		 * 
+		 *
 		 * @param {Object} spec
 		 *      a specification object
-		 *      
+		 *
 		 * @param {String} spec.name
 		 *      the local name to give the layer.
-		 *      
+		 *
 		 * @param {String} spec.url
 		 *      the source url for the tiles.
-		 *      
+		 *
 		 * @param {Object} spec.options
 		 *      implementation specific options.
-		 *      
+		 *
 		 * @param {String} spec.options.layername
 		 *      required name of the served layer to request of the source tile data.
-		 *      
+		 *
 		 * @param {String} spec.options.type
 		 *      required type of the images in the source tile data.
 
@@ -209,13 +209,13 @@ function openLayersMaps() {
                 [spec.url],
                 spec.options
 			);
-			
-			this.canvas_.olMap_.addLayer(this.olLayer_);
-		}		
-	});
-	
 
-	ns.MapTileLayer.WMS = MapTileLayer.extend( 'aperture.geo.MapTileLayer.WMS', 
+			this.canvas_.olMap_.addLayer(this.olLayer_);
+		}
+	});
+
+
+	ns.MapTileLayer.WMS = MapTileLayer.extend( 'aperture.geo.MapTileLayer.WMS',
 	/** @lends aperture.geo.MapTileLayer.WMS# */
 	{
 		/**
@@ -226,12 +226,12 @@ function openLayersMaps() {
 		 * @augments aperture.geo.MapTileLayer
 		 * @constructs
 		 *
-		 * @description MapTileLayers may be configured as base layers in 
+		 * @description MapTileLayers may be configured as base layers in
 		 * {@link aperture.geo.Map Map} construction,
 		 * or later added as overlay layers by calling
 		 * {@link aperture.PlotLayer#addLayer addLayer} on a parent layer.
 		 * This layer constructor is never called directly.
-		 * 
+		 *
 		 * @example
 		 * var spec = {
 		 *     name: 'OSGeo WMS',
@@ -242,29 +242,29 @@ function openLayersMaps() {
 		 *         displayProjection : 'EPSG:4326'
 		 *     }
 		 * };
-		 * 
+		 *
 		 * // EXAMPLE ONE: create a map and explicitly set the base tile layer
 		 * var map = new Map({
 		 *      baseLayer : {
 		 *          WMS: spec
 		 *      }
 		 * });
-		 * 
+		 *
 		 * // EXAMPLE TWO: overlay a layer on a map with an existing base layer
 		 * map.addLayer( aperture.geo.MapTileLayer.WMS, {}, spec );
-		 * 
+		 *
 		 * @param {Object} spec
 		 *      a specification object
-		 *      
+		 *
 		 * @param {String} spec.name
 		 *      the local name to give the layer.
-		 *      
+		 *
 		 * @param {String} spec.url
 		 *      the source url for the tiles.
-		 *      
+		 *
 		 * @param {Object} spec.options
 		 *      implementation specific options.
-		 *      
+		 *
 		 * @param {String} spec.options.layers
 		 *      a single layer name or comma separated list of served layer names to request.
 		 */
@@ -276,31 +276,31 @@ function openLayersMaps() {
                 spec.url,
                 spec.options
 			);
-			
+
 			this.canvas_.olMap_.addLayer(this.olLayer_);
-		}		
+		}
 	});
-	
-	
-	
-	ns.MapTileLayer.Google = MapTileLayer.extend( 'aperture.geo.MapTileLayer.Google', 
+
+
+
+	ns.MapTileLayer.Google = MapTileLayer.extend( 'aperture.geo.MapTileLayer.Google',
 	/** @lends aperture.geo.MapTileLayer.Google# */
 	{
 		/**
 		 * @class A Google Maps service. Use of this layer requires the inclusion of the
 		 * <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank">Google Maps v3 API</a> script
-		 * and is subject to its terms of use. Map options include dynamically 
+		 * and is subject to its terms of use. Map options include dynamically
 		 * <a href="https://developers.google.com/maps/documentation/javascript/styling" target="_blank">styled maps</a>.
-		 * 
+		 *
 		 * @augments aperture.geo.MapTileLayer
 		 * @constructs
 		 *
-		 * @description MapTileLayers may be configured as base layers in 
+		 * @description MapTileLayers may be configured as base layers in
 		 * {@link aperture.geo.Map Map} construction,
 		 * or later added as overlay layers by calling
 		 * {@link aperture.PlotLayer#addLayer addLayer} on a parent layer.
 		 * This layer constructor is never called directly.
-		 * 
+		 *
 		 * @example
 		 * var spec = {
 		 *     name: 'My Layer',
@@ -308,17 +308,17 @@ function openLayersMaps() {
 		 *          type: google.maps.MapTypeId.TERRAIN
 		 *     }
 		 * };
-		 * 
+		 *
 		 * // EXAMPLE ONE: create a map and explicitly set the base tile layer
 		 * var map = new Map({
 		 *      baseLayer : {
 		 *          Google: spec
 		 *      }
 		 * });
-		 * 
+		 *
 		 * // EXAMPLE TWO: overlay a layer on a map with an existing base layer
 		 * map.addLayer( aperture.geo.MapTileLayer.Google, {}, spec );
-		 * 
+		 *
 		 * // EXAMPLE THREE: create a styled map
 		 * var map = new Map({
 		 *      baseLayer : {
@@ -335,19 +335,19 @@ function openLayersMaps() {
 		 *          }
 		 *      }
 		 * });
-		 * 
+		 *
 		 * @param {Object} spec
 		 *      a specification object
-		 *      
+		 *
 		 * @param {String} spec.name
 		 *      the local name to give the layer.
-		 *      
+		 *
 		 * @param {Object} spec.options
 		 *      implementation specific options.
-		 *      
+		 *
 		 * @param {google.maps.MapTypeId|'styled'} spec.options.type
 		 *      a Google defined layer type to request.
-		 *      
+		 *
 		 * @param {Array} spec.options.style
 		 *      a list of Google defined
 		 *      <a href="https://developers.google.com/maps/documentation/javascript/styling" target="_blank">style rules</a>.
@@ -359,36 +359,36 @@ function openLayersMaps() {
 				spec.name || 'Google ' + this.uid,
 				spec.options
 			);
-			
+
 			this.canvas_.olMap_.addLayer(this.olLayer_);
-			
+
 			if (spec.options.type == 'styled') {
 				var styledMapType = new google.maps.StyledMapType(spec.options.style, {name: 'Styled Map'});
 
 				this.olLayer_.mapObject.mapTypes.set('styled', styledMapType);
 				this.olLayer_.mapObject.setMapTypeId('styled');
-			}			
-		}		
+			}
+		}
 	});
-			
-	
-	
-	ns.MapTileLayer.Bing = MapTileLayer.extend( 'aperture.geo.MapTileLayer.Bing', 
+
+
+
+	ns.MapTileLayer.Bing = MapTileLayer.extend( 'aperture.geo.MapTileLayer.Bing',
 	/** @lends aperture.geo.MapTileLayer.Bing# */
 	{
 		/**
-		 * @class A Bing (Microsoft) map service. Use of a Bing map layer 
+		 * @class A Bing (Microsoft) map service. Use of a Bing map layer
 		 * <a href="http://bingmapsportal.com/" target="_blank">requires a key</a>.
 
 		 * @augments aperture.geo.MapTileLayer
 		 * @constructs
 		 *
-		 * @description MapTileLayers may be configured as base layers in 
+		 * @description MapTileLayers may be configured as base layers in
 		 * {@link aperture.geo.Map Map} construction,
 		 * or later added as overlay layers by calling
 		 * {@link aperture.PlotLayer#addLayer addLayer} on a parent layer.
 		 * This layer constructor is never called directly.
-		 * 
+		 *
 		 * @example
 		 * var spec = {
 		 *     name: 'My Layer',
@@ -397,29 +397,29 @@ function openLayersMaps() {
 		 *          key: 'my-license-key-here'
 		 *     }
 		 * };
-		 * 
+		 *
 		 * // EXAMPLE ONE: create a map and explicitly set the base tile layer
 		 * var map = new Map({
 		 *      baseLayer : {
 		 *          Bing: spec
 		 *      }
 		 * });
-		 * 
+		 *
 		 * // EXAMPLE TWO: overlay a layer on a map with an existing base layer
 		 * map.addLayer( aperture.geo.MapTileLayer.Bing, {}, spec );
-		 * 
+		 *
 		 * @param {Object} spec
 		 *      a specification object
-		 *      
+		 *
 		 * @param {String} spec.name
 		 *      the local name to give the layer.
-		 *      
+		 *
 		 * @param {Object} spec.options
 		 *      implementation specific options.
-		 *      
+		 *
 		 * @param {String='Road'|'Aerial'|...} spec.options.type
 		 *      the name of a Bing defined layer type to request.
-		 *      
+		 *
 		 * @param {String} spec.options.key
 		 *      a client license key, obtained from Microsoft.
 		 */
@@ -427,17 +427,17 @@ function openLayersMaps() {
 			MapTileLayer.prototype.init.call(this, spec, mappings);
 
 			spec.options.name = spec.options.name || spec.name || 'Bing ' + this.uid;
-			
+
 			this.olLayer_ = new OpenLayers.Layer.Bing(
 				spec.options
 			);
-			
+
 			this.canvas_.olMap_.addLayer(this.olLayer_);
-		}		
+		}
 	});
 
-	
-	ns.MapTileLayer.Image = MapTileLayer.extend( 'aperture.geo.MapTileLayer.Image', 
+
+	ns.MapTileLayer.Image = MapTileLayer.extend( 'aperture.geo.MapTileLayer.Image',
 	/** @lends aperture.geo.MapTileLayer.Image# */
 	{
 		/**
@@ -446,12 +446,12 @@ function openLayersMaps() {
 		 * @augments aperture.geo.MapTileLayer
 		 * @constructs
 		 *
-		 * @description MapTileLayers may be configured as base layers in 
+		 * @description MapTileLayers may be configured as base layers in
 		 * {@link aperture.geo.Map Map} construction,
 		 * or later added as overlay layers by calling
 		 * {@link aperture.PlotLayer#addLayer addLayer} on a parent layer.
 		 * This layer constructor is never called directly.
-		 * 
+		 *
 		 * @example
 		 * var spec = {
 		 *     name: 'My Layer',
@@ -464,23 +464,23 @@ function openLayersMaps() {
 		 *         20037500  // top
 		 *     ]
 		 * };
-		 * 
+		 *
 		 * // EXAMPLE: overlay a layer on a map with an existing base layer
 		 * map.addLayer( aperture.geo.MapTileLayer.Image, {}, spec );
-		 * 
+		 *
 		 * @param {Object} spec
 		 *      a specification object
-		 *      
+		 *
 		 * @param {String} spec.name
 		 *      the local name to give the layer.
-		 *      
+		 *
 		 * @param {String} spec.url
 		 *      the source url for the image.
-		 *      
+		 *
 		 * @param {Array(Number)} spec.size
 		 *      an array of two numbers specifying width and height
 		 *      of the image in pixels.
-		 *      
+		 *
 		 * @param {Array(Number)} spec.extent
 		 *      an array of numbers specifying the geographical
 		 *      bounding region of the image. The expected order is: [left, bottom, right, top]
@@ -490,11 +490,11 @@ function openLayersMaps() {
 			MapTileLayer.prototype.init.call(this, spec, mappings);
 
 			var options = spec.options;
-			
+
 			if (spec.size) {
 				spec.size = new OpenLayers.Size(spec.size[0], spec.size[1]);
 			}
-	        
+
 			if (!options.isBaseLayer) {
 
 				// clone from base layer
@@ -504,14 +504,14 @@ function openLayersMaps() {
 				if (!options.maxResolution) {
 					options.maxResolution = options.resolutions[0];
 				}
-		
+
 				if (spec.projection) {
 					var tmpFromProjection = new OpenLayers.Projection(spec.projection);
 					var tmpToProjection = new OpenLayers.Projection(this.canvas_.olMap_.projection.projCode);
 					spec.extent = spec.extent.clone().transform(tmpFromProjection, tmpToProjection);
 				}
 	        }
-	        
+
 			this.olLayer_ = new OpenLayers.Layer.Image(
 	            spec.name || 'Image ' + this.uid,
 	            spec.url,
@@ -519,11 +519,11 @@ function openLayersMaps() {
 	            spec.size,
 	            options
 	        );
-	        
+
 			this.canvas_.olMap_.addLayer(this.olLayer_);
-		}		
+		}
 	});
-	
+
     /**
      * @private
      * Blank Layer
@@ -600,11 +600,11 @@ function openLayersMaps() {
 
 	// returns private function for use by map external layer
 	var makeHandler = (function() {
-		
+
 		// event hooks for features.
 		function makeCallback( type ) {
 			var stopKey;
-			
+
 			switch (type) {
 			case 'click':
 			case 'dblclick':
@@ -634,29 +634,29 @@ function openLayersMaps() {
 				};
 			}
 		}
-	
+
 		var featureEvents = {
 			'mouseout' : 'out',
 			'mouseover' : 'over'
 		};
-		
+
 		return function (events) {
 			var handlers = {}, active;
-			
+
 			if (this.handler_) {
 				this.handler_.deactivate();
 				this.handler_= null;
 			}
-			
+
 			aperture.util.forEach(events, function(fn, event) {
 				handlers[ featureEvents[event] || event ] = makeCallback(event);
 				active = true;
-			}); 
+			});
 
 			if (active) {
 				this.handler_ = new OpenLayers.Handler.Feature(
 					this, this._layer, handlers,
-					{ map: this.canvas_.olMap_, 
+					{ map: this.canvas_.olMap_,
 						stopClick: false,
 						stopDown: false,
 						stopUp: false
@@ -666,7 +666,7 @@ function openLayersMaps() {
 			}
 		};
 	}());
-	
+
 	var MapGISLayer = aperture.Layer.extend( 'aperture.geo.MapGISLayer',
 	/** @lends aperture.geo.MapGISLayer# */
 	{
@@ -678,45 +678,45 @@ function openLayersMaps() {
 		 *
 		 * @mapping {String} fill
 		 *   The fill color of the feature
-		 * 
+		 *
 		 * @mapping {String} stroke
 		 *   The line color of the feature
-		 *   
+		 *
 		 * @mapping {Number} stroke-opacity
 		 *   The line opacity of the feature as a value from 0 (transparent) to 1.
-		 *   
+		 *
 		 * @mapping {Number} stroke-width
 		 *   The line width of the feature.
-		 *   
+		 *
 		 * @mapping {String} label
 		 *   The label of the feature.
-		 *   
+		 *
 		 * @mapping {Number} radius
 		 *   The radius of the feature.
-		 *   
+		 *
 		 * @mapping {String} cursor
 		 *   The hover cursor for the feature.
-		 *   
+		 *
 		 * @augments aperture.Layer
 		 * @constructs
 		 *
 		 * @description Layer constructors are invoked indirectly by calling
 		 *  {@link aperture.PlotLayer#addLayer addLayer} on a parent layer with the following specifications...
-		 * 
+		 *
 		 * @param {Object} spec
 		 *      a specification object describing how to construct this layer
-		 *      
+		 *
 		 * @param {String} spec.url
 		 *      the URL of the external data source to load
-		 *      
+		 *
 		 * @param {String='KML'|'GML'|'GeoRSS'} spec.format
 		 *      indicates the type of data that will be loaded from the	provided URL.
 		 *      One of 'KML', 'GML', or 'GeoRSS'.
-		 *      
+		 *
 		 * @param {String} [spec.projection]
 		 *      an optional string specifying the projection of the data contained in
 		 *      the external data file.  If not provided, WGS84 (EPSG:4326) is assumed.
-		 *      
+		 *
 		 */
 		init : function(spec, mappings) {
 			aperture.Layer.prototype.init.call(this, spec, mappings);
@@ -735,8 +735,8 @@ function openLayersMaps() {
 	                })
 	            })
 			};
-			
-			this._layer = new OpenLayers.Layer.Vector( name, options );	
+
+			this._layer = new OpenLayers.Layer.Vector( name, options );
 			if( this.canvas_ ) {
 				this.canvas_.olMap_.addLayer(this._layer);
 			}
@@ -810,25 +810,25 @@ function openLayersMaps() {
 		 */
 		on : function( eventType, callback ) {
 			var hadit = this.handlers_[eventType];
-			
+
 			aperture.Layer.prototype.on.call(this, eventType, callback);
-			
+
 			if (!hadit) {
 				makeHandler.call(this, this.handlers_);
 			}
 		},
-		
+
 		/**
 		 * @private monitor adds and removes.
 		 */
 		off : function( eventType, callback ) {
 			aperture.Layer.prototype.off.call(this, eventType, callback);
-			
+
 			if (!this.handlers_[eventType]) {
 				makeHandler.call(this, this.handlers_);
 			}
 		},
-		
+
 		/**
 		 * @private
 		 */
@@ -925,7 +925,7 @@ function openLayersMaps() {
 
 			if (this.onFrameChange) {
 				this.onFrameChange(bounds);
-				}
+			}
 		},
 
 		getContentPixelForLonLat : function( lon, lat ) {
@@ -988,10 +988,10 @@ function openLayersMaps() {
 	{
 		/**
 		 * @class A layer that draws child layer items at point locations.
-		 * 
+		 *
 		 * @mapping {Number} longitude
 		 *   The longitude at which to locate a node
-		 *   
+		 *
 		 * @mapping {Number} latitude
 		 *   The latitude at which to locate a node
 		 *
@@ -1002,7 +1002,7 @@ function openLayersMaps() {
 		init: function(spec, mappings) {
 			aperture.PlotLayer.prototype.init.call(this, spec, mappings);
 
-			// because we declare ourselves as an open layers canvas layer this will be 
+			// because we declare ourselves as an open layers canvas layer this will be
 			// the parenting open layers canvas, which holds the map reference. Note however that
 			// since we are really a vector canvas layer we override that a ways below.
 			var mapCanvas = this.canvas_;
@@ -1028,14 +1028,8 @@ function openLayersMaps() {
 			mapCanvas.canvases_.push( this.canvas_ );
 
 			var that = this;
-			this._canvasWidth = this.canvas_.root_.offsetWidth;
-			this._canvasHeight = this.canvas_.root_.offsetHeight;
 			this._layer.onFrameChange = function(newBounds) {
 				// The OpenLayers layer has changed the canvas, must redraw all contents
-				that._canvasWidth = that.canvas_.root_.offsetWidth;
-				that._canvasHeight = that.canvas_.root_.offsetHeight;
-
-				// This layer has changed, must rerender
 				// TODO Pass in appropriate "change" hint so only translation need be updated
 				that.all().redraw();
 			};
@@ -1066,31 +1060,12 @@ function openLayersMaps() {
 
 				// Update the given node in place with these values
 				node.position = [px.x,px.y];
-
-				// Update width/height
-				node.userData.width = this._canvasWidth;
-				node.userData.height = this._canvasHeight;
-
 			}, this);
-			
-			
+
+
 			// will call renderChild for each child.
 			aperture.PlotLayer.prototype.render.call(this, changeSet);
 
-		},
-
-		/**
-		 * @private
-		 */
-		renderChild : function(layer, changeSet) {
-			// Pass size information to children (so LineSeriesLayer can render correctly)
-			aperture.util.forEach( changeSet.updates, function (node) {
-				if (node) {
-					node.width = node.parent.userData.width;
-					node.height = node.parent.userData.height;
-				}
-			});
-			layer.render( changeSet );
 		},
 
 		/**
@@ -1099,7 +1074,7 @@ function openLayersMaps() {
 		getXY: function(lon,lat) {
 
 			var pt = new OpenLayers.LonLat(lon, lat);
-			
+
 			// Reproject to map's projection
 			if( this._layer.map.projection != apiProjection ) {
 				pt.transform(apiProjection, this._layer.map.projection);
@@ -1152,7 +1127,7 @@ function openLayersMaps() {
 			layer : this
 		});
 	}
-	
+
 	var MapVizletLayer = aperture.PlotLayer.extend( 'aperture.geo.MapVizletLayer',
 	// documented as Map, since it currently cannot function as a non-vizlet layer.
 	/**
@@ -1164,7 +1139,7 @@ function openLayersMaps() {
 		 * contains a base map and additional child geo layers can be added. The base map is
 		 * typically configured as a system-wide default, although can be overridden via the
 		 * spec object passed into this constructor.  This layer does not require or support any
-		 * mapped properties. 
+		 * mapped properties.
 		 *
 		 *
 		 * @constructs
@@ -1177,7 +1152,7 @@ function openLayersMaps() {
 		 *      specification object, if provided, includes optional creation options for the
 		 *      map layer.  These options can include base map configuration, map projection settings,
 		 *      zoom level and visible area restrictions, and initial visible bounds.  Other than an id,
-		 *      the following options do not need to be included if they are already configured via the 
+		 *      the following options do not need to be included if they are already configured via the
 		 *      aperture.config system.
 		 * @param {String|Element} spec.id
 		 *      If the spec parameter is an object, a string specifying the id of the DOM
@@ -1198,7 +1173,7 @@ function openLayersMaps() {
 		 * @param {Object} [spec.baseLayer]
 		 *      Object containing information about the base map layer that should be created.
 		 * @param {Object} spec.baseLayer.{TYPE}
-		 *      The base layer specification where {TYPE} is the class of MapTileLayer 
+		 *      The base layer specification where {TYPE} is the class of MapTileLayer
 		 *      (e.g. {@link aperture.geo.MapTileLayer.TMS TMS}) and
 		 *      its value is the specification for it.
 		 * @param {Object} [mappings]
@@ -1229,10 +1204,10 @@ function openLayersMaps() {
 			if( util.isArray(spec.options.maxExtent) ) {
 				spec.options.maxExtent = OpenLayers.Bounds.fromArray(spec.options.maxExtent);
 			}
-			
+
 			// If map to have no controls, initialize with new empty array, not array from defaultMapConfig
 			if(util.isString(spec.options.controls)||(util.isArray(spec.options.controls)&&(spec.options.controls.length==0))){
-				spec.options.controls = [];  
+				spec.options.controls = [];
 			}
 
 			// Clone provided base layer information and fill in defaults
@@ -1243,23 +1218,23 @@ function openLayersMaps() {
 			this.olMap_ = new OpenLayers.Map( spec.options );
 			this.canvas_.canvases_.push(new OpenLayersCanvas( this.canvas_.root(), this.olMap_ ) );
 
-			
+
 			var type = '', config = null;
-			
+
 			for (type in spec.baseLayer) {
 				if (spec.baseLayer.hasOwnProperty(type)) {
 					config = spec.baseLayer[type];
 					break;
 				}
 			}
- 
+
 			if (!config) {
 				this.addLayer( BlankMapLayer, {}, spec );
-				
+
 			} else {
 				config.options = config.options || {};
 				config.options.isBaseLayer = true;
-				
+
 				var resolvedType = tileTypeAliases[type] || type;
 
 				if (MapTileLayer[resolvedType]) {
@@ -1269,7 +1244,7 @@ function openLayersMaps() {
 					this.addLayer( BlankMapLayer, {}, spec );
 				}
 			}
-			
+
 			// Add mouse event handlers that pass click and dblclick events
 			// through to layer event handers
 			var that = this,
@@ -1404,15 +1379,15 @@ function openLayersMaps() {
 		if( config['aperture.map'] ) {
 			if( config['aperture.map'].defaultMapConfig ) {
 				var olMapType = 'openlayers';
-				
+
 				mapType = config['aperture.map'].defaultMapConfig.mapType || olMapType;
-				
+
 				if (mapType.toLowerCase() === olMapType) {
 					openLayersMaps();
 				}
 			}
 		}
 	});
-	
+
 	return ns;
 }(aperture.geo || {}));
