@@ -24,12 +24,12 @@ function(ns) {
 	// Searchers through a set of layers to find
 	// the base layer's index.
 	var getBaseLayerIndex = function(map) {
-	    var i, layers = map.layers;
-	    for(i=0; i < layers.length; i++){
-	        if(layers[i].isBaseLayer==true){
-	            return(i);
-	        }
-	    }
+			var i, layers = map.layers;
+			for(i=0; i < layers.length; i++){
+					if(layers[i].isBaseLayer==true){
+							return(i);
+					}
+			}
 	};
 
 	// if basic Canvas ever implements stuff for real we should override where it makes sense
@@ -43,10 +43,10 @@ function(ns) {
 
 	aperture.canvas.handle( ol, OpenLayersCanvas );
 
-    /**
-     * @private
-     * Base of Map Layer classes
-     */
+		/**
+		 * @private
+		 * Base of Map Layer classes
+		 */
 	var OpenLayersMapLayer = aperture.Layer.extend( '[private].OpenLayersMapLayer', {
 		init : function(spec, mappings) {
 			aperture.Layer.prototype.init.call(this, spec, mappings);
@@ -130,7 +130,7 @@ function(ns) {
 		}
 	});
 
-    ns.MapTileLayer = MapTileLayer;
+		ns.MapTileLayer = MapTileLayer;
 
 	ns.MapTileLayer.TMS = MapTileLayer.extend( 'aperture.geo.MapTileLayer.TMS',
 	/** @lends aperture.geo.MapTileLayer.TMS# */
@@ -205,8 +205,8 @@ function(ns) {
 
 			this.olLayer_ = new OpenLayers.Layer.TMS(
 				spec.name || 'TMS ' + this.uid,
-                [spec.url],
-                spec.options
+								[spec.url],
+								spec.options
 			);
 
 			this.canvas_.olMap_.addLayer(this.olLayer_);
@@ -272,8 +272,8 @@ function(ns) {
 
 			this.olLayer_ = new OpenLayers.Layer.WMS(
 				spec.name || 'WMS ' + this.uid,
-                spec.url,
-                spec.options
+								spec.url,
+								spec.options
 			);
 
 			this.canvas_.olMap_.addLayer(this.olLayer_);
@@ -509,28 +509,28 @@ function(ns) {
 					var tmpToProjection = new OpenLayers.Projection(this.canvas_.olMap_.projection.projCode);
 					spec.extent = spec.extent.clone().transform(tmpFromProjection, tmpToProjection);
 				}
-	        }
+					}
 
 			this.olLayer_ = new OpenLayers.Layer.Image(
-	            spec.name || 'Image ' + this.uid,
-	            spec.url,
-	            spec.extent,
-	            spec.size,
-	            options
-	        );
+							spec.name || 'Image ' + this.uid,
+							spec.url,
+							spec.extent,
+							spec.size,
+							options
+					);
 
 			this.canvas_.olMap_.addLayer(this.olLayer_);
 		}
 	});
 
-    /**
-     * @private
-     * Blank Layer
-     *
-     * Needed an option to have an empty baselayer, especially good if the
-     * tiles are not geographically-based.
-     * This layer is not exposed right now, may never be.  Used internally by map layer
-     */
+		/**
+		 * @private
+		 * Blank Layer
+		 *
+		 * Needed an option to have an empty baselayer, especially good if the
+		 * tiles are not geographically-based.
+		 * This layer is not exposed right now, may never be.  Used internally by map layer
+		 */
 	var BlankMapLayer = OpenLayersMapLayer.extend( '[private].BlankMapLayer', {
 		init : function(spec, mappings) {
 			OpenLayersMapLayer.prototype.init.call(this, spec, mappings);
@@ -724,15 +724,15 @@ function(ns) {
 
 			// Create layer for KML, GML, or GeoRSS formats.
 			var options = {
-	            strategies: [new OpenLayers.Strategy.Fixed()],
+				strategies: [new OpenLayers.Strategy.Fixed()],
 				projection: spec.projection || apiProjection.projCode,
-	            protocol: new OpenLayers.Protocol.HTTP({
-	                url: spec.url,
-	                format: new OpenLayers.Format[spec.format]({
-	                    extractAttributes: true,
-	                    maxDepth: 2
-	                })
-	            })
+				protocol: new OpenLayers.Protocol.HTTP({
+						url: spec.url,
+						format: new OpenLayers.Format[spec.format]({
+								extractAttributes: true,
+								maxDepth: 2
+						})
+				})
 			};
 
 			this._layer = new OpenLayers.Layer.Vector( name, options );
@@ -844,145 +844,9 @@ function(ns) {
 
 	/**********************************************************************/
 
-	/**
-	 * @private
-	 * OpenLayers implementation that positions a DIV that covers the entire world
-	 * at the current zoom level.  This provides the basis for the MapNodeLayer
-	 * to allow child layers to render via DOM or Vector graphics.
-	 */
-	var DivOpenLayer = OpenLayers.Class(OpenLayers.Layer,
-	{
-
-		/**
-		 * APIProperty: isBaseLayer
-		 * {Boolean} Markers layer is never a base layer.
-		 */
-		isBaseLayer : false,
-
-		/**
-		 * @private
-		 */
-		topLeftPixelLocation : null,
-
-		/**
-		 * @private constructor
-		 *
-		 * Parameters:
-		 * name - {String}
-		 * options - {Object} Hashtable of extra options to tag onto the layer
-		 */
-		initialize : function(name, options) {
-			OpenLayers.Layer.prototype.initialize.apply(this, arguments);
-
-			// The frame is big enough to contain the entire world
-			this.contentFrame = document.createElement('div');
-			this.contentFrame.style.overflow = 'hidden';
-			this.contentFrame.style.position = 'absolute';
-			// It is contained in the 'div' element which is fit exactly
-			// to the map's main container layer
-			this.div.appendChild(this.contentFrame);
-		},
-
-		/**
-		 * APIMethod: destroy
-		 */
-		destroy : function() {
-			OpenLayers.Layer.prototype.destroy.apply(this, arguments);
-		},
-
-		/**
-		 * Method: moveTo
-		 *
-		 * Parameters:
-		 * bounds - {<OpenLayers.Bounds>}
-		 * zoomChanged - {Boolean}
-		 * dragging - {Boolean}
-		 */
-		moveTo : function(bounds, zoomChanged, dragging) {
-			var extent, topLeft, bottomRight;
-
-			OpenLayers.Layer.prototype.moveTo.apply(this, arguments);
-
-			// Adjust content DIV to cover visible area + 1 equivalent area in each direction
-			topLeft = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
-			bottomRight = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
-
-			var width = bottomRight.x - topLeft.x;
-			var height = bottomRight.y - topLeft.y;
-
-			// Layer origin is offset that must be subtracted from a pixel location to transform
-			// from OpenLayer's layer pixel coordinates to the contentFrame's coordinates
-			this.olLayerOrigin = {
-				x: topLeft.x - width,
-				y: topLeft.y - height,
-			};
-
-			this.contentFrame.style.top = this.olLayerOrigin.y + 'px';
-			this.contentFrame.style.left = this.olLayerOrigin.x + 'px';
-			this.contentFrame.style.width = (3*width) + 'px';
-			this.contentFrame.style.height = (3*height) + 'px';
-
-			if (this.onFrameChange) {
-				this.onFrameChange(bounds);
-			}
-		},
-
-		getContentPixelForLonLat : function( lon, lat ) {
-			// Convert from lon/lat to pixel space, account for projection
-			var pt = new OpenLayers.Geometry.Point(lon, lat);
-			// Reproject to map's projection
-			if( this.map.projection != apiProjection ) {
-				pt.transform(apiProjection, this.map.projection);
-			}
-			// Get layer pixel
-			var px = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(pt.x, pt.y));
-			// Transform pixel to contentFrame space
-			px.x -= this.olLayerOrigin.x;
-			px.y -= this.olLayerOrigin.y;
-
-			return px;
-		},
-
-		getLonLatExtent: function() {
-			var extent = this.map.getExtent();
-			var p0 = new OpenLayers.Geometry.Point(extent.left, extent.top);
-			var p1 = new OpenLayers.Geometry.Point(extent.right, extent.bottom);
-			if( this.map.projection != apiProjection ) {
-				p0.transform(this.map.projection, apiProjection);
-				p1.transform(this.map.projection, apiProjection);
-			}
-			return {
-				left: p0.x,
-				top: p0.y,
-				right: p1.x,
-				bottom: p1.y
-			};
-		},
-
-		drawFeature : function(feature, style, force) {
-			// Called by OpenLayers to force this feature to redraw (e.g. if some state changed
-			// such as selection that could affect the visual.  Not needed for a container layer
-		},
-
-		CLASS_NAME : 'DivOpenLayer'
-	});
 
 
-	// default property values for map nodes.
-	var mapNodeProps = {
-		'longitude' : 0,
-		'latitude' : 0
-	};
-
-	/*
-	 * TODO: Create a generic container layer that just creates a canvas for children
-	 * to use.  Map lat/lon to [0,1] ranges and then renderers can scale x/y based on
-	 * size of canvas.  Then can make MapNodeLayer derive from this layer.  This layer
-	 * could be used as parent for a layer drawing a series of points/labels, for
-	 * example.
-	 */
-
-	var MapNodeLayer = aperture.PlotLayer.extend( 'aperture.geo.MapNodeLayer',
+	var MapNodeLayer = ns.BaseMapNodeLayer.extend( 'aperture.geo.MapNodeLayer',
 	/** @lends aperture.geo.MapNodeLayer# */
 	{
 		/**
@@ -994,12 +858,12 @@ function(ns) {
 		 * @mapping {Number} latitude
 		 *   The latitude at which to locate a node
 		 *
-		 * @augments aperture.PlotLayer
+		 * @augments aperture.geo.BaseMapNodeLayer
 		 * @constructs
 		 * @factoryMade
 		 */
 		init: function(spec, mappings) {
-			aperture.PlotLayer.prototype.init.call(this, spec, mappings);
+			ns.BaseMapNodeLayer.prototype.init.call(this, spec, mappings);
 
 			// because we declare ourselves as an open layers canvas layer this will be
 			// the parenting open layers canvas, which holds the map reference. Note however that
@@ -1012,7 +876,7 @@ function(ns) {
 			}
 
 			// create the layer and parent it
-			this._layer = new DivOpenLayer(spec.name || ('NodeLayer_' + this.uid), {});
+			this._layer = new ns.OL2ContainerLayer(spec.name || ('NodeLayer_' + this.uid), {});
 			mapCanvas.olMap_.addLayer(this._layer);
 			this._layer.setZIndex(999); // Change z as set by OpenLayers to be just under controls
 			// Turn off pointer events on the divs/svg to allow click through to map layers below
@@ -1038,34 +902,6 @@ function(ns) {
 		 * @private
 		 */
 		canvasType : ol,
-
-		/**
-		 * @private
-		 */
-		render : function( changeSet ) {
-
-			// just need to update positions
-			aperture.util.forEach(changeSet.updates, function( node ) {
-				// If lon,lat is specified pass the position to children
-				// Otherwise let the children render at (x,y)=(0,0)
-				var lat = this.valueFor('latitude', node.data, null);
-				var lon = this.valueFor('longitude', node.data, null);
-
-				// Find pixel x/y from lon/lat
-				var px = {x:0,y:0};
-				if (lat != null && lon != null) {
-					px = this._layer.getContentPixelForLonLat(lon,lat);
-				}
-
-				// Update the given node in place with these values
-				node.position = [px.x,px.y];
-			}, this);
-
-
-			// will call renderChild for each child.
-			aperture.PlotLayer.prototype.render.call(this, changeSet);
-
-		},
 
 		/**
 		 * Given a location returns its pixel coordinates in the viewPort space
@@ -1321,17 +1157,17 @@ function(ns) {
 		},
 
 		/**
-         * Smoothly pans the map to a given center point in lat/lon.
-         * @param lat latitude to pan to
-         * @param lon longitude to pan to
-         */
-        panTo : function( lat, lon ) {
-            var center = new OpenLayers.LonLat(lon,lat);
-            if( this.olMap_.getProjection() !== apiProjection.projCode ) {
-                center.transform(apiProjection, this.olMap_.projection);
-            }
-            this.olMap_.panTo( center );
-        },
+		 * Smoothly pans the map to a given center point in lat/lon.
+		 * @param lat latitude to pan to
+		 * @param lon longitude to pan to
+		 */
+		panTo : function( lat, lon ) {
+				var center = new OpenLayers.LonLat(lon,lat);
+				if( this.olMap_.getProjection() !== apiProjection.projCode ) {
+						center.transform(apiProjection, this.olMap_.projection);
+				}
+				this.olMap_.panTo( center );
+		},
 
 		/**
 		 * Sets visible extents of the map in lat/lon (regardless of current coordinate

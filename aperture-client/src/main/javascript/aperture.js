@@ -34,6 +34,7 @@
 		'packages/layout.js',
 		'packages/pubsub.js',
 		'packages/store.js',
+		'packages/geo/openLayers2.js',
 		'packages/geo/map.js',
 		'packages/chart/AxisLayer.js',
 		'packages/chart/BarSeriesLayer.js',
@@ -67,7 +68,7 @@
 	// Inject scripts
 	var tags = [];
 	for (var i=0, len=scripts.length; i<len; i++) {
-		tags.push('<script src="' + rootPath + scripts[i] + '"></script>'); 
+		tags.push('<script src="' + rootPath + scripts[i] + '"></script>');
 	}
 	document.write(tags.join(''));
 }());
