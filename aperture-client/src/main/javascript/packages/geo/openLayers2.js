@@ -163,6 +163,7 @@ function(ns) {
 
 	ns.OL2ContainerLayer = DivOpenLayer;
 
+
 	/**********************************************************************/
 
 
@@ -184,6 +185,7 @@ function(ns) {
 		 */
 		init : function( spec, mappings ) {
 			aperture.PlotLayer.prototype.init.call(this, spec, mappings );
+			this._layer = spec.olLayer;
 		},
 
 		/**
@@ -224,61 +226,50 @@ function(ns) {
 
 	/**********************************************************************/
 
-	// Vizlet version of the base layer allows it to be root layer within OL2 layer
-	var MapLayerVizlet = aperture.vizlet.make( BaseMapNodeLayer );
 
-	var OL2NodeLayer = OpenLayers.Class(DivOpenLayer,
-	/** @lends aperture.geo.OL2NodeLayer# */
-	{
-		/**
-		 * @class OpenLayers v2.x layer that wraps an Aperture aperture.geo.BaseMapNodeLayer
-		 * When added to an OpenLayers map, this layer essentially creates a vizlet as a map
-		 * layer and exposes it via apertureLayer. The exposed layer allows mapping latitude
-		 * and longitude positions to locate child layer nodes.
-		 *
-		 * @param {String} [name]
-		 *   The name of the OpenLayers layer - see OpenLayers docs
-		 * @param {Object} [options]
-		 *   Options to pass to the OpenLayer layer - see OpenLayers docs
-		 * @param {Object} [apertureSpec]
-		 *   Spec object to pass to Aperture layer constructor, see {@link Layer#}
-		 * @param {Object} [apertureMappings]
-		 *   Optional initial simple property : value mappings passed to Aperture
-		 *   layer constructor, see {@link Layer#}.
-		 *
-		 * @constructs
-		 */
-		initialize : function(name, options, apertureSpec, apertureMappings) {
-			// spec.name || ('NodeLayer_' + this.uid), {}
-			DivOpenLayer.prototype.initialize.apply(this, arguments);
+	var MapLayerVizletWrapper = aperture.vizlet.make( BaseMapNodeLayer );
 
-			// Disable pointer events on the layer itself to allow click-through
-			this.div.style.pointerEvents = 'none';
+	/**
+	 * @class A root-level layer (cannot be contained in another vizlet/layer) that
+	 * can be added to an OpenLayers v2.x map. Layers of this type contain a {@link #olLayer}
+	 * member which is a valid OpenLayers layer and can be added to any OL map.
+	 *
+	 * @example
+	 *
+	 * var mapLayer = new aperture.geo.OL2MapLayer();
+	 * mapLayer.map('latitude').to('lat');
+	 * mapLayer.map('longitude').to('lon');
+	 * myOLMap.addLayer( mapLayer.olLayer );
+	 *
+	 * @name aperture.geo.OL2MapLayer
+	 * @augments aperture.geo.BaseMapNodeLayer
+	 * @constructs
+	 * @requires OpenLayers
+	 */
+	var OL2MapLayer = function(spec, mappings) {
+		// Create OL layer that our layer will contain
+		var olLayer = new DivOpenLayer('aperture-openlayers-bridge', {});
 
-			// TODO init params
-			this._apertureLayer = new MapLayerVizlet(this.contentFrame, apertureSpec, apertureMappings);
-			this._apertureLayer._layer = this;
-		},
+		spec = aperture.util.extend(spec || {}, {
+			elem: olLayer.contentFrame,
+			olLayer: olLayer
+		});
 
-		/**
-		 * Returns the aperture map node layer wrapped by this OpenLayers layer. The returned value
-		 * can be stored and will not change.
-		 *
-		 * @returns {aperture.geo.BaseMapNodeLayer} the wrapped Aperture layer
-		 */
-		apertureLayer: function() {
-			return this._apertureLayer;
-		},
+		// Create Aperture MapLayer layer itself
+		var self = MapLayerVizletWrapper(spec, mappings);
 
-		/**
-		 * @private
-		 */
-		onFrameChange: function(bounds) {
-			this._apertureLayer.all().redraw();
+		// When ol layer's frame changes, redraw owner Aperture layer
+		olLayer.onFrameChange = function() {
+			self.all().redraw();
 		}
-	});
 
-	ns.OL2NodeLayer = OL2NodeLayer;
+		// Expose ol layer via member "olLayer"
+		self.olLayer = olLayer;
+
+		return self;
+	};
+
+	ns.OL2MapLayer = OL2MapLayer;
 
 
 	return ns;

@@ -863,6 +863,13 @@ function(ns) {
 		 * @factoryMade
 		 */
 		init: function(spec, mappings) {
+			spec = spec || {};
+
+			var olLayer = new ns.OL2ContainerLayer(spec.name || 'aperture-ol-bridge', {});
+			spec = util.extend(spec, {
+				olLayer: olLayer
+			});
+
 			ns.BaseMapNodeLayer.prototype.init.call(this, spec, mappings);
 
 			// because we declare ourselves as an open layers canvas layer this will be
@@ -876,22 +883,21 @@ function(ns) {
 			}
 
 			// create the layer and parent it
-			this._layer = new ns.OL2ContainerLayer(spec.name || ('NodeLayer_' + this.uid), {});
-			mapCanvas.olMap_.addLayer(this._layer);
-			this._layer.setZIndex(999); // Change z as set by OpenLayers to be just under controls
+			mapCanvas.olMap_.addLayer(olLayer);
+			olLayer.setZIndex(999); // Change z as set by OpenLayers to be just under controls
 			// Turn off pointer events on the divs/svg to allow click through to map layers below
-			this._layer.div.style.pointerEvents = 'none';
+			olLayer.div.style.pointerEvents = 'none';
 
 			// because we parent vector graphics but render into a specialized open layers
 			// canvas we need to help bridge the two by pre-creating this canvas with the
 			// right parentage.
 			var OpenLayersVectorCanvas = aperture.canvas.type(aperture.canvas.VECTOR_CANVAS);
 
-			this.canvas_ = new OpenLayersVectorCanvas( this._layer.contentFrame );
+			this.canvas_ = new OpenLayersVectorCanvas( olLayer.contentFrame );
 			mapCanvas.canvases_.push( this.canvas_ );
 
 			var that = this;
-			this._layer.onFrameChange = function(newBounds) {
+			olLayer.onFrameChange = function(newBounds) {
 				// The OpenLayers layer has changed the canvas, must redraw all contents
 				// TODO Pass in appropriate "change" hint so only translation need be updated
 				that.all().redraw();
