@@ -1,9 +1,18 @@
 define(function() { return function() { //START-EXAMPLE
 // Create the map in the DOM
-var map = new aperture.geo.Map('#map');
+
+var map = new OpenLayers.Map({
+    div: "map",
+    projection: new OpenLayers.Projection("EPSG:900913"),
+    center: new OpenLayers.LonLat(20, 25).transform('EPSG:4326', 'EPSG:900913'),
+    zoom: 2,
+    layers: [new OpenLayers.Layer.OSM("OpenStreetMap")]
+});
+
+var locations = new aperture.geo.OL2MapLayer();
+map.addLayer(locations.olLayer);
 
 // Create a location layer
-var locations = map.addLayer( aperture.geo.MapNodeLayer );
 locations.map('latitude').from('latitude');
 locations.map('longitude').from('longitude');
 
@@ -41,13 +50,9 @@ bubbles.on('mouseout', function(event){
 	$('#hover').html('');
 });
 
-//Zoom to the area of the world with the data
-map.zoomTo( 20, 25, 2 );
-
 //load data
 $.getJSON("data/co2.json", function(data){
-	locations.all( data );
-	map.all().redraw();
+	locations.all( data ).redraw();
 });
 
 

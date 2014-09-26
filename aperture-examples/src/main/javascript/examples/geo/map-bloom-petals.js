@@ -1,9 +1,17 @@
 define(function() { return function() { //START-EXAMPLE
-// Create the map in the DOM
-var map = new aperture.geo.Map('#map');
+// Create the OpenLayers map, add to DOM
+var map = new OpenLayers.Map({
+    div: "map",
+    projection: new OpenLayers.Projection("EPSG:900913"),
+    center: new OpenLayers.LonLat(23, 2).transform('EPSG:4326', 'EPSG:900913'),
+    zoom: 3,
+    layers: [new OpenLayers.Layer.TMS( "my-tms", 'http://aperture.oculusinfo.com/map-world-graphite/', {
+				'layername': 'world-graphite', 'type': 'png'})]
+});
 
 //Create a content position layer
-var locations = map.addLayer( aperture.geo.MapNodeLayer );
+var locations = new aperture.geo.OL2MapLayer();
+map.addLayer(locations.olLayer);
 
 locations.map('latitude').from('lat');
 locations.map('longitude').from('long');
@@ -48,7 +56,7 @@ petals.map('stroke-width').asValue(1).filter( hover.scale(2) );
 petals.on('mouseover', function(event){
 	// Given the data object and the index into the data, get the response label
 	var indicator = event.data.indicators[event.index[0]].name;
-	
+
 	// Add to highlight group
 	if (hover.add(indicator)) {
 		$('#hover').html( event.data.country + ': ' + indicator );
@@ -63,10 +71,6 @@ petals.on('mouseout', function(event){
 	}
 });
 
-
-
-//Zoom to the area of the world with the data
-map.zoomTo( 2, 28, 3 );
 
 //load data
 $.getJSON("data/devindicators.json", function(data){
@@ -88,9 +92,7 @@ $.getJSON("data/devindicators.json", function(data){
 	petals.map('sector-count').asValue(indicators.length);
 	growth.from().expand([0, indicators.length-1]);
 
-	locations.all( data );
-
-	map.all().redraw();
+	locations.all( data ).redraw();
 });
 
 //END-EXAMPLE
