@@ -182,6 +182,9 @@ function(ns) {
      * @constructs
      * @factoryMade
      */
+		init : function( spec, mappings ) {
+			aperture.PlotLayer.prototype.init.call(this, spec, mappings );
+		},
 
     /**
      * @private
@@ -224,7 +227,27 @@ function(ns) {
   // Vizlet version of the base layer allows it to be root layer within OL2 layer
   var MapLayerVizlet = aperture.vizlet.make( BaseMapNodeLayer );
 
-  var OL2NodeLayer = OpenLayers.Class(DivOpenLayer, {
+	var OL2NodeLayer = OpenLayers.Class(DivOpenLayer,
+	/** @lends aperture.geo.OL2NodeLayer# */
+	{
+		/**
+		 * @class OpenLayers v2.x layer that wraps an Aperture aperture.geo.BaseMapNodeLayer
+		 * When added to an OpenLayers map, this layer essentially creates a vizlet as a map
+		 * layer and exposes it via apertureLayer. The exposed layer allows mapping latitude
+		 * and longitude positions to locate child layer nodes.
+		 *
+		 * @param {String} [name]
+		 *   The name of the OpenLayers layer - see OpenLayers docs
+		 * @param {Object} [options]
+		 *   Options to pass to the OpenLayer layer - see OpenLayers docs
+		 * @param {Object} [apertureSpec]
+		 *   Spec object to pass to Aperture layer constructor, see {@link Layer#}
+		 * @param {Object} [apertureMappings]
+		 *   Optional initial simple property : value mappings passed to Aperture
+		 *   layer constructor, see {@link Layer#}.
+		 *
+		 * @constructs
+		 */
     initialize : function(name, options, apertureSpec, apertureMappings) {
       // spec.name || ('NodeLayer_' + this.uid), {}
       DivOpenLayer.prototype.initialize.apply(this, arguments);
@@ -237,10 +260,19 @@ function(ns) {
       this._apertureLayer._layer = this;
     },
 
+		/**
+		 * Returns the aperture map node layer wrapped by this OpenLayers layer. The returned value
+		 * can be stored and will not change.
+		 *
+		 * @returns {aperture.geo.BaseMapNodeLayer} the wrapped Aperture layer
+		 */
     apertureLayer: function() {
       return this._apertureLayer;
     },
 
+		/**
+		 * @private
+		 */
     onFrameChange: function(bounds) {
       this._apertureLayer.all().redraw();
     }
