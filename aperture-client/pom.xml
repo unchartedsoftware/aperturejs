@@ -175,7 +175,7 @@
 								<!-- Create a single JS file for OpenLayers 2 integation and legacy map vizlet -->
 								<concat	destfile="${project.build.directory}/processed-packages/aperture-geo.js">
 									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/geo/openLayers2.js" />
-									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/geo/map.js" />
+									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/geo/legacyMap.js" />
 								</concat>
 
 								<!-- Create a single JS file for the new chart vizlet -->
