@@ -11,10 +11,9 @@
 aperture.geo = (
 /** @private */
 function(ns) {
-function openLayersMaps() {
 	if (!window.OpenLayers) {
 		aperture.log.info('OpenLayers js not present. Skipping default map api implementation.');
-		return;
+		return ns;
 	}
 
 	aperture.log.info('Loading OpenLayers map api implementation...');
@@ -1370,22 +1369,6 @@ function openLayersMaps() {
 			}
 
 			aperture.log.info('Map configuration set.');
-		}
-	});
-}
-
-	// load the default map implementation if the default mapType is unconfigured or configured to be openlayers.
-	aperture.config.register('aperture.map', function(config) {
-		if( config['aperture.map'] ) {
-			if( config['aperture.map'].defaultMapConfig ) {
-				var olMapType = 'openlayers';
-
-				mapType = config['aperture.map'].defaultMapConfig.mapType || olMapType;
-
-				if (mapType.toLowerCase() === olMapType) {
-					openLayersMaps();
-				}
-			}
 		}
 	});
 
