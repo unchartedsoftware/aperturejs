@@ -9,7 +9,7 @@ var map = new OpenLayers.Map({
     layers: [new OpenLayers.Layer.OSM("OpenStreetMap")]
 });
 
-var locations = new aperture.geo.ol.MapNodeLayer();
+var locations = new aperture.geo.ol.NodeLayer();
 map.addLayer(locations.olLayer);
 
 // Create a location layer

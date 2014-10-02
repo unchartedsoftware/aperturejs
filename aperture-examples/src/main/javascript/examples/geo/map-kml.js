@@ -1,16 +1,30 @@
 define(function() { return function() { //START-EXAMPLE
-// Create a vizlet container
-var map = new aperture.geo.Map('#map');
-
-// Zoom to the area of the world with the data
-map.zoomTo( 15, 30, 4 );
-
-// Create kmlLayer layer
-var kmlLayer = map.addLayer( aperture.geo.MapGISLayer, {}, {
-	format: "KML",
-	url: "data/sudan.kml"
+// Create the OpenLayers map, add to DOM
+var map = new OpenLayers.Map({
+		div: "map",
+		projection: new OpenLayers.Projection('EPSG:900913'),
+		center: new OpenLayers.LonLat(30, 15).transform('EPSG:4326', 'EPSG:900913'),
+		zoom: 4,
+		layers: [new OpenLayers.Layer.TMS( 'my-tms', 'http://aperture.oculusinfo.com/map-world-graphite/', {
+				'layername': 'world-graphite', 'type': 'png'})]
 });
 
+var vectorLayer = new OpenLayers.Layer.Vector('my-layer', {
+	strategies: [new OpenLayers.Strategy.Fixed()],
+	projection: 'EPSG:4326',
+	protocol: new OpenLayers.Protocol.HTTP({
+		url: 'data/sudan.kml',
+		format: new OpenLayers.Format.KML({
+			extractAttributes: true,
+			maxDepth: 2
+		})
+	})
+});
+map.addLayer(vectorLayer);
+
+
+// Use Aperture to map visual properties of the vectorLayer
+var kmlLayer = new aperture.geo.ol.VectorLayer( vectorLayer );
 // Data for each region in the KML file
 var data = {
 	'Darfur': 9,
@@ -33,7 +47,7 @@ kmlLayer.map('fill').from(dataLookup).using(scalar.mapKey(
 		new aperture.Color('#078')]));
 
 // Draw
-map.all().redraw();
+kmlLayer.all().redraw();
 
 /*
  * Create a selection "Set".  Clicking on a pie selects it, clicking
@@ -53,12 +67,6 @@ kmlLayer.on('click', function(event){
 	return true;
 });
 
-map.on('click', function(event){
-	// Clicked on map, deselect everything
-	if (selection.clear()) {
-		kmlLayer.all().redraw();
-	}
-});
 
 //END-EXAMPLE
 };});

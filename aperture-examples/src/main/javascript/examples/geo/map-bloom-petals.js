@@ -10,7 +10,7 @@ var map = new OpenLayers.Map({
 });
 
 //Create a content position layer
-var locations = new aperture.geo.ol.MapNodeLayer();
+var locations = new aperture.geo.ol.NodeLayer();
 map.addLayer(locations.olLayer);
 
 locations.map('latitude').from('lat');

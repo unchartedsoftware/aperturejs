@@ -14,13 +14,13 @@
  * example.
  */
 
-
+aperture.geo = aperture.geo || {};
 
 /**
  * @namespace Geospatial vizlet layers. If not used, may be excluded.
  * @requires OpenLayers2
  */
-aperture.geo = (
+aperture.geo.ol = (
 /** @private */
 function(ns) {
 
@@ -161,14 +161,14 @@ function(ns) {
 		CLASS_NAME : 'DivOpenLayer'
 	});
 
-	ns.OL2ContainerLayer = DivOpenLayer;
+	ns.ContainerOLLayer = DivOpenLayer;
 
 
 	/**********************************************************************/
 
 
 	var BaseMapNodeLayer = aperture.PlotLayer.extend('aperture.geo.BaseMapNodeLayer',
-	/** @lends aperture.geo.BaseMapNodeLayer# */
+	/** @lends aperture.geo.ol.BaseMapNodeLayer# */
 	{
 		/**
 		 * @class A layer that draws child layer items at point locations.
@@ -185,7 +185,7 @@ function(ns) {
 		 */
 		init : function( spec, mappings ) {
 			aperture.PlotLayer.prototype.init.call(this, spec, mappings );
-			this._layer = spec.olLayer;
+			this.olLayer = spec.olLayer;
 		},
 
 		/**
@@ -207,7 +207,7 @@ function(ns) {
 				// Find pixel x/y from lon/lat
 				var px = {x:0,y:0};
 				if (lat != null && lon != null) {
-					px = this._layer.getContentPixelForLonLat(lon,lat);
+					px = this.olLayer.getContentPixelForLonLat(lon,lat);
 				}
 
 				// Update the given node in place with these values
@@ -221,6 +221,7 @@ function(ns) {
 		}
 	});
 
+	// Expose base for sharing
 	ns.BaseMapNodeLayer = BaseMapNodeLayer;
 
 
@@ -236,17 +237,17 @@ function(ns) {
 	 *
 	 * @example
 	 *
-	 * var mapLayer = new aperture.geo.ol2.MapLayer();
+	 * var mapLayer = new aperture.geo.ol.NodeLayer();
 	 * mapLayer.map('latitude').to('lat');
 	 * mapLayer.map('longitude').to('lon');
 	 * myOLMap.addLayer( mapLayer.olLayer );
 	 *
-	 * @name aperture.geo.OL2MapLayer
+	 * @name aperture.geo.ol.NodeLayer
 	 * @augments aperture.geo.BaseMapNodeLayer
 	 * @constructs
 	 * @requires OpenLayers
 	 */
-	var MapNodeLayer = function(spec, mappings) {
+	var NodeLayer = function(spec, mappings) {
 		// Create OL layer that our layer will contain
 		var olLayer = new DivOpenLayer('aperture-openlayers-bridge', {});
 
@@ -263,15 +264,300 @@ function(ns) {
 			self.all().redraw();
 		}
 
-		// Expose ol layer via member "olLayer"
-		self.olLayer = olLayer;
-
 		return self;
 	};
 
-	ns.ol = {
-		MapNodeLayer: MapNodeLayer
+	ns.NodeLayer = NodeLayer;
+
+
+
+
+
+	/**********************************************************************/
+	/*
+	 * The list of OpenLayers vector layer styles that can be mapped in Aperture
+	 */
+	var availableStyles = {
+			'fillColor' : 'fill',
+			'fillOpacity': 'opacity',
+			'strokeColor': 'stroke',
+			'strokeOpacity': 'stroke-opacity',
+			'strokeWidth': 'stroke-width',
+			'strokeLinecap': 'stroke-linecap',
+			'strokeDashstyle': 'stroke-style', // needs translation?
+//			'graphicZIndex', ??
+			'label': 'label',
+			'pointRadius': 'radius',
+			'cursor': 'cursor',
+			'externalGraphic': '' // overridden below
 	};
 
+	/*
+	 * Default values for all settable styles (used if not mapped)
+	 * TODO Allow this to be overridden by configuration
+	 */
+	var vectorStyleDefaults = {
+		fillColor: '#999999',
+		fillOpacity: '1',
+		strokeColor: '#333333',
+		strokeOpacity: '1',
+		strokeWidth: 1,
+		strokeLinecap: 'round',
+		strokeDashstyle: 'solid',
+		graphicZIndex: 0,
+		// Must have a non-undefined label or else OpenLayers writes "undefined"
+		label: '',
+		// Must have something defined here or IE throws errors trying to do math on "undefined"
+		pointRadius: 0,
+		cursor: ''
+	};
+
+	/*
+	 * Styles that are fixed and cannot be altered
+	 * TODO Allow this to be overridden by configuration
+	 */
+	var fixedStyles = {
+		fontFamily: 'Arial, Helvetica, sans-serif',
+		fontSize: 10
+
+		// If we allow the following to be customizable by the user
+		// this prevents us from using the default of the center of the image!
+		//graphicXOffset:
+		//graphicYOffset:
+	};
+
+	// returns private function for use by map external layer
+	var makeHandler = (function() {
+
+		// event hooks for features.
+		function makeCallback( type ) {
+			var stopKey;
+
+			switch (type) {
+			case 'click':
+			case 'dblclick':
+				stopKey = 'stopClick';
+				break;
+			case 'mousedown':
+			case 'touchstart': // ?
+				stopKey = 'stopDown';
+				break;
+			case 'mouseup':
+				stopKey = 'stopUp';
+				break;
+			}
+			if (stopKey) {
+				return function(feature) {
+					this.handler_[stopKey] = this.trigger(type, {
+						data: feature.attributes,
+						eventType: type
+					});
+				};
+			} else {
+				return function(feature) {
+					this.trigger(type, {
+						data: feature.attributes,
+						eventType: type
+					});
+				};
+			}
+		}
+
+		var featureEvents = {
+			'mouseout' : 'out',
+			'mouseover' : 'over'
+		};
+
+		return function (events) {
+			var handlers = {}, active;
+
+			if (this.handler_) {
+				this.handler_.deactivate();
+				this.handler_= null;
+			}
+
+			aperture.util.forEach(events, function(fn, event) {
+				handlers[ featureEvents[event] || event ] = makeCallback(event);
+				active = true;
+			});
+
+			if (active) {
+				this.handler_ = new OpenLayers.Handler.Feature(
+					this, this.olLayer, handlers,
+					{ map: this.olLayer.map,
+						stopClick: false,
+						stopDown: false,
+						stopUp: false
+					}
+				);
+				this.handler_.activate();
+			}
+		};
+	}());
+
+	var VectorLayer = aperture.Layer.extend( 'aperture.geo.ol.VectorLayer',
+	/** @lends aperture.geo.ol.VectorLayer# */
+	{
+		/**
+		 * @class An Aperture Map layer that manages visual mappings of an OpenLayers Vector layer
+		 * such as KML, GML, or GeoRSS.  Visual properties of this layer are mapped like any
+		 * other layer where the data available for mapping are attributes of the features
+		 * loaded from the external source.
+		 *
+		 * @mapping {String} fill
+		 *   The fill color of the feature
+		 *
+		 * @mapping {String} stroke
+		 *   The line color of the feature
+		 *
+		 * @mapping {Number} stroke-opacity
+		 *   The line opacity of the feature as a value from 0 (transparent) to 1.
+		 *
+		 * @mapping {Number} stroke-width
+		 *   The line width of the feature.
+		 *
+		 * @mapping {String} label
+		 *   The label of the feature.
+		 *
+		 * @mapping {Number} radius
+		 *   The radius of the feature.
+		 *
+		 * @mapping {String} cursor
+		 *   The hover cursor for the feature.
+		 *
+		 * @augments aperture.Layer
+		 * @constructs
+		 *
+		 * @description Layer constructors are invoked indirectly by calling
+		 *  {@link aperture.PlotLayer#addLayer addLayer} on a parent layer with the following specifications...
+		 *
+ 		 * @param {Object} olLayer|spec
+		 *      an OpenLayers Vector layer to manage
+		 *
+		 * @param {Object} [spec.olLayer]
+		 *      a set of initial mappings
+		 *
+		 * @param {Object} [mappings]
+		 *      a set of initial mappings
+		 */
+		init : function(olLayer, mappings) {
+			var spec;
+			if (olLayer && olLayer.olLayer) {
+				spec = olLayer;
+				olLayer = olLayer.olLayer;
+			} else {
+				spec = {};
+			}
+
+			if (!olLayer || !olLayer.CLASS_NAME) {
+				aperture.log.error('Aperture OpenLayers VectorLayer requires an OpenLayers Vector layer')
+			}
+
+			aperture.Layer.prototype.init.call(this, spec, mappings);
+
+			this.olLayer = olLayer;
+
+			//
+			// Ensure Openlayers defers to Aperture for all style queries
+			// Creates an OpenLayers style map that will call the Aperture layer's "valueFor"
+			// function for all styles.
+			//
+			// Create a base spec that directs OpenLayers to call our functions for all properties
+			var defaultSpec = aperture.util.extend({}, fixedStyles);
+
+			// plus any set properties
+			aperture.util.forEach(availableStyles, function(property, styleName) {
+				defaultSpec[styleName] = '${'+styleName+'}';
+			});
+
+			// Create a cloned version for each item state
+			var selectedSpec = aperture.util.extend({}, defaultSpec);
+			var highlighedSpec = aperture.util.extend({}, defaultSpec);
+
+			// Override some properties for custom styles (e.g. selection bumps up zIndex)
+			//util.extend(selectedSpec, customStyles.select);
+			//util.extend(highlighedSpec, customStyles.highlight);
+
+			// Create context object that provides feature styles
+			// For each available style create a function that calls "valueFor" giving the
+			// feature as the data value
+			var styleContext = {},
+				that = this;
+
+			aperture.util.forEach(availableStyles, function(property, styleName) {
+				styleContext[styleName] = function(feature) {
+					// Value for the style given the data attributes of the feature
+					return that.valueFor(property, feature.attributes, vectorStyleDefaults[styleName]);
+				};
+			});
+			styleContext.externalGraphic = function(feature) {
+				// Must have a non-undefined externalGraphic or else OpenLayers tries
+				// to load the URL "undefined"
+				if (feature.geometry.CLASS_NAME === 'OpenLayers.Geometry.Point') {
+					return that.valueFor('icon-url', feature.attributes, '');
+				}
+				return that.valueFor('fill-pattern', feature.attributes, '');
+			};
+
+			// Create the style map for this layer
+			styleMap = new OpenLayers.StyleMap({
+				'default' : new OpenLayers.Style(defaultSpec, {context: styleContext}),
+				'select' : new OpenLayers.Style(selectedSpec, {context: styleContext}),
+				'highlight' : new OpenLayers.Style(highlighedSpec, {context: styleContext})
+			});
+
+			this.olLayer.styleMap = styleMap;
+		},
+
+		/**
+		 * @private not supported
+		 */
+		data : function(value) {
+			// Not supported
+			if( value ) {
+				throw new Error('Cannot add data to a layer with an external data source');
+			}
+		},
+
+		/**
+		 * @private monitor adds and removes.
+		 */
+		on : function( eventType, callback ) {
+			var hadit = this.handlers_[eventType];
+
+			aperture.Layer.prototype.on.call(this, eventType, callback);
+
+			if (!hadit) {
+				makeHandler.call(this, this.handlers_);
+			}
+		},
+
+		/**
+		 * @private monitor adds and removes.
+		 */
+		off : function( eventType, callback ) {
+			aperture.Layer.prototype.off.call(this, eventType, callback);
+
+			if (!this.handlers_[eventType]) {
+				makeHandler.call(this, this.handlers_);
+			}
+		},
+
+		/**
+		 * @private
+		 */
+		render : function(changeSet) {
+			// No properties or properties and intersection with our properties
+			// Can redraw
+			this.olLayer.redraw();
+		},
+
+		redraw : function() {
+			this.render();
+		}
+	});
+
+	ns.VectorLayer = VectorLayer;
+
 	return ns;
-}(aperture.geo || {}));
+}(aperture.geo.ol || {}));
