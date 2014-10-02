@@ -18,14 +18,14 @@
 
 /**
  * @namespace Geospatial vizlet layers. If not used, may be excluded.
- * @requires OpenLayers
+ * @requires OpenLayers2
  */
 aperture.geo = (
 /** @private */
 function(ns) {
 
 	if (!window.OpenLayers) {
-		aperture.log.info('OpenLayers js not present. Skipping default map api implementation.');
+		aperture.log.info('OpenLayers 2 js not present. Skipping OL2 map api implementation.');
 		return ns;
 	}
 
@@ -236,7 +236,7 @@ function(ns) {
 	 *
 	 * @example
 	 *
-	 * var mapLayer = new aperture.geo.OL2MapLayer();
+	 * var mapLayer = new aperture.geo.ol2.MapLayer();
 	 * mapLayer.map('latitude').to('lat');
 	 * mapLayer.map('longitude').to('lon');
 	 * myOLMap.addLayer( mapLayer.olLayer );
@@ -246,7 +246,7 @@ function(ns) {
 	 * @constructs
 	 * @requires OpenLayers
 	 */
-	var OL2MapLayer = function(spec, mappings) {
+	var MapNodeLayer = function(spec, mappings) {
 		// Create OL layer that our layer will contain
 		var olLayer = new DivOpenLayer('aperture-openlayers-bridge', {});
 
@@ -269,8 +269,9 @@ function(ns) {
 		return self;
 	};
 
-	ns.OL2MapLayer = OL2MapLayer;
-
+	ns.ol = {
+		MapNodeLayer: MapNodeLayer
+	};
 
 	return ns;
 }(aperture.geo || {}));
