@@ -26,6 +26,8 @@ package oculus.aperture.cms;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import oculus.aperture.common.rest.ApertureServerResource;
 import oculus.aperture.common.rest.BlobRepresentation;
@@ -97,6 +99,13 @@ public class ContentResource extends ApertureServerResource {
 		// Get parameters from query
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		this.rev = form.getFirstValue("rev");
+		if (this.rev != null) {
+			Pattern regex = Pattern.compile("[^\\d\\.]");
+			Matcher regexMatcher = regex.matcher(this.rev);
+			if (regexMatcher.find()) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Document revisions must only contain digits and periods.");
+			}
+		}
 		
 		// optional local filename to save to for gets
 		this.filename = form.getFirstValue("downloadAs");
@@ -151,7 +160,7 @@ public class ContentResource extends ApertureServerResource {
 			descriptor = contentService.storeDocument(doc, store, id, rev);
 		} catch (ConflictException e) {
 			// Wrong rev used, cannot update
-			throw new ResourceException(Status.CLIENT_ERROR_CONFLICT, "Version conflict, provided revision " + rev + " for document "+ id + " is out of date.", e);
+			throw new ResourceException(Status.CLIENT_ERROR_CONFLICT, "Version conflict, provided revision for document is out of date.", e);
 		}
 
 		if( descriptor != null ) {
