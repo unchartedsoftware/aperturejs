@@ -4,14 +4,28 @@
 	<parent>
 		<artifactId>aperture</artifactId>
 		<groupId>oculus.aperture</groupId>
-		<version>1.0.8</version>
+		<version>1.0.9</version>
 	</parent>
 
 	<artifactId>aperture-server-core</artifactId>
 	<packaging>jar</packaging>
 
 	<name>Aperture Server Core Components</name>
-	<description>Server component code of Aperture.</description>	<url>http://aperturejs.com</url>	<licenses>		<license>			<name>The MIT License (MIT)</name>			<url>http://opensource.org/licenses/MIT</url>			<distribution>repo</distribution>		</license>	</licenses>	<scm>		<url>https://github.com/oculusinfo/aperturejs</url>		<connection>scm:git:https://github.com/oculusinfo/aperturejs.git</connection>	</scm>
+	<description>Server component code of Aperture.</description>
+	<url>http://aperturejs.com</url>
+
+	<licenses>
+		<license>
+			<name>The MIT License (MIT)</name>
+			<url>http://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/oculusinfo/aperturejs</url>
+		<connection>scm:git:https://github.com/oculusinfo/aperturejs.git</connection>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
