@@ -53,7 +53,8 @@ aperture.store = (function() {
 		 * being updated this id specifies the id of the document to update.
 		 * @param {String} [descriptor.rev] the revision of the document to store.  If updating a document
 		 * this must be set to the current revision to be allowed to perform the update.  This prevents
-		 * updating a document with out of date information.
+		 * updating a document with out of date information. Revisions must only contain digits
+		 * and periods.
 		 *
 		 * @param {Function(descriptor)} [callback] a function to be called after the store command completes on the server.  The
 		 * callback will be given a descriptor object in the same format as the descriptor to the store function
@@ -123,7 +124,8 @@ aperture.store = (function() {
 		 * provided the default will be used.
 		 * @param {String} descriptor.id the id of the document to get
 		 * @param {String} [descriptor.rev] the revision of the document to get.  If not
-		 * provided, the most recent revision will be retrieved.
+		 * provided, the most recent revision will be retrieved. Revisions must only contain digits
+		 * and periods.
 		 * @param {String='get'|'remove'|'pop'} [action='get'] the action to perform, which defaults to get 
 		 * @param {String} [downloadAs] the local filename of the document if is to be downloaded 
 		 * rather than opened by the browser. Do not specify this argument if the document should
@@ -164,7 +166,8 @@ aperture.store = (function() {
 		 * provided the default will be used.
 		 * @param {String} descriptor.id the id of the document to get
 		 * @param {String} [descriptor.rev] the revision of the document to get.  If not
-		 * provided, the most recent revision will be retrieved.
+		 * provided, the most recent revision will be retrieved. Revisions must only contain digits
+		 * and periods.
 		 *
 		 * @param {Function(data,descriptor)} [callback] a callback to be called when the document
 		 * data is available.  The callback will be provided with the data and a hash of the
@@ -185,7 +188,8 @@ aperture.store = (function() {
 		 * provided the default will be used.
 		 * @param {String} descriptor.id the id of the document to get
 		 * @param {String} [descriptor.rev] the revision of the document to get.  If not
-		 * provided, the most recent revision will be retrieved.
+		 * provided, the most recent revision will be retrieved. Revisions must only contain digits
+		 * and periods.
 		 *
 		 * @param {Function(data,descriptor)} [callback] a callback to be called when the document
 		 * data is available.  The callback will be provided with the data and a hash of the
