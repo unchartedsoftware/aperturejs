@@ -75,6 +75,9 @@ function(ns) {
 			// It is contained in the 'div' element which is fit exactly
 			// to the map's main container layer
 			this.div.appendChild(this.contentFrame);
+			// Turn off pointer events on the map-covering div to allow click through to map layers below
+			// Child visuals will need to turn back on
+			this.div.style.pointerEvents = 'none';
 		},
 
 		/**

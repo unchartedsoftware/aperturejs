@@ -651,8 +651,6 @@ function(ns) {
 			// create the layer and parent it
 			mapCanvas.olMap_.addLayer(olLayer);
 			olLayer.setZIndex(999); // Change z as set by OpenLayers to be just under controls
-			// Turn off pointer events on the divs/svg to allow click through to map layers below
-			olLayer.div.style.pointerEvents = 'none';
 
 			// because we parent vector graphics but render into a specialized open layers
 			// canvas we need to help bridge the two by pre-creating this canvas with the
