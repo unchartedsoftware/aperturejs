@@ -35,6 +35,7 @@
 		'packages/pubsub.js',
 		'packages/store.js',
 		'packages/geo/openLayers2.js',
+		'packages/geo/openLayers3.js',
 		'packages/geo/legacyMap.js',
 		'packages/chart/AxisLayer.js',
 		'packages/chart/BarSeriesLayer.js',
