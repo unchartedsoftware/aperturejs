@@ -63,6 +63,8 @@ function(ns) {
 			if (map) {
 				this.moveEndKey = map.on('moveend', this.postMove, this);
 				this.zoomKey = map.getView().on('change:resolution', this.preMove, this);
+				// Set initial state
+				this.postMove();
 			}
 		}, this);
 	};
