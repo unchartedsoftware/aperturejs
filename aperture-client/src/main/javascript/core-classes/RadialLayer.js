@@ -150,7 +150,7 @@ function(namespace) {
 		 * Creates a forward or backward path from an arc definition.
 		 *
 		 * @param arc
-		 *  the arc object as created by one of the arc functions (bloom, pie, radar)
+		 *  the arc object as created by one of the arc functions (bloom, pie)
 		 *
 		 * @param prefix
 		 *  the move to (M,m) or line to (L,l) prefix, depending on whether this is the beginning
@@ -207,7 +207,10 @@ function(namespace) {
 			'form' : 'pie',
 			'base-radius': 0,
 			'outline': null,
-			'outline-width': 3
+			'outline-width': 3,
+            'axis-stroke-width': 0,
+            'axis-stroke': '#000',
+            'axis-stroke-dasharray': ''
 		},
 		seriesDefaults = {
 			'radius' : 20,
@@ -258,6 +261,8 @@ function(namespace) {
 			 *  suitable for partitioned data, whereas a
 			 *  <span class="fixedFont">'bloom'</span>
 			 *  form can be used for discrete multi-variate data, similar to a radar chart.
+             *  <span class="fixedFont">'radar'</span>
+             *  form can be used for single or multi-variate data.
 			 *  If a single data element is provided, a circle is produced and this property
 			 *  will have no effect.
 			 *  <i>Evaluated for each radial node.</i>
@@ -319,6 +324,18 @@ function(namespace) {
 			 *  The opacity as a value from 0 to 1.
 			 *  <i>Evaluated for each series of each sector of each radial node.</i>
 			 *
+             * @mapping {Number=0} axis-stroke-width
+             *  The stroke width of the axis lines.  Will not draw if 0.
+             *  <i>Evaluated for each radial node.</i>
+             *
+             * @mapping {String='#000'} axis-stroke
+             *  The stroke color of the axis lines.
+             *  <i>Evaluated for each radial node.</i>
+             *
+             * @mapping {String=''} axis-stroke-dasharray
+             *  The stroke line style of the axis lines.  Use RaphaelJs styles.
+             *  <i>Evaluated for each radial node.</i>
+             *
 			 * @constructs
 			 * @factoryMade
 			 * @extends aperture.Layer
@@ -352,7 +369,13 @@ function(namespace) {
                     shapes = [],
                     dimSkip = false,
                     path,
-                    j;
+                    j,
+                    axisWidth = p['axis-stroke-width'],
+                    axisColor = p['axis-stroke'],
+                    axisDashStyle = p['axis-stroke-dasharray'],
+                    rotations = [],
+                    out;
+
 
                 if (numSegments == undefined) {
                     numSegments = 1;
@@ -400,10 +423,51 @@ function(namespace) {
                 //build the paths
 
                 if(independent) {
-                    outlinePath = this.buildNodeSeriesIndependentPaths(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread);
+                    out = this.buildNodeSeriesIndependentPaths(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread, rotations);
+
+                    outlinePath = out.outlinePath;
+                    maxRadius = out.maxRadius;
 
                 } else {
-                    outlinePath = this.buildNodeSeriesJoinedPaths(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread, arc);
+                    out = this.buildNodeSeriesJoinedPaths(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread, arc, rotations);
+
+                    outlinePath = out.outlinePath;
+                    maxRadius = out.maxRadius;
+                }
+
+
+                //draw the radial axis markers
+                if(segmented && axisWidth) {
+
+                    var axisPath = 'M 0,0';
+
+                    for(i = 0; i < rotations.length; i++) {
+                        var rot = rotations[i];
+
+                        var axisPt = { x : 0, y : -(innerRadius + maxRadius) };
+                        rot.rotate(axisPt);
+
+
+                        axisPath +=  ' L' + ' '
+                            + axisPt.x + ','
+                            + axisPt.y + ' M 0,0';
+
+
+
+
+                    }
+
+                    shapes.push({
+                        graphic: {
+                            // arc plus a tapered point to 0,0
+                            'path': axisPath,
+                            'fill': none,
+                            'opacity': 1,
+                            'stroke-width': axisWidth,
+                            'stroke': axisColor,
+                            'stroke-dasharray': axisDashStyle
+                        }
+                    });
                 }
 
 
@@ -487,10 +551,10 @@ function(namespace) {
              * @private
              * Build paths for a joined series node implementation  (bloom and pie)
              */
-            buildNodeSeriesIndependentPaths : function(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread) {
+            buildNodeSeriesIndependentPaths : function(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread, rotations) {
                 //build each series
                 var iSeries, iSegment, radialData, path, outlinePath, maxRadius, i;
-                var rotations = [];
+
 
                 radialData = segmentRadialData[0];
                 maxRadius = 0;
@@ -605,50 +669,16 @@ function(namespace) {
                     }
                 }
 
-                //draw the radial axis markers
-                if(segmented) {
-
-                    path = 'M 0,0';
-
-                    for(i = 0; i < rotations.length; i++) {
-                        var rot = rotations[i];
-
-                        outerArc = { x : 0, y : -(innerRadius + maxRadius) };
-                        rot.rotate(outerArc);
-
-
-                        path +=  ' L' + ' '
-                            + outerArc.x + ','
-                            + outerArc.y + ' M 0,0';
-
-
-
-
-                    }
-
-                    shapes.push({
-                        graphic: {
-                            // arc plus a tapered point to 0,0
-                            'path': path,
-                            'fill': none,
-                            'opacity': 1,
-                            'stroke-width': 0.5,
-                            'stroke': '#000000',
-                            'stroke-dasharray': '--'
-                        }
-                    });
-                }
-
-                return outlinePath;
+                return {outlinePath:outlinePath, maxRadius:maxRadius};
             },
 
             /**
              * @private
              * Build paths for an independent series node implementation  (radar)
              */
-            buildNodeSeriesJoinedPaths : function(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread, arc) {
+            buildNodeSeriesJoinedPaths : function(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread, arc, rotations) {
 
-                var iSeries, iSegment, radialData, path, outlinePath, j, maxRadius;
+                var iSeries, iSegment, radialData, path, outlinePath, j, maxRadius = 0;
                 var strokes = [];
 
                 // For each radial, build
@@ -662,7 +692,9 @@ function(namespace) {
                         outerArc,
                         outerPath;
 
-
+                    if(rotations.length != numSegments) {
+                        rotations.push(rotation0);
+                    }
 
                     if (!spread) {
                         continue;
@@ -790,7 +822,7 @@ function(namespace) {
                     shapes.push(strokes[j]);
                 }
 
-                return outlinePath;
+                return {outlinePath:outlinePath, maxRadius:maxRadius};
             },
 
              /**
