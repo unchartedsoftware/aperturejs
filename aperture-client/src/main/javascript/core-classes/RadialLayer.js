@@ -59,7 +59,7 @@ function(namespace) {
 		 * @private
 		 */
 		arcFns = {
-
+	
 			/**
 			 * @private
 			 * Returns vertices and properties for a petal arc.
@@ -150,7 +150,7 @@ function(namespace) {
 		 * Creates a forward or backward path from an arc definition.
 		 *
 		 * @param arc
-		 *  the arc object as created by one of the arc functions (bloom, pie)
+		 *  the arc object as created by one of the arc functions (bloom, pie, radar)
 		 *
 		 * @param prefix
 		 *  the move to (M,m) or line to (L,l) prefix, depending on whether this is the beginning
@@ -251,7 +251,7 @@ function(namespace) {
 			 *  is normalized against the height of the layer.
 			 *  <i>Evaluated for each radial node.</i>
 			 *
-			 * @mapping {'pie'|'bloom'} form
+			 * @mapping {'pie'|'bloom'|'radar'} form
 			 *  The form of layer elements. A
 			 *  <span class="fixedFont">'pie'</span>
 			 *  form can be used for pie, donut, or coxcomb indicators,
@@ -331,279 +331,483 @@ function(namespace) {
 			// type flag
 			canvasType : aperture.canvas.VECTOR_CANVAS,
 
-			/**
+            /**
+             * @private
+             * Render joined series node implementation  (bloom and pie)
+             */
+            renderNode : function( node, data, p, transition, independent ) {
+
+                var i, iSegment, iSeries, node, visuals, graphics;
+
+                var numSegments = p['sector-count'],
+                    segmented = 0,
+                    rotation0 = rotation(p['start-angle']),
+                    innerRadius = p['base-radius'],
+                    outlineWidth = p['outline-width'],
+                    outline = outlineWidth && p.outline !== 'none' && p.outline,
+                    outlinePath = '',
+                    maxRadius = 0,
+                    arc = arcFns.pie,
+                    strokes = [],
+                    shapes = [],
+                    dimSkip = false,
+                    path,
+                    j;
+
+                if (numSegments == undefined) {
+                    numSegments = 1;
+                    dimSkip = true;
+                }
+                // use a different arc function for blooms,
+                // and we don't currently support the inner radius so reset it to zero.
+                if (p.form === 'bloom') {
+                    innerRadius = 0;
+                    arc = arcFns.bloom;
+                }
+
+                var defSpread = 360 / numSegments;
+
+                // Check for single segment
+                for( iSegment = 0; iSegment < numSegments; iSegment++ ) {
+                    if (this.valueFor( 'sector-angle', data, defSpread, iSegment ) && ++segmented === 2) {
+                        break;
+                    }
+                }
+
+                segmented = segmented > 1;
+
+                //build radial data for all segments
+                var segmentRadialData = [], radialData;
+                var seriesIndex;
+
+                for( iSegment = 0; iSegment < numSegments; iSegment++ ) {
+
+                    var numSeries = this.valueFor( 'series-count', data, 1, iSegment );
+                    radialData = [];
+
+                    // Collect all series data for sorting
+                    for( iSeries = 0; iSeries < numSeries; iSeries++ ) {
+                        seriesIndex = dimSkip? [iSeries] : [iSegment, iSeries];
+                        radialData.push(this.valuesFor(seriesDefaults, data, seriesIndex));
+                    }
+
+                    // Sort by increasing radial length
+                    radialData.sort( sortByRadialLength );
+
+                    segmentRadialData.push(radialData);
+                }
+
+                //build the paths
+
+                if(independent) {
+                    outlinePath = this.buildNodeSeriesIndependentPaths(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread);
+
+                } else {
+                    outlinePath = this.buildNodeSeriesJoinedPaths(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread, arc);
+                }
+
+
+                    // NOW PROCESS ALL SHAPES INTO GRAPHICS.
+                // There is one node per radial visual.
+                var xCoord = node.position[0]+ (this.valueFor('x', node.data, 0))*node.width,
+                    yCoord = node.position[1]+ ((this.valueFor('y', node.data, 0)))*node.height,
+                    ud = node.userData;
+
+                visuals = ud.visuals;
+                graphics  = node.graphics;
+
+                var nShapes = shapes.length,
+                    transform = 't' + xCoord + ',' + yCoord;
+
+                // insert perimeter outline?
+                if (outline) {
+
+                    // Create the inner path of the ring
+                    if (innerRadius) {
+                        outlinePath += ' ' + circlePath( innerRadius, 0 );
+                    }
+                    outlinePath += ' Z';
+
+                    var attrs = {
+                        'fill': none,
+                        'stroke' : outline,
+                        'stroke-width' : outlineWidth,
+                        'opacity' : this.valueFor('outline-opacity', node.data, 1),
+                        'transform' : transform
+                    };
+
+                    path = ud.outline;
+
+                    if (path) {
+                        attrs.path = outlinePath;
+                        graphics.attr(path, attrs, transition);
+                    } else {
+//								console.log(outlinePath);
+
+                        path = ud.outline = graphics.path(outlinePath);
+                        graphics.toBack(path);
+                        graphics.attr(path, attrs);
+                    }
+                } else if (ud.outline) {
+                    graphics.remove(ud.outline);
+                    ud.outline = null;
+                }
+
+                // get visuals, create storage if not already there
+                if (!visuals) {
+                    visuals = ud.visuals = [];
+                }
+
+                // sync our set of path visuals.
+                if (visuals.length > nShapes) {
+                    graphics.removeAll(visuals.splice(nShapes, visuals.length - nShapes));
+                } else {
+                    while (visuals.length < nShapes) {
+                        path = graphics.path();
+                        visuals.push(path);
+                    }
+                }
+
+                // Turn it into graphics.
+                for (j = 0; j < shapes.length; j++) {
+
+                    // add transform attribute as well.
+                    shapes[j].graphic.transform = transform;
+
+                    // apply all attributes.
+                    graphics.attr(visuals[j], shapes[j].graphic, transition);
+
+                    // Set the data associated with this visual element
+                    graphics.data( visuals[j], data, [shapes[j].segment, shapes[j].series] );
+                }
+
+            },
+
+
+            buildNodeSeriesIndependentPaths : function(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread) {
+                //build each series
+                var iSeries, iSegment, radialData, path, outlinePath, maxRadius, i;
+                var rotations = [];
+
+                radialData = segmentRadialData[0];
+                maxRadius = 0;
+
+                for( iSeries = 0; iSeries < numSeries; iSeries++ ) {
+                    var innerArc = innerRadius,
+                        singleSeries = numSeries === 1,
+                        outerArc,
+                        nextRadialData;
+
+                    var stroke = radialData[iSeries].stroke,
+                        strokeWidth = radialData[iSeries]['stroke-width'],
+                        fill   = radialData[iSeries].fill,
+                        outlineSeries = outline && iSeries == numSeries-1;
+
+
+                    if(segmented) {
+
+                        path = undefined;
+
+                        for( iSegment = 0; iSegment < numSegments; iSegment++ ) {
+
+                            radialData = segmentRadialData[iSegment];
+
+                            var  spread = this.valueFor( 'sector-angle', data, defSpread, iSegment ),
+                                radius = radialData[iSeries].radius,
+                                rotation1 = rotation( rotation0.angle + spread );
+
+                            if(rotations.length != numSegments) {
+                                rotations.push(rotation0);
+                            }
+
+                            if (!spread || radius <= 0) {
+                                rotation0 = rotation1;
+                                continue;
+                            }
+
+                            maxRadius = Math.max( maxRadius, radius );
+
+
+
+                            outerArc = { x : 0, y : -(innerRadius + radius) };
+                            rotation0.rotate(outerArc);
+
+
+                            if(!path) {
+                                path =  'M' + ' '
+                                    + outerArc.x + ','
+                                    + outerArc.y ;
+                            }
+
+                            path +=  'L' + ' '
+                                + outerArc.x + ','
+                                + outerArc.y ;
+
+
+                            rotation0 = rotation1;
+                        }
+
+                        path += ' Z';
+
+                        if (outlineSeries) {
+                            outlinePath = path;
+                        }
+
+                    }  else {
+                        // outerArc is the outer radius
+                        outerArc = innerRadius + radius;
+
+                        // start with the outer circle.
+                        path = circlePath( outerArc, 1 );
+
+                        // then if there is a cutout, add that.
+                        if( innerArc ) {
+
+                            // Create the inner path of the ring using the innerArc (radius)
+                            path += circlePath( innerArc, 0 );
+                        }
+
+                        // form the outline.
+                        if (outlineSeries) {
+                            outlinePath = path;
+                        }
+                    }
+
+
+                    if(fill) {
+                        shapes.push({
+                            graphic: {
+                                'path': path,
+                                'fill': fill,
+                                'opacity': radialData[iSeries].opacity,
+                                'stroke-width': 0,
+                                'stroke': none
+                            },
+                            series: iSeries
+                        });
+                    }
+
+                    if (stroke !== none) {
+                        shapes.push({
+                            graphic: {
+                                // arc plus a tapered point to 0,0
+                                'path': path,
+                                'fill': none,
+                                'opacity': 1,
+                                'stroke-width': strokeWidth,
+                                'stroke': stroke
+                            },
+                            series: iSeries
+                        });
+                    }
+                }
+
+                //draw the radial axis markers
+                if(segmented) {
+
+                    path = 'M 0,0';
+
+                    for(i = 0; i < rotations.length; i++) {
+                        var rot = rotations[i];
+
+                        outerArc = { x : 0, y : -(innerRadius + maxRadius) };
+                        rot.rotate(outerArc);
+
+
+                        path +=  ' L' + ' '
+                            + outerArc.x + ','
+                            + outerArc.y + ' M 0,0';
+
+
+
+
+                    }
+
+                    shapes.push({
+                        graphic: {
+                            // arc plus a tapered point to 0,0
+                            'path': path,
+                            'fill': none,
+                            'opacity': 1,
+                            'stroke-width': 0.5,
+                            'stroke': '#000000',
+                            'stroke-dasharray': '--'
+                        }
+                    });
+                }
+
+                return outlinePath;
+            },
+
+            buildNodeSeriesJoinedPaths : function(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread, arc) {
+
+                var iSeries, iSegment, radialData, path, outlinePath, j, maxRadius;
+                var strokes = [];
+
+                // For each radial, build
+                for( iSegment = 0; iSegment < numSegments; iSegment++ ) {
+
+                    var numSeries = this.valueFor( 'series-count', data, 1, iSegment ),
+                        spread = this.valueFor( 'sector-angle', data, defSpread, iSegment ),
+                        rotation1 = rotation( rotation0.angle + spread ),
+                        innerArc = innerRadius,
+                        singleSeries = numSeries === 1,
+                        outerArc,
+                        outerPath;
+
+
+
+                    if (!spread) {
+                        continue;
+                    }
+
+                    radialData = segmentRadialData[iSegment];
+
+                    // start somewhere?
+                    if ( innerRadius && segmented ) {
+                        innerArc = arc( innerRadius, spread, rotation0, rotation1 );
+                    }
+
+                    // Iterate from inner to outer-most series
+                    for( iSeries = 0; iSeries < numSeries; iSeries++ ) {
+
+                        var radius = radialData[iSeries].radius,
+                            stroke = radialData[iSeries].stroke,
+                            strokeWidth = radialData[iSeries]['stroke-width'],
+                            fill   = radialData[iSeries].fill,
+                            outlineSeries = outline && iSeries == numSeries-1;
+
+                        // skip items with no radius.
+                        if ( radius <= 0 ) {
+                            continue;
+                        }
+
+                        maxRadius = Math.max( maxRadius, radius );
+
+                        // has radial segments?
+                        if( segmented ) {
+
+                            // Create radial petal
+                            outerArc = arc( innerRadius + radius, spread, rotation0, rotation1 );
+
+                            // form the arc to begin the path.
+                            path = outerPath = arcPath( outerArc, 'M', 1 );
+
+                            // append to the outline.
+                            if (outlineSeries) {
+                                if (outlinePath) {
+                                    outlinePath += arcPath( outerArc, ' L', 1 );
+                                } else {
+                                    outlinePath = outerPath;
+                                }
+                            }
+
+                            // the complete shape, tapered to point 0,0 (strokes use this as well)
+                            outerPath += ' L0,0 Z';
+
+                            if( innerArc ) {
+                                // outer arc plus inner arc reversed, then closed
+                                path += arcPath( innerArc, 'L', 0 ) + ' Z';
+
+                            } else {
+                                path = outerPath;
+                            }
+
+
+                        } else {    // else create a circle.
+
+                            // outerArc is the outer radius
+                            outerArc = innerRadius + radius;
+
+                            // start with the outer circle.
+                            path = outerPath = circlePath( outerArc, 1 );
+
+                            // then if there is a cutout, add that.
+                            if( innerArc ) {
+
+                                // Create the inner path of the ring using the innerArc (radius)
+                                path += circlePath( innerArc, 0 );
+                            }
+
+                            // form the outline.
+                            if (outlineSeries) {
+                                outlinePath = outerPath;
+                            }
+                        }
+
+                        // add the filled part, if there is something visible here.
+                        if (fill || (singleSeries && stroke)) {
+                            shapes.push({
+                                graphic: {
+                                    'path': path,
+                                    'fill': fill,
+                                    'opacity': radialData[iSeries].opacity,
+                                    'stroke-width': singleSeries ? strokeWidth : 0,
+                                    'stroke': singleSeries ? stroke : none
+                                },
+                                series: iSeries,
+                                segment: iSegment
+                            });
+                        }
+
+                        // have to draw the stroke separately in all
+                        // multi-series cases because:
+                        // a) it needs to define the outer edge only and
+                        // b) it needs to sit on top.
+                        if (!singleSeries && stroke !== none) {
+                            strokes.push({
+                                graphic: {
+                                    // arc plus a tapered point to 0,0
+                                    'path': outerPath,
+                                    'fill': none,
+                                    'opacity': 1,
+                                    'stroke-width': strokeWidth,
+                                    'stroke': stroke
+                                },
+                                series: iSeries,
+                                segment: iSegment
+                            });
+                        }
+
+
+                        // This one's outer becomes the next one's inner
+                        innerArc = outerArc;
+                    }
+
+                    // increment angle.
+                    rotation0 = rotation1;
+                }
+
+                // add the strokes in reverse order.
+                for ( j = strokes.length; j-- > 0; ) {
+                    shapes.push(strokes[j]);
+                }
+
+                return outlinePath;
+            },
+
+             /**
 			 * @private
 			 * Render implementation
 			 */
 			render : function( changeSet ) {
 
 				// FOR NOW - process all changes INEFFICIENTLY as total rebuilds.
-				var toProcess = changeSet.updates,
-					i, iSegment, iSeries, node, visuals, graphics,
-					transition = changeSet.transition;
+				var toProcess = changeSet.updates, transition = changeSet.transition;
+                var node, data, i, p;
 
 				// Handle adds
 				for( i=toProcess.length-1; i>=0; i-- ) {
 					node = toProcess[i];
-					var data = node.data,
-						p = this.valuesFor(defaults, data),
-						numSegments = p['sector-count'],
-						segmented = 0,
-						rotation0 = rotation(p['start-angle']),
-						innerRadius = p['base-radius'],
-						outlineWidth = p['outline-width'],
-						outline = outlineWidth && p.outline !== 'none' && p.outline,
-						outlinePath = '',
-						maxRadius = 0,
-						arc = arcFns.pie,
-						strokes = [],
-						shapes = [],
-						dimSkip = false,
-						path,
-						j;
+                    data = node.data;
+                    p = this.valuesFor(defaults, data);
 
-					if (numSegments == undefined) {
-						numSegments = 1;
-						dimSkip = true;
-					}
-					// use a different arc function for blooms,
-					// and we don't currently support the inner radius so reset it to zero.
-					if (p.form === 'bloom') {
-						innerRadius = 0;
-						arc = arcFns.bloom;
-					}
+                    if (p.form === 'bloom' || p.form === 'pie') {
+                        this.renderNode( node, data, p, transition, false );
+                    } else if(p.form === 'radar') {
+                        this.renderNode( node, data, p, transition, true );
+                    }
 
-					var defSpread = 360 / numSegments;
-					
-					// For each radial, build
-					for( iSegment = 0; iSegment < numSegments; iSegment++ ) {
-						if (this.valueFor( 'sector-angle', data, defSpread, iSegment ) && ++segmented === 2) {
-							break;
-						}
-					}
-					
-					segmented = segmented > 1;
-
-					// For each radial, build
-					for( iSegment = 0; iSegment < numSegments; iSegment++ ) {
-
-						var numSeries = this.valueFor( 'series-count', data, 1, iSegment ),
-							spread = this.valueFor( 'sector-angle', data, defSpread, iSegment ),
-							rotation1 = rotation( rotation0.angle + spread ),
-							innerArc = innerRadius,
-							singleSeries = numSeries === 1,
-							radialData = [],
-							outerArc,
-							outerPath,
-							seriesIndex;
-
-						if (!spread) {
-							continue;
-						}
-
-						// Collect all series data for sorting
-						for( iSeries = 0; iSeries < numSeries; iSeries++ ) {
-							seriesIndex = dimSkip? [iSeries] : [iSegment, iSeries];
-							radialData.push(this.valuesFor(seriesDefaults, data, seriesIndex));
-						}
-
-						// Sort by increasing radial length
-						radialData.sort( sortByRadialLength );
-
-						// start somewhere?
-						if ( innerRadius && segmented ) {
-							innerArc = arc( innerRadius, spread, rotation0, rotation1 );
-						}
-
-						// Iterate from inner to outer-most series
-						for( iSeries = 0; iSeries < numSeries; iSeries++ ) {
-
-							var radius = radialData[iSeries].radius,
-								stroke = radialData[iSeries].stroke,
-								strokeWidth = radialData[iSeries]['stroke-width'],
-								fill   = radialData[iSeries].fill,
-								outlineSeries = outline && iSeries == numSeries-1;
-
-							// skip items with no radius.
-							if ( radius <= 0 ) {
-								continue;
-							}
-
-							maxRadius = Math.max( maxRadius, radius );
-
-							// has radial segments?
-							if( segmented ) {
-
-								// Create radial petal
-								outerArc = arc( innerRadius + radius, spread, rotation0, rotation1 );
-
-								// form the arc to begin the path.
-								path = outerPath = arcPath( outerArc, 'M', 1 );
-
-								// append to the outline.
-								if (outlineSeries) {
-									if (outlinePath) {
-										outlinePath += arcPath( outerArc, ' L', 1 );
-									} else {
-										outlinePath = outerPath;
-									}
-								}
-								
-								// the complete shape, tapered to point 0,0 (strokes use this as well)
-								outerPath += ' L0,0 Z';
-
-								if( innerArc ) {
-									// outer arc plus inner arc reversed, then closed
-									path += arcPath( innerArc, 'L', 0 ) + ' Z';
-
-								} else {
-									path = outerPath;
-								}
-
-							// else create a circle.
-							} else {
-
-								// outerArc is the outer radius
-								outerArc = innerRadius + radius;
-
-								// start with the outer circle.
-								path = outerPath = circlePath( outerArc, 1 );
-
-								// then if there is a cutout, add that.
-								if( innerArc ) {
-
-									// Create the inner path of the ring using the innerArc (radius)
-									path += circlePath( innerArc, 0 );
-								}
-								
-								// form the outline.
-								if (outlineSeries) {
-									outlinePath = outerPath;
-								}
-							}
-
-
-							// add the filled part, if there is something visible here.
-							if ( fill || (singleSeries && stroke) ) {
-								shapes.push( {
-									graphic: {
-										'path': path,
-										'fill': fill,
-										'opacity': radialData[iSeries].opacity,
-										'stroke-width': singleSeries? strokeWidth : 0,
-										'stroke': singleSeries? stroke : none
-									},
-									series: iSeries,
-									segment: iSegment
-								});
-							}
-
-							// have to draw the stroke separately in all
-							// multi-series cases because:
-							// a) it needs to define the outer edge only and
-							// b) it needs to sit on top.
-							if ( !singleSeries && stroke !== none ) {
-								strokes.push( {
-									graphic: {
-										// arc plus a tapered point to 0,0
-										'path': outerPath,
-										'fill': none,
-										'opacity': 1,
-										'stroke-width': strokeWidth,
-										'stroke': stroke
-									},
-									series: iSeries,
-									segment: iSegment
-								});
-							}
-
-							// This one's outer becomes the next one's inner
-							innerArc = outerArc;
-						}
-
-						// increment angle.
-						rotation0 = rotation1;
-					}
-
-					// add the strokes in reverse order.
-					for ( j = strokes.length; j-- > 0; ) {
-						shapes.push(strokes[j]);
-					}
-
-
-					// NOW PROCESS ALL SHAPES INTO GRAPHICS.
-					// There is one node per radial visual.
-					var xCoord = node.position[0]+ (this.valueFor('x', node.data, 0))*node.width,
-						yCoord = node.position[1]+ ((this.valueFor('y', node.data, 0)))*node.height,
-						ud = node.userData;
-
-					visuals = ud.visuals;
-					graphics  = node.graphics;
-
-					var nShapes = shapes.length,
-						transform = 't' + xCoord + ',' + yCoord;
-
-					// insert perimeter outline?
-					if (outline) {
-						
-						// Create the inner path of the ring
-						if (innerRadius) {
-							outlinePath += ' ' + circlePath( innerRadius, 0 );
-						}
-						outlinePath += ' Z';
-						
-						var attrs = {
-							'fill': none,
-							'stroke' : outline,
-							'stroke-width' : outlineWidth,
-							'opacity' : this.valueFor('outline-opacity', node.data, 1),
-							'transform' : transform
-						};
-						
-						path = ud.outline;
-						
-						if (path) {
-							attrs.path = outlinePath;
-							graphics.attr(path, attrs, transition);
-						} else {
-//								console.log(outlinePath);
-							
-							path = ud.outline = graphics.path(outlinePath);
-							graphics.toBack(path);
-							graphics.attr(path, attrs);
-						}
-					} else if (ud.outline) {
-						graphics.remove(ud.outline);
-						ud.outline = null;
-					}
-						
-					// get visuals, create storage if not already there
-					if (!visuals) {
-						visuals = ud.visuals = [];
-					}
-
-					// sync our set of path visuals.
-					if (visuals.length > nShapes) {
-						graphics.removeAll(visuals.splice(nShapes, visuals.length - nShapes));
-					} else {
-						while (visuals.length < nShapes) {
-							path = graphics.path();
-							visuals.push(path);
-						}
-					}
-
-					// Turn it into graphics.
-					for (j = 0; j < shapes.length; j++) {
-
-						// add transform attribute as well.
-						shapes[j].graphic.transform = transform;
-
-						// apply all attributes.
-						graphics.attr(visuals[j], shapes[j].graphic, transition);
-
-						// Set the data associated with this visual element
-						graphics.data( visuals[j], data, [shapes[j].segment, shapes[j].series] );
-					}
 				}
 
 			}
