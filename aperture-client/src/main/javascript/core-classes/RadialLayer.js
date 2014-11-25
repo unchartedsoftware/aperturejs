@@ -333,7 +333,7 @@ function(namespace) {
 
             /**
              * @private
-             * Render joined series node implementation  (bloom and pie)
+             * Render a node to a set of graphics
              */
             renderNode : function( node, data, p, transition, independent ) {
 
@@ -483,7 +483,10 @@ function(namespace) {
 
             },
 
-
+            /**
+             * @private
+             * Build paths for a joined series node implementation  (bloom and pie)
+             */
             buildNodeSeriesIndependentPaths : function(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread) {
                 //build each series
                 var iSeries, iSegment, radialData, path, outlinePath, maxRadius, i;
@@ -639,6 +642,10 @@ function(namespace) {
                 return outlinePath;
             },
 
+            /**
+             * @private
+             * Build paths for an independent series node implementation  (radar)
+             */
             buildNodeSeriesJoinedPaths : function(numSeries, numSegments, innerRadius, segmented, segmentRadialData, rotation0, shapes, outline, data, defSpread, arc) {
 
                 var iSeries, iSegment, radialData, path, outlinePath, j, maxRadius;
