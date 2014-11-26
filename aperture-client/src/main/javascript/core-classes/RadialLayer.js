@@ -210,7 +210,8 @@ function(namespace) {
 			'outline-width': 3,
             'axis-stroke-width': 0,
             'axis-stroke': '#000',
-            'axis-stroke-dasharray': ''
+            'axis-stroke-dasharray': '',
+            'axis-length': 0
 		},
 		seriesDefaults = {
 			'radius' : 20,
@@ -336,6 +337,10 @@ function(namespace) {
              *  The stroke line style of the axis lines.  Use RaphaelJs styles.
              *  <i>Evaluated for each radial node.</i>
              *
+             * @mapping {Number=0} axis-length
+             *  The length of axis lines.  Will use the max distance from the node if set to 0.
+             *  <i>Evaluated for each radial node.</i>
+             *
 			 * @constructs
 			 * @factoryMade
 			 * @extends aperture.Layer
@@ -373,6 +378,7 @@ function(namespace) {
                     axisWidth = p['axis-stroke-width'],
                     axisColor = p['axis-stroke'],
                     axisDashStyle = p['axis-stroke-dasharray'],
+                    axisLength = p['axis-length'],
                     rotations = [],
                     out;
 
@@ -441,10 +447,14 @@ function(namespace) {
 
                     var axisPath = 'M 0,0';
 
+                    if(!axisLength) {
+                        axisLength = maxRadius;
+                    }
+
                     for(i = 0; i < rotations.length; i++) {
                         var rot = rotations[i];
 
-                        var axisPt = { x : 0, y : -(innerRadius + maxRadius) };
+                        var axisPt = { x : 0, y : -(innerRadius + axisLength) };
                         rot.rotate(axisPt);
 
 
@@ -457,7 +467,7 @@ function(namespace) {
 
                     }
 
-                    shapes.push({
+                    shapes.unshift({
                         graphic: {
                             // arc plus a tapered point to 0,0
                             'path': axisPath,
