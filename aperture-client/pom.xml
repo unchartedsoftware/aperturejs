@@ -105,7 +105,7 @@
 						<goals>
 							<goal>run</goal>
 						</goals>
-						
+
 						<configuration>
 							<target>
 								<concat	destfile="${project.build.directory}/processed-packages/aperture-core.js">
@@ -172,9 +172,10 @@
 									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/store.js" />
 								</concat>
 
-								<!-- Create a single JS file for the new map vizlet -->
+								<!-- Create a single JS file for OpenLayers 2 integation and legacy map vizlet -->
 								<concat	destfile="${project.build.directory}/processed-packages/aperture-geo.js">
-									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/geo/**" />
+									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/geo/openLayers2.js" />
+									<fileset dir="${project.build.directory}/processed-scripts" includes="packages/geo/legacyMap.js" />
 								</concat>
 
 								<!-- Create a single JS file for the new chart vizlet -->
@@ -372,7 +373,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!-- Generate jsdoc .zip artifact -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -417,7 +418,7 @@
 				</dependencies>
 			</plugin>
 
-			
+
 			<!--sign if -Daperture.deployment.signed=true-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -437,7 +438,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>			
+			</plugin>
 		</plugins>
 
 		<pluginManagement>
