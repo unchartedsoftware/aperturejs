@@ -53,16 +53,16 @@ function(ns) {
 
 		// When map is set/changed register moveend listener
 		this.on('change:map', function() {
-			var map = this.getMap();
-			if (this.moveEndKey) {
-				map.getView().unByKey( this.zoomKey );
-				map.unByKey( this.moveEndKey );
+			if (this.moveEndKey && this.activeMap) {
+				this.activeMap.getView().unByKey( this.zoomKey );
+				this.activeMap.unByKey( this.moveEndKey );
 				this.moveEndKey = null;
 				this.zoomKey = null;
 			}
-			if (map) {
-				this.moveEndKey = map.on('moveend', this.postMove, this);
-				this.zoomKey = map.getView().on('change:resolution', this.preMove, this);
+			this.activeMap = this.getMap();
+			if (this.activeMap) {
+				this.moveEndKey = this.activeMap.on('moveend', this.postMove, this);
+				this.zoomKey = this.activeMap.getView().on('change:resolution', this.preMove, this);
 				// Set initial state
 				this.postMove();
 			}
