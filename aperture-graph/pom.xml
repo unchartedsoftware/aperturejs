@@ -19,9 +19,9 @@
 
 	<repositories>
 		<repository>
-			<id>codelutin</id>
-			<name>Code Lutin</name>
-			<url>http://devel.summitsystemsinc.net/artifactory/repo/</url>
+			<id>streamreasoning</id>
+			<name>Stream Reasoning</name>
+      <url>http://streamreasoning.org/maven</url>
 		</repository>
 	</repositories>	
 
